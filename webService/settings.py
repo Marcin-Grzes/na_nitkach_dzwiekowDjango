@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
-
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -37,8 +37,27 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    "events.apps.EventsConfig"
+    "events.apps.EventsConfig",
+
+    # Wymagane aplikacje Wagtail
+    'wagtail.contrib.forms',
+    'wagtail.contrib.redirects',
+    'wagtail.embeds',
+    'wagtail.sites',
+    'wagtail.users',
+    'wagtail.snippets',
+    'wagtail.documents',
+    'wagtail.images',
+    'wagtail.search',
+    'wagtail.admin',
+    'wagtail',  # Główny pakiet Wagtail
+
+    # Zależności Wagtail
+    'modelcluster',
+    'taggit',
 ]
+
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -48,6 +67,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+# Middleware Wagtail
+    'wagtail.contrib.redirects.middleware.RedirectMiddleware',
 ]
 
 ROOT_URLCONF = 'webService.urls'
@@ -69,8 +91,30 @@ TEMPLATES = [
     },
 ]
 
+# Domyślny szablon dla stron Wagtail
+WAGTAIL_FRONTEND_LOGIN_TEMPLATE = 'wagtailcore/login.html'
+
+# Ustawienia dla wyszukiwarki Wagtail
+WAGTAILSEARCH_BACKENDS = {
+    'default': {
+        'BACKEND': 'wagtail.search.backends.database',
+    }
+}
+
+# Katalog z mediami Wagtail
+WAGTAILIMAGES_MAX_UPLOAD_SIZE = 10 * 1024 * 1024  # 10MB - opcjonalne, możesz dostosować
+
+# Adresy URL dla mediów (jeśli nie są już zdefiniowane)
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
+
 WSGI_APPLICATION = 'webService.wsgi.application'
 
+# Podstawowy URL dla panelu administracyjnego Wagtail
+WAGTAILADMIN_BASE_URL = 'http://localhost:8000'  # W środowisku produkcyjnym zmień na właściwy adres
+
+# Nazwa witryny Wagtail - wymagana do działania panelu administracyjnego
+WAGTAIL_SITE_NAME = 'Na Nitkach Dźwięków'  # Możesz użyć dowolnej nazwy dla swojej witryny
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
