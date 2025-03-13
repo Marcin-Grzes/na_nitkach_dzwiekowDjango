@@ -1,10 +1,3 @@
-import pytest
+from django.test import TestCase
 
-
-def test_status():
-    assert True
-
-
-@pytest.mark.django_db
-def test_status():
-    assert True
+# Create your tests here.
