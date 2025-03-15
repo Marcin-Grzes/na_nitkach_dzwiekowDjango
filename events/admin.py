@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.utils.html import format_html
 from .models import Rezerwations
 # Register your models here.
 
@@ -6,7 +7,8 @@ from .models import Rezerwations
 class RezerwationsAdmin(admin.ModelAdmin):
     # Wyświetlane kolumny na liście
     list_display = ['first_name', 'last_name', 'email', 'phone_number',
-                    'type_of_payments', 'created_at', 'marketing_emails_consent', 'reminder_emails_consent']
+                    'type_of_payments', 'created_at', 'marketing_emails_consent', 'reminder_emails_consent',
+                    'consent_status']
 
     # Kolumny, które po kliknięciu prowadzą do edycji
     list_display_links = ['first_name', 'last_name']
@@ -41,6 +43,27 @@ class RezerwationsAdmin(admin.ModelAdmin):
             'classes': ['collapse']  # zwijana sekcja
         }),
     ]
+
+    # Niestandardowe wyświetlanie pól
+    def payment_display(self, obj):
+        return obj.get_type_of_payments_display()
+
+    payment_display.short_description = 'Sposób płatności'
+
+    def consent_status(self, obj):
+        return '✓' if obj.marketing_emails_consent else '✗'
+
+    consent_status.short_description = 'Marketing'
+
+    def colored_type_of_payments(self, obj):
+        if obj.type_of_payments == 'blik':
+            return format_html(
+                '<span style="background-color: #90EE90; padding: 3px 10px; border-radius: 5px;">BLIK</span>')
+        else:
+            return format_html(
+                '<span style="background-color: #FFD580; padding: 3px 10px; border-radius: 5px;">Gotówka</span>')
+
+    colored_type_of_payments.short_description = 'Płatność'
 
     # Eksport do CSV (opcjonalnie)
     actions = ['export_to_csv']

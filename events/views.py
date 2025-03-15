@@ -27,7 +27,8 @@ class RezerwationsView(View):
             nazwisko = form.cleaned_data['last_name']
             email = form.cleaned_data['email']
             numer_telefonu = form.cleaned_data['phone_number']
-            type_of_payments = form.cleaned_data['type_of_payments']
+            sposob_platnosci = form.cleaned_data['type_of_payments']
+            liczba_uczestnikow = form.cleaned_data['participants_count']
             reservation = form.save()
             # Wysyłka emaila potwierdzającego
             self.send_confirmation_email(reservation)
@@ -42,6 +43,7 @@ class RezerwationsView(View):
         context = {
             'first_name': reservation.first_name,
             'last_name': reservation.last_name,
+            'participants_count': reservation.participants_count,
             'email': reservation.email,
             'phone_number': str(reservation.phone_number),
             'payment_method': reservation.get_type_of_payments_display(),  # używa metody display dla choices

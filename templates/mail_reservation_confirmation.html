@@ -15,25 +15,26 @@
         <div class="header">
             <h1>Potwierdzenie rezerwacji</h1>
         </div>
-        
+
         <p>Witaj {{ first_name }} {{ last_name }},</p>
         <p>Dziękujemy za dokonanie rezerwacji. Poniżej znajdziesz szczegóły:</p>
-        
+
         <div class="details">
             <h2>Szczegóły rezerwacji:</h2>
             <ul>
                 <li><strong>Imię i nazwisko:</strong> {{ first_name }} {{ last_name }}</li>
                 <li><strong>Email:</strong> {{ email }}</li>
+                <li><strong>Liczba osób: {{ participants_count }}</strong></li>
                 <li><strong>Numer telefonu:</strong> {{ phone_number }}</li>
                 <li><strong>Sposób płatności:</strong> {{ payment_method }}</li>
             </ul>
         </div>
-        
+
         <p>W razie jakichkolwiek pytań, prosimy o kontakt.</p>
-        
+
         <p>Z poważaniem,<br>
         Zespół Na Nitkach Dźwięków</p>
-        
+
         <div class="footer">
             <p>Wiadomość została wygenerowana automatycznie, prosimy na nią nie odpowiadać.</p>
         </div>

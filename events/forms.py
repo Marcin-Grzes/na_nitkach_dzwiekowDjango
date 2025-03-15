@@ -6,7 +6,7 @@ class RezerwationForm(forms.ModelForm):
     class Meta:
         model = Rezerwations
         fields = [
-            'first_name', 'last_name', 'email', 'phone_number', 'type_of_payments',
+            'first_name', 'last_name', 'email', 'participants_count', 'phone_number', 'type_of_payments',
             'data_processing_consent', 'privacy_policy_consent', 'marketing_emails_consent', 'reminder_emails_consent'
         ]
 

@@ -11,6 +11,11 @@ class Rezerwations(models.Model):
     # Podstawowe informacje
     first_name = models.CharField(_("Imię"), max_length=50)
     last_name = models.CharField(_("Nazwisko"), max_length=50)
+    participants_count = models.PositiveIntegerField(
+        _("Liczba uczestników"),
+        default=1,
+        help_text=_("Podaj liczbę osób biorących udział w spotkaniu.")
+    )
     email = models.EmailField(_("Adres email"))
     phone_number = PhoneNumberField(region='PL', verbose_name=_("Numer telefonu"))
     type_of_payments = models.CharField(_("Typ płatności"), max_length=10,
