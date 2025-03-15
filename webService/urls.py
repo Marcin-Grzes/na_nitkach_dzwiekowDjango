@@ -17,6 +17,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+from events import views
+from events.views import HomeView, RezerwationsView
+
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', HomeView.as_view(), name='home'),
+    path('rezerwation', RezerwationsView.as_view(), name='rezerwation'),
 ]
