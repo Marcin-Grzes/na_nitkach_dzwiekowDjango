@@ -15,6 +15,8 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
+from django.conf import settings
+from django.conf.urls.static import static
 from django.urls import path
 
 from events import views
@@ -25,3 +27,6 @@ urlpatterns = [
     path('', HomeView.as_view(), name='home'),
     path('rezerwation', RezerwationsView.as_view(), name='rezerwation'),
 ]
+# Tylko w wersji developerskiej
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

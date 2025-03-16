@@ -1,6 +1,5 @@
 from django import forms
-from .models import Rezerwations
-
+from .models import Rezerwations, Events, EventType, Venue
 
 class RezerwationForm(forms.ModelForm):
     class Meta:
@@ -22,3 +21,28 @@ class RezerwationForm(forms.ModelForm):
 
         return cleaned_data
 
+
+class EventForm(forms.ModelForm):
+    class Meta:
+        model = Events
+        fields = [
+            'title', 'type_of_events', 'start_datetime', 'end_datetime',
+            'venue', 'max_participants', 'description', 'main_image', 'is_active'
+        ]
+        widgets = {
+            'start_datetime': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
+            'end_datetime': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
+            'description': forms.Textarea(attrs={'rows': 5}),
+        }
+
+    def clean(self):
+        cleaned_data = super().clean()
+        start_datetime = cleaned_data.get('start_datetime')
+        end_datetime = cleaned_data.get('end_datetime')
+
+        if start_datetime and end_datetime:
+            if end_datetime <= start_datetime:
+                self.add_error('end_datetime',
+                               "Data zakończenia musi być późniejsza niż data rozpoczęcia.")
+
+        return cleaned_data

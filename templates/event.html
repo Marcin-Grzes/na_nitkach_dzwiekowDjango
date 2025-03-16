@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+{% if venue.map_iframe %}
+    <div class="venue-map">
+        <h3>Mapa dojazdu</h3>
+        <div class="map-container">
+            {{ venue.map_iframe|safe }}
+        </div>
+    </div>
+{% endif %}
+</body>
+</html>
