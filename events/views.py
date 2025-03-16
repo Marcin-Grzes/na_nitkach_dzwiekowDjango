@@ -1,10 +1,16 @@
+from django.utils import timezone
 from django.core.mail import send_mail
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.views import View
+from django.views.generic import ListView, DetailView
+from django.views.generic.base import ContextMixin
+
 from events.forms import RezerwationForm
 from django.contrib import messages
+
+from events.models import EventType, Events
 
 
 # Create your views here.
@@ -61,3 +67,95 @@ class RezerwationsView(View):
             [reservation.email],
             html_message=html_message,
         )
+
+
+class EventTypeMixin(ContextMixin):
+    """
+    Mixin dodający typy wydarzeń do kontekstu.
+    Przydatny we wszystkich widokach, które potrzebują listy typów do filtrowania.
+    """
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['event_types'] = EventType.objects.filter(is_active=True)
+        return context
+
+
+class EventListView(EventTypeMixin, ListView):
+    """
+    Widok wyświetlający listę wszystkich aktywnych, nadchodzących wydarzeń.
+    Umożliwia filtrowanie po typie wydarzenia.
+    """
+    model = Events
+    template_name = 'events/event_list.html'
+    context_object_name = 'events'
+
+    def get_queryset(self):
+        # Pobieramy tylko aktywne wydarzenia z datą rozpoczęcia w przyszłości
+        queryset = Events.objects.filter(
+            is_active=True,
+            start_datetime__gte=timezone.now()
+        ).order_by('start_datetime')
+
+        # Opcjonalne filtrowanie po typie wydarzenia
+        selected_type = self.request.GET.get('type')
+        if selected_type:
+            queryset = queryset.filter(type_of_events__slug=selected_type)
+
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # Dodajemy informację o wybranym typie do kontekstu
+        context['selected_type'] = self.request.GET.get('type')
+        return context
+
+
+class EventDetailView(EventTypeMixin, DetailView):
+    """
+    Widok wyświetlający szczegóły pojedynczego wydarzenia.
+    Zawiera dodatkowe informacje, takie jak galeria zdjęć.
+    """
+    model = Events
+    template_name = 'events/event_detail.html'
+    context_object_name = 'event'
+    pk_url_kwarg = 'event_id'  # Określa nazwę parametru ID w URL
+
+    def get_queryset(self):
+        # Ograniczamy do aktywnych wydarzeń
+        return Events.objects.filter(is_active=True)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # Dodajemy wszystkie zdjęcia wydarzenia do kontekstu
+        context['images'] = self.object.images.all().order_by('order')
+        return context
+
+
+class EventsByTypeView(EventListView):
+    """
+    Widok wyświetlający wydarzenia określonego typu.
+    Dziedziczy po EventListView, co pozwala na reużycie logiki.
+    """
+
+    def get_queryset(self):
+        # Pobieramy typ wydarzenia lub zwracamy 404
+        self.event_type = get_object_or_404(
+            EventType,
+            slug=self.kwargs['type_slug'],
+            is_active=True
+        )
+
+        # Filtrujemy wydarzenia po typie
+        return Events.objects.filter(
+            is_active=True,
+            type_of_events=self.event_type,
+            start_datetime__gte=timezone.now()
+        ).order_by('start_datetime')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # Dodajemy informacje o typie wydarzenia do kontekstu
+        context['event_type'] = self.event_type
+        context['selected_type'] = self.kwargs['type_slug']
+        return context

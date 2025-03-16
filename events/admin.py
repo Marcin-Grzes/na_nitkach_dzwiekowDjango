@@ -1,5 +1,7 @@
-from django.contrib import admin
+from django.contrib import admin, messages
 from django.core.exceptions import ValidationError
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 
@@ -168,24 +170,83 @@ class EventsAdmin(admin.ModelAdmin):
     date_hierarchy = 'start_datetime'
     inlines = [EventImageInline]
     autocomplete_fields = ['venue', 'type_of_events']  # Dodane pole autocomplete
+    actions = ['duplicate_event']
 
     class Media:
         js = ('admin/js/admin_enhancements.js',)
 
     fieldsets = [
-            ('Podstawowe informacje', {
-                'fields': ['title', 'type_of_events', 'description', 'main_image']
-            }),
-            ('Czas i miejsce', {
-                'fields': ['start_datetime', 'end_datetime', 'venue']
-            }),
-            ('Ustawienia uczestników', {
-                'fields': ['max_participants']
-            }),
-            ('Status', {
-                'fields': ['is_active']
-            }),
-        ]
+        ('Podstawowe informacje', {
+            'fields': ['title', 'type_of_events', 'description', 'main_image']
+        }),
+        ('Czas i miejsce', {
+            'fields': ['start_datetime', 'end_datetime', 'venue']
+        }),
+        ('Ustawienia uczestników', {
+            'fields': ['max_participants']
+        }),
+        ('Status', {
+            'fields': ['is_active']
+        }),
+    ]
+
+    def duplicate_event(self, request, queryset):
+        """
+        Akcja administratora pozwalająca na tworzenie duplikatów wybranych wydarzeń.
+        """
+        # Możemy duplikować tylko jedno wydarzenie na raz
+        if queryset.count() != 1:
+            self.message_user(
+                request,
+                "Proszę wybrać dokładnie jedno wydarzenie do duplikowania.",
+                level=messages.ERROR
+            )
+            return
+
+        # Pobieramy oryginalne wydarzenie
+        original_event = queryset.first()
+        # Tworzymy nowy obiekt wydarzenie bez zapisywania go w bazie
+        new_event = Events(
+            title=f"Kopia - {original_event.title}",
+            type_of_events=original_event.type_of_events,
+            start_datetime=original_event.start_datetime,
+            end_datetime=original_event.end_datetime,
+            venue=original_event.venue,
+            max_participants=original_event.max_participants,
+            description=original_event.description,
+            is_active=original_event.is_active
+        )
+
+        # Jeśli wydarzenie ma główne zdjęcie, kopiujemy je
+        if original_event.main_image:
+            # Plik zostanie skopiowany przy zapisie
+            new_event.main_image = original_event.main_image
+
+        # Zapisujemy nowe wydarzenie w bazie danych
+        new_event.save()
+
+        # Kopiujemy powiązane zdjęcia
+        for image in original_event.images.all():
+            EventImage.objects.create(
+                event=new_event,
+                image=image.image,  # Plik będzie skopiowany przy zapisie
+                caption=image.caption,
+                order=image.order
+            )
+
+        # Wyświetl komunikat o sukcesie
+        self.message_user(
+            request,
+            f"Wydarzenie '{original_event.title}' zostało zduplikowane jako '{new_event.title}'.",
+            level=messages.SUCCESS
+        )
+
+        # Przekierowujemy do strony edycji nowego wydarzenia
+        return HttpResponseRedirect(
+            reverse('admin:events_events_change', args=[new_event.id])
+        )
+
+    duplicate_event.short_description = "Duplikuj wybrane wydarzenie"
 
     def save_model(self, request, obj, form, change):
         try:
