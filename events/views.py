@@ -7,7 +7,7 @@ from django.views import View
 from django.views.generic import ListView, DetailView
 from django.views.generic.base import ContextMixin
 
-from events.forms import RezerwationForm
+from events.forms import RezerwationForm, EventReservationForm
 from django.contrib import messages
 
 from events.models import EventType, Events
@@ -18,6 +18,99 @@ from events.models import EventType, Events
 class HomeView(View):
     def get(self, request):
         return render(request, 'index.html')
+
+
+class EventReservationView(View):
+    """
+    Widok do rezerwacji miejsc na konkretne wydarzenie.
+    Przyjmuje ID wydarzenia z URL i tworzy odpowiednią rezerwację.
+    """
+
+    def get(self, request, event_id):
+        # Pobierz wydarzenie lub zwróć 404
+        event = get_object_or_404(Events, id=event_id, is_active=True)
+
+        # Sprawdź czy są jeszcze miejsca
+        if event.is_fully_booked():
+            messages.error(request, "Niestety wszystkie miejsca na to wydarzenie zostały już zarezerwowane.")
+            return redirect('event_detail', event_id=event_id)
+
+        # Tworzenie formularza pre-konfigurowanego dla tego wydarzenia
+        form = EventReservationForm(initial={'event': event})
+
+        context = {
+            'form': form,
+            'event': event,
+        }
+        return render(request, 'events/event_reservation.html', context)
+
+    def post(self, request, event_id):
+        # Pobierz wydarzenie lub zwróć 404
+        event = get_object_or_404(Events, id=event_id, is_active=True)
+
+        # Sprawdź czy są jeszcze miejsca
+        if event.is_fully_booked():
+            messages.error(request, "Niestety wszystkie miejsca na to wydarzenie zostały już zarezerwowane.")
+            return redirect('event_detail', event_id=event_id)
+
+        # Przetwarzanie formularza
+        form = EventReservationForm(request.POST)
+
+        # Ręcznie ustawiamy pole wydarzenia (które jest ukryte w formularzu)
+        form.instance.event = event
+
+        if form.is_valid():
+            # Sprawdzenie czy liczba uczestników nie przekracza dostępnych miejsc
+            participants_count = form.cleaned_data['participants_count']
+            available_seats = event.get_available_seats()
+
+            if participants_count > available_seats:
+                form.add_error('participants_count',
+                               f"Nie ma wystarczającej liczby miejsc. Dostępne miejsca: {available_seats}")
+                context = {'form': form, 'event': event}
+                return render(request, 'events/event_reservation.html', context)
+
+            # Zapisujemy rezerwację
+            reservation = form.save()
+
+            # Wysyłka emaila potwierdzającego
+            self.send_confirmation_email(reservation)
+
+            messages.success(request, f"Twoja rezerwacja na wydarzenie '{event.title}' została przyjęta pomyślnie!")
+            return redirect('event_detail', event_id=event_id)
+
+        context = {'form': form, 'event': event}
+        return render(request, 'events/event_reservation.html', context)
+
+    def send_confirmation_email(self, reservation):
+        subject = f'Potwierdzenie rezerwacji - {reservation.event.title}'
+
+        # Kontekst do szablonu z danymi wydarzenia
+        context = {
+            'first_name': reservation.first_name,
+            'last_name': reservation.last_name,
+            'participants_count': reservation.participants_count,
+            'email': reservation.email,
+            'phone_number': str(reservation.phone_number),
+            'payment_method': reservation.get_type_of_payments_display(),
+            'event': reservation.event,  # Dodanie informacji o wydarzeniu
+        }
+
+        # Generowanie wiadomości HTML z szablonu
+        html_message = render_to_string('event_reservation_confirmation.html', context)
+        plain_message = strip_tags(html_message)
+
+        # Wysyłanie emaila
+        send_mail(
+            subject,
+            plain_message,
+            None,  # używa DEFAULT_FROM_EMAIL z ustawień
+            [reservation.email],
+            html_message=html_message,
+        )
+
+
+
 
 
 class RezerwationsView(View):

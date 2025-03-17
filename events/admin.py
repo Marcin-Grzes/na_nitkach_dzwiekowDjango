@@ -178,7 +178,7 @@ class EventImageAdmin(admin.ModelAdmin):
 class EventsAdmin(admin.ModelAdmin):
     form = EventAdminForm
     list_display = ['title', 'type_of_events', 'start_datetime', 'end_datetime',
-                    'venue', 'max_participants', 'get_available_seats', 'is_active']
+                    'venue','price', 'max_participants', 'get_available_seats', 'is_active']
     list_filter = ['type_of_events', 'is_active', 'venue']
     search_fields = ['title', 'description']
     date_hierarchy = 'start_datetime'
@@ -204,7 +204,7 @@ class EventsAdmin(admin.ModelAdmin):
 
     fieldsets = [
         ('Podstawowe informacje', {
-            'fields': ['title', 'type_of_events', 'description', 'main_image']
+            'fields': ['title', 'type_of_events', 'description', 'main_image', 'price']
         }),
         ('Czas i miejsce', {
             'fields': ['start_datetime', 'end_datetime', 'venue']
@@ -239,6 +239,7 @@ class EventsAdmin(admin.ModelAdmin):
             start_datetime=original_event.start_datetime,
             end_datetime=original_event.end_datetime,
             venue=original_event.venue,
+            price=original_event.price,
             max_participants=original_event.max_participants,
             description=original_event.description,
             is_active=original_event.is_active

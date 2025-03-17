@@ -30,6 +30,7 @@ urlpatterns = [
     path('<int:event_id>/', views.EventDetailView.as_view(), name='event_detail'),
     path('type/<slug:type_slug>/', views.EventsByTypeView.as_view(), name='events_by_type'),
     path('tinymce/', include('tinymce.urls')),
+    path('events/<int:event_id>/reservation/', views.EventReservationView.as_view(), name='event_reservation'),
 ]
 # Tylko w wersji developerskiej
 if settings.DEBUG:

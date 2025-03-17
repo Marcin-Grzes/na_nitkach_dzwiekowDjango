@@ -3,10 +3,12 @@ from django.utils import timezone
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.text import slugify
+from djmoney.models.validators import MinMoneyValidator
 from phonenumber_field.modelfields import PhoneNumberField
 from django.utils.translation import gettext_lazy as _
 from django.core.validators import MinValueValidator, MaxValueValidator
 from tinymce.models import HTMLField
+from djmoney.models.fields import MoneyField
 
 
 # Create your models here.
@@ -164,7 +166,14 @@ class Events(models.Model):
         verbose_name=_("Miejsce"),
         related_name='events'
     )
-
+    price = MoneyField(_("Cena od osoby"),
+                       max_digits=10,
+                       decimal_places=2,
+                       validators=[MinMoneyValidator(0)],
+                       default_currency='PLN',
+                       help_text=_("Cena za udział w wydarzeniu"),
+                       null=True,
+                       blank=True,)
     max_participants = models.PositiveIntegerField(
         _("Maksymalna liczba uczestników"),
         default=20,

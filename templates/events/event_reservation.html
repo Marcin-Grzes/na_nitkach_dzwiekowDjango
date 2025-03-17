@@ -1,0 +1,141 @@
+{% extends 'events/base.html' %}
+
+{% block title %}Rezerwacja - {{ event.title }}{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+{#                    <li class="breadcrumb-item"><a href="{% url 'home' %}">Strona główna</a></li>#}
+                    <li class="breadcrumb-item"><a href="{% url 'event_list' %}">Wydarzenia</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'event_detail' event.id %}">{{ event.title }}</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Rezerwacja</li>
+                </ol>
+            </nav>
+
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h1 class="h3 mb-0">Rezerwacja miejsca na wydarzenie</h1>
+                </div>
+                <div class="card-body">
+                    <div class="mb-4">
+                        <h2 class="h4">{{ event.title }}</h2>
+                        <p><strong>Data:</strong> {{ event.start_datetime|date:"j E Y, H:i" }}</p>
+                        <p><strong>Miejsce:</strong> {{ event.venue.name }}, {{ event.venue.address }}</p>
+                        <p><strong>Dostępne miejsca:</strong> {{ event.get_available_seats }}</p>
+                    </div>
+
+                    <form method="post" novalidate>
+                        {% csrf_token %}
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.first_name.id_for_label }}" class="form-label">{{ form.first_name.label }}</label>
+                                {{ form.first_name }}
+                                {% if form.first_name.errors %}
+                                    <div class="invalid-feedback d-block">{{ form.first_name.errors }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.last_name.id_for_label }}" class="form-label">{{ form.last_name.label }}</label>
+                                {{ form.last_name }}
+                                {% if form.last_name.errors %}
+                                    <div class="invalid-feedback d-block">{{ form.last_name.errors }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.email.id_for_label }}" class="form-label">{{ form.email.label }}</label>
+                                {{ form.email }}
+                                {% if form.email.errors %}
+                                    <div class="invalid-feedback d-block">{{ form.email.errors }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.phone_number.id_for_label }}" class="form-label">{{ form.phone_number.label }}</label>
+                                {{ form.phone_number }}
+                                {% if form.phone_number.errors %}
+                                    <div class="invalid-feedback d-block">{{ form.phone_number.errors }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.participants_count.id_for_label }}" class="form-label">{{ form.participants_count.label }}</label>
+                                {{ form.participants_count }}
+                                <small class="form-text text-muted">{{ form.participants_count.help_text }}</small>
+                                {% if form.participants_count.errors %}
+                                    <div class="invalid-feedback d-block">{{ form.participants_count.errors }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.type_of_payments.id_for_label }}" class="form-label">{{ form.type_of_payments.label }}</label>
+                                {{ form.type_of_payments }}
+                                {% if form.type_of_payments.errors %}
+                                    <div class="invalid-feedback d-block">{{ form.type_of_payments.errors }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <div class="form-check">
+                                {{ form.data_processing_consent }}
+                                <label class="form-check-label" for="{{ form.data_processing_consent.id_for_label }}">
+                                    {{ form.data_processing_consent.label }}
+                                </label>
+                                {% if form.data_processing_consent.errors %}
+                                    <div class="invalid-feedback d-block">{{ form.data_processing_consent.errors }}</div>
+                                {% endif %}
+                                <small class="form-text text-muted d-block">{{ form.data_processing_consent.help_text }}</small>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <div class="form-check">
+                                {{ form.privacy_policy_consent }}
+                                <label class="form-check-label" for="{{ form.privacy_policy_consent.id_for_label }}">
+                                    {{ form.privacy_policy_consent.label }}
+                                </label>
+                                {% if form.privacy_policy_consent.errors %}
+                                    <div class="invalid-feedback d-block">{{ form.privacy_policy_consent.errors }}</div>
+                                {% endif %}
+                                <small class="form-text text-muted d-block">{{ form.privacy_policy_consent.help_text }}</small>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <div class="form-check">
+                                {{ form.marketing_emails_consent }}
+                                <label class="form-check-label" for="{{ form.marketing_emails_consent.id_for_label }}">
+                                    {{ form.marketing_emails_consent.label }}
+                                </label>
+                                <small class="form-text text-muted d-block">{{ form.marketing_emails_consent.help_text }}</small>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <div class="form-check">
+                                {{ form.reminder_emails_consent }}
+                                <label class="form-check-label" for="{{ form.reminder_emails_consent.id_for_label }}">
+                                    {{ form.reminder_emails_consent.label }}
+                                </label>
+                                <small class="form-text text-muted d-block">{{ form.reminder_emails_consent.help_text }}</small>
+                            </div>
+                        </div>
+
+                        <div class="mt-4">
+                            <a href="{% url 'event_detail' event.id %}" class="btn btn-secondary">Anuluj</a>
+                            <button type="submit" class="btn btn-primary">Zarezerwuj miejsce</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
