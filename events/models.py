@@ -6,6 +6,7 @@ from django.utils.text import slugify
 from phonenumber_field.modelfields import PhoneNumberField
 from django.utils.translation import gettext_lazy as _
 from django.core.validators import MinValueValidator, MaxValueValidator
+from tinymce.models import HTMLField
 
 
 # Create your models here.
@@ -170,7 +171,8 @@ class Events(models.Model):
         validators=[MinValueValidator(1)]
     )
 
-    description = models.TextField(_("Opis wydarzenia"), blank=True)
+    # description = models.TextField(_("Opis wydarzenia"), blank=True)
+    description = HTMLField(_("Opis wydarzenia"), blank=True)
 
     # Główne zdjęcie wydarzenia (opcjonalne)
     main_image = models.ImageField(

@@ -1,14 +1,27 @@
+from django import forms
 from django.contrib import admin, messages
 from django.core.exceptions import ValidationError
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
+from tinymce.widgets import TinyMCE
 
 from .models import Rezerwations, EventType, EventImage, Events, Venue
 
 
 # Register your models here.
+
+class EventAdminForm(forms.ModelForm):
+    description = forms.CharField(
+        widget=TinyMCE(attrs={'cols': 80, 'rows': 30}),
+        required=False
+    )
+
+    class Meta:
+        model = EventType
+        fields = '__all__'
+
 
 class EventImageInline(admin.TabularInline):
     model = EventImage
@@ -163,6 +176,7 @@ class EventImageAdmin(admin.ModelAdmin):
 
 @admin.register(Events)
 class EventsAdmin(admin.ModelAdmin):
+    form = EventAdminForm
     list_display = ['title', 'type_of_events', 'start_datetime', 'end_datetime',
                     'venue', 'max_participants', 'get_available_seats', 'is_active']
     list_filter = ['type_of_events', 'is_active', 'venue']
@@ -171,6 +185,19 @@ class EventsAdmin(admin.ModelAdmin):
     inlines = [EventImageInline]
     autocomplete_fields = ['venue', 'type_of_events']  # Dodane pole autocomplete
     actions = ['duplicate_event']
+
+    # Opcjonalnie, jeśli chcesz dostosować edytor do konkretnego pola w panelu administracyjnym:
+
+    # formfield_overrides = {
+    #     models.TextField: {'widget': TinyMCE()},
+    # }
+
+    # Alternatywnie, możesz też nadpisać tylko konkretne pole:
+    # def formfield_for_dbfield(self, db_field, **kwargs):
+    #     if db_field.name == 'description':
+    #         kwargs['widget'] = TinyMCE(attrs={'cols': 80, 'rows': 30})
+    #     return super().formfield_for_dbfield(db_field, **kwargs)
+
 
     class Media:
         js = ('admin/js/admin_enhancements.js',)

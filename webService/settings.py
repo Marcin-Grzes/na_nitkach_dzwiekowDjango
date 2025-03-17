@@ -41,7 +41,36 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     "events.apps.EventsConfig",
     'phonenumber_field',
+    'tinymce',
 ]
+
+# Konfiguracja TinyMCE
+# TINYMCE_JS_URL = 'https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js'
+
+TINYMCE_DEFAULT_CONFIG = {
+    'theme': "silver",  # Dodajmy jawnie motyw
+    'height': 360,
+    'width': 'auto',
+    'menubar': False,
+    'plugins': '''
+        advlist autolink lists link image charmap print preview anchor
+        searchreplace visualblocks code fullscreen insertdatetime media table
+        paste help wordcount
+    ''',
+    'toolbar': '''
+        undo redo | formatselect | bold italic backcolor |
+        alignleft aligncenter alignright alignjustify |
+        bullist numlist outdent indent | removeformat |
+        link image table | code
+    ''',
+    'content_style': 'body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, '
+                     'sans-serif; font-size: 16px; }',
+    'language': 'pl',  # Dodałem język polski
+    'browser_spellcheck': True,
+}
+
+TINYMCE_SPELLCHECKER = True
+TINYMCE_COMPRESSOR = False
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -121,6 +150,14 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = 'static/'
+
+# Dodaj te linie
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+# Opcjonalnie, ale zalecane - określa dodatkowe miejsca, gdzie Django szuka plików statycznych
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field

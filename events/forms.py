@@ -46,3 +46,4 @@ class EventForm(forms.ModelForm):
                                "Data zakończenia musi być późniejsza niż data rozpoczęcia.")
 
         return cleaned_data
+
