@@ -11,6 +11,7 @@ from events.forms import RezerwationForm, EventReservationForm
 from django.contrib import messages
 
 from events.models import EventType, Events, Rezerwations
+from events.services import cancel_reservation
 
 
 # Create your views here.
@@ -252,3 +253,42 @@ class EventsByTypeView(EventListView):
         context['event_type'] = self.event_type
         context['selected_type'] = self.kwargs['type_slug']
         return context
+
+
+class CancelReservationView(View):
+    def get(self, request, token):
+        """Wyświetla stronę potwierdzenia anulowania rezerwacji"""
+        reservation = get_object_or_404(Rezerwations, cancellation_token=token)
+
+        # Sprawdź czy można anulować rezerwację
+        if reservation.status == Rezerwations.ReservationStatus.CANCELLED:
+            messages.warning(request, "Ta rezerwacja została już anulowana.")
+            return redirect('home')
+
+        return render(request, 'events/cancel_reservation_confirm.html', {
+            'reservation': reservation
+        })
+
+    def post(self, request, token):
+        """Obsługuje anulowanie rezerwacji"""
+        reservation = get_object_or_404(Rezerwations, cancellation_token=token)
+
+        # Sprawdź czy można anulować rezerwację
+        if reservation.status == Rezerwations.ReservationStatus.CANCELLED:
+            messages.warning(request, "Ta rezerwacja została już anulowana.")
+            return redirect('home')
+
+        # Anuluj rezerwację
+        cancel_reservation(reservation)
+
+        messages.success(request, "Twoja rezerwacja została pomyślnie anulowana.")
+
+        # Jeśli anulowana rezerwacja była potwierdzona, informuj o automatycznym przesunięciu z listy rezerwowej
+        if reservation.status == Rezerwations.ReservationStatus.CONFIRMED:
+            if reservation.event.reservations.filter(
+                    status=Rezerwations.ReservationStatus.CONFIRMED,
+                    waitlist_position__isnull=True
+            ).exclude(id=reservation.id).exists():
+                messages.info(request, "Osoba z listy rezerwowej została automatycznie przesunięta na Twoje miejsce.")
+
+        return redirect('home')

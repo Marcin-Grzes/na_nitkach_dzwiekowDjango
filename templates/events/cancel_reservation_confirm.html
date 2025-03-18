@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block title %}Anulowanie rezerwacji{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <div class="card shadow">
+                <div class="card-header bg-danger text-white">
+                    <h1 class="h3 mb-0">Anulowanie rezerwacji</h1>
+                </div>
+                <div class="card-body">
+                    <h2 class="h4 mb-4">Czy na pewno chcesz anulować swoją rezerwację?</h2>
+                    
+                    <div class="alert alert-warning">
+                        <p><strong>Uwaga:</strong> Po anulowaniu rezerwacji nie będzie możliwości jej przywrócenia.</p>
+                    </div>
+                    
+                    <dl class="row mt-4">
+                        <dt class="col-sm-4">Wydarzenie:</dt>
+                        <dd class="col-sm-8">{{ reservation.event.title }}</dd>
+                        
+                        <dt class="col-sm-4">Data:</dt>
+                        <dd class="col-sm-8">{{ reservation.event.start_datetime|date:"j E Y, H:i" }}</dd>
+                        
+                        <dt class="col-sm-4">Miejsce:</dt>
+                        <dd class="col-sm-8">{{ reservation.event.venue.name }}, {{ reservation.event.venue.address }}</dd>
+                        
+                        <dt class="col-sm-4">Rezerwacja dla:</dt>
+                        <dd class="col-sm-8">{{ reservation.first_name }} {{ reservation.last_name }}</dd>
+                        
+                        <dt class="col-sm-4">Liczba osób:</dt>
+                        <dd class="col-sm-8">{{ reservation.participants_count }}</dd>
+                        
+                        <dt class="col-sm-4">Status:</dt>
+                        <dd class="col-sm-8">{{ reservation.get_status_display }}</dd>
+                    </dl>
+                    
+                    <div class="d-flex justify-content-between mt-4">
+                        <a href="{% url 'home' %}" class="btn btn-secondary">Anuluj (Zachowaj rezerwację)</a>
+                        
+                        <form method="post">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger">Potwierdzam anulowanie rezerwacji</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

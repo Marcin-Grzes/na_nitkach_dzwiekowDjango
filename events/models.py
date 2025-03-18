@@ -1,6 +1,10 @@
+import uuid
+
+from django.conf import settings
 from django.core.mail import send_mail
 from django.db.models import Max
 from django.template.loader import render_to_string
+from django.urls import reverse
 from django.utils import timezone
 
 from .services import cancel_reservation, send_waitlist_promotion_email
@@ -38,6 +42,22 @@ class Rezerwations(models.Model):
         blank=True,
         help_text=_("Pozycja na liście rezerwowej (tylko dla rezerwacji w statusie 'Lista rezerwowa')")
     )
+
+    # Dodajemy pole tokenu
+    cancellation_token = models.UUIDField(
+        _("Token anulowania"),
+        default=uuid.uuid4,
+        editable=False,
+        unique=True,
+        # null=True,
+        # Domyślnie na produkcji powinno tylko unique=True,
+    )
+
+    def get_cancellation_url(self):
+        """Generuje pełny URL do anulowania rezerwacji"""
+        path = reverse('cancel_reservation', kwargs={'token': self.cancellation_token})
+        return f"{settings.SITE_URL}{path}"
+
 
     def cancel(self):
         """

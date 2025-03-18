@@ -181,3 +181,6 @@ try:
     from webService.local_settings import *
 except ImportError:
     pass
+
+# URL bazowy strony (używany do generowania pełnych linków)
+SITE_URL = 'http://localhost:8000'  # Zmień na rzeczywisty URL w produkcji

@@ -29,7 +29,12 @@
                 <li><strong>Sposób płatności:</strong> {{ payment_method }}</li>
             </ul>
         </div>
-
+        <div style="margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 5px; background-color: #f8f9fa;">
+    <p>Jeśli chcesz anulować swoją rezerwację, możesz to zrobić klikając w poniższy link:</p>
+    <p><a href="{{ reservation.get_cancellation_url }}" style="color: #dc3545;">Anuluj rezerwację</a></p>
+    <p><small>Link jest unikalny dla Twojej rezerwacji. Prosimy nie udostępniać go innym osobom.</small></p>
+    </div>
+        
         <p>W razie jakichkolwiek pytań, prosimy o kontakt.</p>
 
         <p>Z poważaniem,<br>
