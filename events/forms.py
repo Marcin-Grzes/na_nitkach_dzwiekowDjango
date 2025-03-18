@@ -22,6 +22,7 @@ class RezerwationForm(forms.ModelForm):
         return cleaned_data
 
 
+
 class EventForm(forms.ModelForm):
     class Meta:
         model = Events

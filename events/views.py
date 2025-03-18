@@ -10,7 +10,7 @@ from django.views.generic.base import ContextMixin
 from events.forms import RezerwationForm, EventReservationForm
 from django.contrib import messages
 
-from events.models import EventType, Events
+from events.models import EventType, Events, Rezerwations
 
 
 # Create your views here.
@@ -32,8 +32,10 @@ class EventReservationView(View):
 
         # Sprawdź czy są jeszcze miejsca
         if event.is_fully_booked():
-            messages.error(request, "Niestety wszystkie miejsca na to wydarzenie zostały już zarezerwowane.")
-            return redirect('event_detail', event_id=event_id)
+            messages.warning(
+                request,
+                "Wszystkie miejsca na to wydarzenie są już zajęte. Możesz zapisać się na listę rezerwową."
+            )
 
         # Tworzenie formularza pre-konfigurowanego dla tego wydarzenia
         form = EventReservationForm(initial={'event': event})
@@ -48,11 +50,6 @@ class EventReservationView(View):
         # Pobierz wydarzenie lub zwróć 404
         event = get_object_or_404(Events, id=event_id, is_active=True)
 
-        # Sprawdź czy są jeszcze miejsca
-        if event.is_fully_booked():
-            messages.error(request, "Niestety wszystkie miejsca na to wydarzenie zostały już zarezerwowane.")
-            return redirect('event_detail', event_id=event_id)
-
         # Przetwarzanie formularza
         form = EventReservationForm(request.POST)
 
@@ -64,11 +61,16 @@ class EventReservationView(View):
             participants_count = form.cleaned_data['participants_count']
             available_seats = event.get_available_seats()
 
-            if participants_count > available_seats:
-                form.add_error('participants_count',
-                               f"Nie ma wystarczającej liczby miejsc. Dostępne miejsca: {available_seats}")
-                context = {'form': form, 'event': event}
-                return render(request, 'events/event_reservation.html', context)
+            # Ustawiamy status rezerwacji
+            if event.is_fully_booked() or participants_count > available_seats:
+                # Dodanie do listy rezerwowej
+                form.instance.status = Rezerwations.ReservationStatus.WAITLIST
+                form.instance.waitlist_position = event.get_next_waitlist_position()
+                message = "Zostałeś dodany do listy rezerwowej. Powiadomimy Cię, jeśli zwolni się miejsce."
+            else:
+                # Standardowa rezerwacja
+                form.instance.status = Rezerwations.ReservationStatus.CONFIRMED
+                message = "Twoja rezerwacja została potwierdzona."
 
             # Zapisujemy rezerwację
             reservation = form.save()
@@ -76,7 +78,7 @@ class EventReservationView(View):
             # Wysyłka emaila potwierdzającego
             self.send_confirmation_email(reservation)
 
-            messages.success(request, f"Twoja rezerwacja na wydarzenie '{event.title}' została przyjęta pomyślnie!")
+            messages.success(request, message)
             return redirect('event_detail', event_id=event_id)
 
         context = {'form': form, 'event': event}
@@ -108,8 +110,6 @@ class EventReservationView(View):
             [reservation.email],
             html_message=html_message,
         )
-
-
 
 
 

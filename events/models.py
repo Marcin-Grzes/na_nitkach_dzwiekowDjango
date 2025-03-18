@@ -1,7 +1,12 @@
+from django.core.mail import send_mail
+from django.db.models import Max
+from django.template.loader import render_to_string
 from django.utils import timezone
 
+from .services import cancel_reservation, send_waitlist_promotion_email
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.utils.html import strip_tags
 from django.utils.text import slugify
 from djmoney.models.validators import MinMoneyValidator
 from phonenumber_field.modelfields import PhoneNumberField
@@ -15,6 +20,31 @@ from djmoney.models.fields import MoneyField
 
 
 class Rezerwations(models.Model):
+    class ReservationStatus(models.TextChoices):
+        CONFIRMED = 'confirmed', _('Potwierdzona')
+        WAITLIST = 'waitlist', _('Lista rezerwowa')
+        CANCELLED = 'cancelled', _('Anulowana')
+
+    status = models.CharField(
+        _("Status rezerwacji"),
+        max_length=20,
+        choices=ReservationStatus.choices,
+        default=ReservationStatus.CONFIRMED,
+    )
+    # Dodaj pole pozycji na liście rezerwowej (przydatne do określenia kolejności)
+    waitlist_position = models.PositiveIntegerField(
+        _("Pozycja na liście rezerwowej"),
+        null=True,
+        blank=True,
+        help_text=_("Pozycja na liście rezerwowej (tylko dla rezerwacji w statusie 'Lista rezerwowa')")
+    )
+
+    def cancel(self):
+        """
+        Metoda anulująca rezerwację - deleguje wykonanie do usługi
+        """
+        return cancel_reservation(self)
+
     class PaymentType(models.TextChoices):
         CASH = 'cash', _('Gotówka na miejscu')
         BLIK = 'blik', _('BLIK')
@@ -77,6 +107,8 @@ class Rezerwations(models.Model):
 
     def __str__(self):
         return f"{self.first_name} {self.last_name} - {self.created_at.strftime('%Y-%m-%d %H:%M')}"
+
+
 
 
 class Venue(models.Model):
@@ -180,6 +212,12 @@ class Events(models.Model):
         validators=[MinValueValidator(1)]
     )
 
+    reserve_list = models.PositiveIntegerField(
+        _("Lista rezerwowa"),
+        default=0,
+    #     defeault jest tymczasowo
+    )
+
     # description = models.TextField(_("Opis wydarzenia"), blank=True)
     description = HTMLField(_("Opis wydarzenia"), blank=True)
 
@@ -225,11 +263,25 @@ class Events(models.Model):
         self.clean()  # Wywołanie walidacji przed zapisem
         super().save(*args, **kwargs)
 
+    def get_confirmed_reservations_count(self):
+        """Zwraca liczbę potwierdzonych rezerwacji"""
+        return self.reservations.filter(status=Rezerwations.ReservationStatus.CONFIRMED).count()
+
     def get_available_seats(self):
         """Zwraca liczbę dostępnych miejsc"""
-        reserved = self.reservations.count()
-        return max(0, self.max_participants - reserved)
+        return max(0, self.max_participants - self.get_confirmed_reservations_count())
 
     def is_fully_booked(self):
         """Sprawdza czy wydarzenie jest w pełni zarezerwowane"""
         return self.get_available_seats() == 0
+
+    def get_waitlist_count(self):
+        """Zwraca liczbę osób na liście rezerwowej"""
+        return self.reservations.filter(status=Rezerwations.ReservationStatus.WAITLIST).count()
+
+    def get_next_waitlist_position(self):
+        """Zwraca następną pozycję na liście rezerwowej"""
+        max_position = self.reservations.filter(
+            status=Rezerwations.ReservationStatus.WAITLIST
+        ).aggregate(Max('waitlist_position'))['waitlist_position__max'] or 0
+        return max_position + 1

@@ -45,6 +45,7 @@ class EventInline(admin.TabularInline):
 class RezerwationsAdmin(admin.ModelAdmin):
     # Wyświetlane kolumny na liście
     list_display = ['first_name', 'last_name', 'email', 'phone_number',
+                    'event', 'status', 'participants_count', 'created_at',
                     'type_of_payments', 'created_at', 'marketing_emails_consent', 'reminder_emails_consent',
                     'consent_status']
 
@@ -56,7 +57,9 @@ class RezerwationsAdmin(admin.ModelAdmin):
 
     # Filtrowanie boczne
     list_filter = ['type_of_payments', 'data_processing_consent',
-                   'privacy_policy_consent', 'marketing_emails_consent', 'created_at', 'reminder_emails_consent']
+                   'privacy_policy_consent', 'marketing_emails_consent', 'created_at', 'reminder_emails_consent', 'status', 'event', 'created_at']
+
+    actions = ['confirm_reservations', 'move_to_waitlist', 'cancel_reservations']
 
     # Domyślne sortowanie
     ordering = ['-created_at']
@@ -93,41 +96,46 @@ class RezerwationsAdmin(admin.ModelAdmin):
 
     consent_status.short_description = 'Marketing'
 
-    def colored_type_of_payments(self, obj):
-        if obj.type_of_payments == 'blik':
-            return format_html(
-                '<span style="background-color: #90EE90; padding: 3px 10px; border-radius: 5px;">BLIK</span>')
-        else:
-            return format_html(
-                '<span style="background-color: #FFD580; padding: 3px 10px; border-radius: 5px;">Gotówka</span>')
+    def confirm_reservations(self, request, queryset):
+        updated = queryset.update(status=Rezerwations.ReservationStatus.CONFIRMED, waitlist_position=None)
+        self.message_user(request, f"{updated} rezerwacji zostało potwierdzonych.")
 
-    colored_type_of_payments.short_description = 'Płatność'
+    confirm_reservations.short_description = "Potwierdź wybrane rezerwacje"
 
-    # Eksport do CSV (opcjonalnie)
-    actions = ['export_to_csv']
+    def move_to_waitlist(self, request, queryset):
+        # Dla każdej rezerwacji obliczamy pozycję na liście rezerwowej
+        for reservation in queryset:
+            if reservation.status != Rezerwations.ReservationStatus.WAITLIST:
+                reservation.status = Rezerwations.ReservationStatus.WAITLIST
+                reservation.waitlist_position = reservation.event.get_next_waitlist_position()
+                reservation.save()
 
-    def export_to_csv(self, request, queryset):
-        import csv
-        from django.http import HttpResponse
+        self.message_user(request, f"{queryset.count()} rezerwacji przeniesionych na listę rezerwową.")
 
-        response = HttpResponse(content_type='text/csv')
-        response['Content-Disposition'] = 'attachment; filename="rezerwacje.csv"'
+    move_to_waitlist.short_description = "Przenieś wybrane rezerwacje na listę rezerwową"
 
-        writer = csv.writer(response)
-        writer.writerow(['Imię', 'Nazwisko', 'Email', 'Telefon', 'Płatność'])
+    def cancel_reservations(self, request, queryset):
+        # Używamy metody cancel dla każdej rezerwacji
+        count = 0
+        waitlist_promotions = 0
 
-        for obj in queryset:
-            writer.writerow([
-                obj.first_name,
-                obj.last_name,
-                obj.email,
-                obj.phone_number,
-                obj.get_type_of_payments_display()
-            ])
+        for reservation in queryset:
+            if reservation.cancel():
+                count += 1
+                # Sprawdź czy spowodowało to przesunięcie z listy rezerwowej
+                if reservation.event.reservations.filter(
+                        status=Rezerwations.ReservationStatus.CONFIRMED,
+                        waitlist_position__isnull=True
+                ).exists():
+                    waitlist_promotions += 1
 
-        return response
+        message = f"{count} rezerwacji zostało anulowanych."
+        if waitlist_promotions > 0:
+            message += f" {waitlist_promotions} osób z listy rezerwowej zostało automatycznie potwierdzonych."
 
-    export_to_csv.short_description = "Eksportuj wybrane do CSV"
+        self.message_user(request, message)
+
+    cancel_reservations.short_description = "Anuluj wybrane rezerwacje"
 
 
 @admin.register(Venue)
