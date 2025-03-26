@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     "events.apps.EventsConfig",
     'phonenumber_field',
     'tinymce',
+    # 'honeypot',
+# zabezpieczenie honeypot
 ]
 
 # Konfiguracja TinyMCE
@@ -71,6 +73,13 @@ TINYMCE_DEFAULT_CONFIG = {
 
 TINYMCE_SPELLCHECKER = True
 TINYMCE_COMPRESSOR = False
+
+
+# Konfiguracja ustawień honeypot
+# HONEYPOT_FIELD_NAME = 'email_verification'  # Nazwa ukrytego pola
+# HONEYPOT_VALUE = ''  # Oczekiwana wartość (puste pole)
+# HONEYPOT_VERIFIER = 'honeypot.validators.HoneypotValidator'  # Walidator
+# HONEYPOT_RESPONSE = 'Formularz zawiera podejrzane dane. Jeśli nie jesteś botem, spróbuj ponownie.'  # Komunikat błędu
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

@@ -6,6 +6,7 @@ from django.utils.html import strip_tags
 from django.views import View
 from django.views.generic import ListView, DetailView
 from django.views.generic.base import ContextMixin
+from honeypot.decorators import check_honeypot
 
 from events.forms import RezerwationForm, EventReservationForm
 from django.contrib import messages
@@ -27,6 +28,7 @@ class EventReservationView(View):
     Przyjmuje ID wydarzenia z URL i tworzy odpowiednią rezerwację.
     """
 
+    # @check_honeypot
     def get(self, request, event_id):
         # Pobierz wydarzenie lub zwróć 404
         event = get_object_or_404(Events, id=event_id, is_active=True)
@@ -47,6 +49,7 @@ class EventReservationView(View):
         }
         return render(request, 'events/event_reservation.html', context)
 
+    # @check_honeypot
     def post(self, request, event_id):
         # Pobierz wydarzenie lub zwróć 404
         event = get_object_or_404(Events, id=event_id, is_active=True)
