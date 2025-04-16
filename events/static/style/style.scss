@@ -1,0 +1,1301 @@
+$head-font: "Original Surfer", sans-serif;
+$main-font: "Faculty Glyphic", sans-serif;
+$background: linear-gradient(135deg, rgba(255,255,255,0.8) 0%, rgba(255,248,227,1) 100%);
+$backgroud-subsection: linear-gradient(135deg, rgba(255,253,240,1) 0%, rgba(255,236,179,1) 100%);
+$main-color: goldenrod;
+$text-shadow: 0.5px 0.5px 0.5px saddlebrown;
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+}
+
+html {
+  font-size: 62.5%;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 1.6rem;
+}
+
+a {
+  text-decoration: none;
+}
+
+img {
+  height: auto;
+}
+
+input,
+button,
+textarea,
+select {
+  font-family: inherit;
+}
+
+button {
+  border: none;
+  cursor: pointer;
+}
+
+
+textarea {
+  resize: vertical;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+.wrapper {
+  margin: 0 auto;
+  padding: 0 15px;
+  width: 100%;
+  max-width: 1200px;
+}
+
+// Navigation
+
+.nav {
+  &__items {
+    &--destkop {
+      display: none;
+    }
+  }
+
+  // tło menu w wersji mobilnej
+  &__items-mobile {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background: linear-gradient(225deg, rgb(255, 223, 128), rgb(255, 170, 85), rgb(255, 120, 50));
+    transform: translateX(0);
+    transition: transform 0.5s;
+    z-index: 100;
+
+    &--active {
+      transform: translateX(100%);
+    }
+  }
+
+  // stylizacja poszczególnych linków menu
+  &__item {
+    font-weight: bolder;
+    font-size: 2rem;
+    margin: 0.5em;
+    padding: 0.7em;
+    width: 100%;
+    text-align: center;
+    color: black;
+    text-transform: uppercase;
+    font-family: $main-font
+  }
+}
+
+// pozycjonowqnie menu hamburgerowego
+.nav .hamburger {
+
+  position: fixed;
+  top: 4rem;
+  right: 4rem;
+  z-index: 500;
+  display: block;
+  transform: translateY(-50%);
+}
+
+// animacja wlatująceoo menu w wersji mobilnej
+@keyframes navItemsAnimation {
+  from {
+    transform: translateX(200%);
+  }
+  to {
+    transform: translateX(0%);
+  }
+}
+
+// animacja wlatująceoo menu w wersji mobilnej
+.nav-items-animation {
+  animation: navItemsAnimation 1s both;
+}
+
+// Header
+
+// tło header
+.header {
+  position: relative;
+  height: 100vh;
+  background-image: url("/events/static/img/header_small.jpg");
+  background-attachment: scroll;
+  background-size: cover;
+  background-position: center;
+
+//  cień nałożony na header
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 3, 27, 0.6);
+    z-index: 1;
+  }
+  // napis tytułowy nałożony na header
+  &__heading {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    text-transform: uppercase;
+    font-size: 4rem;
+    font-family: $head-font;
+    z-index: 10;
+    text-align: center;
+  }
+  &__heading span {
+    color: $main-color;
+  }
+}
+
+.about-me {
+  background: $background;
+  padding: 2rem 1rem;
+
+  &__title {
+    font-size: 6rem;
+    margin: 3rem;
+    text-align: center;
+    color: $main-color;
+    font-family: $head-font;
+    text-shadow: $text-shadow;
+    //text-shadow: 0.5px 0.5px 0.5px saddlebrown;
+
+  }
+
+  &__box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 100%;
+    margin: 0 auto;
+  }
+
+  &__box-img {
+    width: 100%;
+    max-width: 320px;
+    margin-bottom: 1.5rem;
+
+    img {
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+      box-shadow: 10px 8px 8px 8px rgba(0, 0, 0, 0.5);
+    }
+  }
+
+  &__box-description {
+    width: 100%;
+
+    &--text {
+      font-size: 2.2rem;
+      line-height: 2;
+      text-align: center;
+      color: #333;
+      font-family: $main-font;
+      margin: 3rem;
+    }
+  }
+}
+
+
+// Sekcja o terapii dźwiękiem
+.about-therapy {
+  padding: 6rem 1rem;
+  background: $background;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    //background-image: url('../img/sound_waves_pattern.svg');
+    background-size: cover;
+    opacity: 0.1;
+    z-index: 1;
+  }
+
+  &__title {
+    font-size: 6rem;
+    margin: 3rem 0 5rem;
+    text-align: center;
+    color: $main-color;
+    font-family: $head-font;
+    text-shadow: $text-shadow;
+    position: relative;
+    z-index: 2;
+  }
+
+  &__container {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 5rem;
+  }
+
+  &__box {
+    margin-bottom: 2rem;
+  }
+
+  &__subtitle {
+    font-family: $head-font;
+    font-size: 2.8rem;
+    color: sienna;
+    margin-bottom: 2rem;
+    position: relative;
+    padding-left: 2rem;
+
+    &::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 1rem;
+      height: 3rem;
+      background-color: goldenrod;
+      border-radius: 4px;
+    }
+  }
+
+  &__text {
+    font-size: 2.4rem;
+    line-height: 1.8;
+    font-family: $main-font;
+    margin-bottom: 2rem;
+    text-align: justify;
+  }
+
+  &__list {
+    list-style-type: none;
+    margin-left: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  &__list-item {
+    font-size: 2.2rem;
+    line-height: 1.7;
+    font-family: $main-font;
+    margin-bottom: 1rem;
+    position: relative;
+    padding-left: 3rem;
+
+    &::before {
+      content: '♪';
+      position: absolute;
+      left: 0;
+      top: 0;
+      color: goldenrod;
+      font-size: 2.5rem;
+    }
+  }
+
+  // Sekcja korzyści
+  &__benefits {
+    margin-bottom: 3rem;
+  }
+
+  .benefits-container {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+
+    @media (min-width: 768px) {
+      flex-direction: row;
+      gap: 4rem;
+    }
+  }
+
+  .benefits-box {
+    flex: 1;
+    //background: rgba(255, 255, 255, 0.5);
+    background: $backgroud-subsection;
+    border-radius: 15px;
+    padding: 2.5rem;
+    box-shadow: 0 8px 20px rgba(184, 134, 11, 0.15);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 25px rgba(184, 134, 11, 0.25);
+    }
+
+    &__title {
+      font-family: $head-font;
+      font-size: 2.4rem;
+      color: sienna;
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+
+    &__list {
+      list-style-type: none;
+    }
+
+    &__item {
+      font-size: 2rem;
+      line-height: 1.7;
+      font-family: $main-font;
+      margin-bottom: 1.5rem;
+      position: relative;
+      padding-left: 3rem;
+
+      &::before {
+        content: '✓';
+        position: absolute;
+        left: 0;
+        top: 0;
+        color: goldenrod;
+        font-size: 2.2rem;
+      }
+    }
+  }
+
+  // Sekcja dla kogo
+  &__for-whom {
+    margin-bottom: 4rem;
+    //background: rgba(255, 255, 255, 0.3);
+    background: $backgroud-subsection;
+    border-radius: 15px;
+    padding: 3rem;
+    border-left: 5px solid goldenrod;
+  }
+
+// Sekcja przeciwskazania;
+
+  &__contraindications {
+    margin-bottom: 4rem;
+    background: $backgroud-subsection;
+    border-radius: 15px;
+    padding: 3rem;
+    border-left: 5px solid goldenrod;
+  }
+
+  // Sekcja zakończenia
+  &__conclusion {
+    margin-top: 4rem;
+    text-align: center;
+  }
+
+  // Przycisk CTA
+  .cta-container {
+    margin-top: 4rem;
+    display: flex;
+    justify-content: center;
+  }
+
+  .cta-button {
+    display: inline-block;
+    background: linear-gradient(135deg, goldenrod, #e6b422);
+    color: white;
+    font-family: $head-font;
+    font-size: 2.2rem;
+    padding: 1.5rem 4rem;
+    border-radius: 50px;
+    text-transform: uppercase;
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, rgba(255,255,255,0.2), rgba(255,255,255,0));
+      transition: left 0.5s ease;
+      z-index: -1;
+    }
+
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 20px rgba(0, 0, 0, 0.3);
+
+      &::before {
+        left: 100%;
+      }
+    }
+
+    &:active {
+      transform: translateY(-2px);
+    }
+  }
+}
+
+/*=====================
+Koncerty
+=====================*/
+
+.concerts {
+  padding: 6rem 1rem;
+  background: $background;
+  position: relative;
+  overflow: hidden;
+
+  &__title {
+    font-size: 6rem;
+    margin: 3rem 0 5rem;
+    text-align: center;
+    color: $main-color;
+    text-shadow: $text-shadow;
+    font-family: $head-font;
+    position: relative;
+    z-index: 2;
+  }
+
+  &__container {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 6rem;
+  }
+
+  &__box {
+    //background: rgba(255, 255, 255, 0.3);
+    background: $backgroud-subsection;
+    border-radius: 15px;
+    padding: 3rem;
+    box-shadow: 0 8px 20px rgba(184, 134, 11, 0.15);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 25px rgba(184, 134, 11, 0.25);
+    }
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+
+    @media (min-width: 768px) {
+      flex-direction: row;
+      align-items: center;
+      gap: 4rem;
+    }
+  }
+
+  &__text-container {
+    flex: 1;
+  }
+
+  &__subtitle {
+    font-family: $head-font;
+    font-size: 2.8rem;
+    color: sienna;
+    margin-bottom: 2rem;
+    position: relative;
+    padding-left: 2rem;
+
+    &::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 1rem;
+      height: 3rem;
+      background-color: goldenrod;
+      border-radius: 4px;
+    }
+  }
+
+  &__text {
+    font-size: 2.4rem;
+    line-height: 1.8;
+    font-family: $main-font;
+    margin-bottom: 2rem;
+    text-align: justify;
+  }
+
+  &__list {
+    list-style-type: none;
+    margin-left: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  &__list-item {
+    font-size: 2.2rem;
+    line-height: 1.7;
+    font-family: $main-font;
+    margin-bottom: 1rem;
+    position: relative;
+    padding-left: 3rem;
+
+    &::before {
+      content: '♪';
+      position: absolute;
+      left: 0;
+      top: 0;
+      color: goldenrod;
+      font-size: 2.5rem;
+    }
+  }
+
+  &__image-container {
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+
+
+    @media (min-width: 768px) {
+      width: 40%;
+    }
+  }
+
+  &__image-placeholder {
+    position: relative;
+    width: 100%;
+    padding-bottom: 75%;
+    background-color: rgba(218, 165, 32, 0.1);
+    //border: 2px dashed goldenrod;
+    border-radius: 20px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background-color: rgba(218, 165, 32, 0.2);
+    }
+  }
+
+  .image-placeholder-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: rgba(184, 134, 11, 0.8);
+    font-family: $main-font;
+    font-size: 1.8rem;
+    text-align: center;
+    width: 100%;
+  }
+
+  // Animacja fade-in
+  /*.fade-in-element {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+    will-change: opacity, tranform; // Optymalizacja wydajności
+
+    &.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }*/
+
+  // Media Queries
+  @media (min-width: 768px) {
+    padding: 8rem 2rem;
+
+    &__text {
+      font-size: 2.6rem;
+      line-height: 1.9;
+    }
+
+    &__subtitle {
+      font-size: 3.2rem;
+    }
+
+    &__list-item {
+      font-size: 2.4rem;
+    }
+  }
+
+  @media (min-width: 992px) {
+    padding: 10rem 2rem;
+
+    &__container {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    &__text {
+      font-size: 2.8rem;
+      line-height: 2;
+    }
+  }
+}
+
+//====================
+// Dla firm
+//====================
+.business {
+  padding: 6rem 1rem;
+  background: $background;
+
+  &__title {
+    font-size: 6rem;
+    margin: 3rem 0 5rem;
+    text-align: center;
+    color: $main-color;
+    text-shadow: $text-shadow;
+    font-family: $head-font;
+  }
+
+  &__container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  &__main-heading {
+    font-family: $head-font;
+    font-size: 3.6rem;
+    color: sienna;
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  &__intro {
+    text-align: center;
+    margin-bottom: 6rem;
+
+    &-text {
+      font-family: $main-font;
+      font-size: 2.4rem;
+      line-height: 1.8;
+      max-width: 800px;
+      margin: 0 auto 4rem;
+    }
+
+    &-graphic {
+      width: 100%;
+      height: 300px;
+      margin: 0 auto;
+      max-width: 800px;
+
+      img {
+        width: 100%;
+        height: 300px;
+        margin: 0 auto;
+        max-width: 800px;
+      }
+    }
+  }
+
+  &__subtitle {
+    font-family: $head-font;
+    font-size: 2.8rem;
+    color: sienna;
+    margin-bottom: 3rem;
+    text-align: center;
+  }
+
+  // Benefits Grid
+  .benefits-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 3rem;
+    margin-bottom: 6rem;
+  }
+
+  .benefit-card {
+    //background: rgba(255, 255, 255, 0.5);
+    background: $backgroud-subsection;
+    padding: 2.5rem;
+    border-radius: 15px;
+    text-align: center;
+    transition: transform 0.3s ease;
+
+    &:hover {
+      transform: translateY(-5px);
+    }
+
+    &__icon {
+      width: 6rem;
+      height: 6rem;
+      margin: 0 auto 2rem;
+      color: goldenrod;
+    }
+
+    p {
+      font-family: $main-font;
+      font-size: 2rem;
+      line-height: 1.5;
+    }
+  }
+
+  // Services
+  .services-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 4rem;
+    margin-bottom: 6rem;
+  }
+
+  .service-card {
+    //background: rgba(255, 255, 255, 0.5);
+    background: $backgroud-subsection;
+    padding: 3rem;
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(184, 134, 11, 0.15);
+    transition: transform 0.3s ease;
+
+    &:hover {
+      transform: translateY(-5px);
+    }
+
+    &__icon {
+      width: 5rem;
+      height: 5rem;
+      margin: 0 auto 2rem;
+      color: goldenrod;
+    }
+
+    &__title {
+      font-family: 'Original Surfer', sans-serif;
+      font-size: 2.4rem;
+      color: sienna;
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+
+    &__list {
+      list-style: none;
+
+      li {
+        font-family: $main-font;
+        font-size: 2rem;
+        line-height: 1.7;
+        margin-bottom: 1rem;
+        padding-left: 2.5rem;
+        position: relative;
+
+        &::before {
+          content: '♪';
+          position: absolute;
+          left: 0;
+          color: sienna;
+        }
+      }
+    }
+  }
+
+  // Benefits Columns
+  .benefits-columns {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 4rem;
+    margin-bottom: 6rem;
+  }
+
+  .benefits-column {
+    //background: rgba(255, 255, 255, 0.5);
+    background: $backgroud-subsection;
+    padding: 3rem;
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(184, 134, 11, 0.15);
+
+    &__icon {
+      width: 5rem;
+      height: 5rem;
+      margin: 0 auto 2rem;
+      color: goldenrod;
+    }
+
+    &__title {
+      font-family: $head-font;
+      font-size: 2.4rem;
+      color: sienna;
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+
+    &__list {
+      list-style: none;
+
+      li {
+        font-family: $main-font;
+        font-size: 2rem;
+        line-height: 1.7;
+        margin-bottom: 1rem;
+        padding-left: 2.5rem;
+        position: relative;
+
+        &::before {
+          content: '✓';
+          position: absolute;
+          left: 0;
+          color: goldenrod;
+        }
+      }
+    }
+  }
+
+  // CTA
+  &__cta {
+    text-align: center;
+    margin-top: 4rem;
+
+    .btn--primary {
+      display: inline-block;
+      background: linear-gradient(135deg, goldenrod, #e6b422);
+      color: white;
+      font-family: $head-font;
+      font-size: 2.2rem;
+      padding: 1.5rem 4rem;
+      border-radius: 50px;
+      text-transform: uppercase;
+      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+      &:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 12px 25px rgba(0, 0, 0, 0.3);
+      }
+    }
+  }
+}
+
+/*===========================
+Praktyczne informacje
+===========================*/
+
+.practical-info {
+  padding: 6rem 1rem;
+  //background: linear-gradient(135deg, rgba(255,253,240,1) 0%, rgba(255,236,179,1) 100%);
+
+  &__title {
+    font-size: 6rem;
+    margin: 3rem 0 5rem;
+    text-align: center;
+    color: $main-color;
+    text-shadow: $text-shadow;
+    font-family: $head-font;
+  }
+
+  &__main-subtitle {
+    font-family: $head-font;
+    font-size: 3.2rem;
+    color: sienna;
+    text-align: center;
+    margin-bottom: 4rem;
+  }
+
+  &__grid {
+    display: grid;
+    gap: 3rem;
+    margin: 4rem 0;
+
+    @media (min-width: 768px) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+
+
+  // Karty informacyjne
+  .info-card {
+    //background: rgba(255, 255, 255, 0.5);
+    background: $backgroud-subsection;
+    border-radius: 15px;
+    padding: 3rem;
+    box-shadow: 0 8px 20px rgba(184, 134, 11, 0.15);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 25px rgba(184, 134, 11, 0.25);
+    }
+
+    &__header {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    &__icon {
+      width: 5rem;
+      height: 5rem;
+      background: goldenrod;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 2.5rem;
+
+      //svg {// Dla ikon z biblioteki Lucide
+      //  width: 2.8rem;  // 28px - rozmiar samej ikony wewnątrz kontenera
+      //  height: 2.8rem; // 28px
+      //}
+    }
+
+    &__title {
+      font-family: $head-font;
+      font-size: 2.4rem;
+      color: sienna;
+    }
+  }
+
+  // Grupy informacji
+  .info-group {
+    margin-bottom: 2rem;
+
+    &__title {
+      font-family: $main-font;
+      font-size: 2.2rem;
+      color: #333;
+      margin-bottom: 1rem;
+    }
+
+    &__list {
+      list-style-type: none;
+      margin-left: 2rem;
+
+      li {
+        font-family: $main-font;
+        font-size: 2rem;
+        line-height: 1.7;
+        margin-bottom: 1rem;
+        position: relative;
+        padding-left: 2.5rem;
+
+        &::before {
+          content: '•';
+          position: absolute;
+          left: 0;
+          color: goldenrod;
+          font-size: 2.5rem;
+          line-height: 1;
+        }
+      }
+    }
+  }
+
+  // Stopka sekcji
+  &__footer {
+    margin-top: 6rem;
+    text-align: center;
+  }
+
+  &__contact {
+    margin-bottom: 3rem;
+  }
+
+  &__subtitle {
+    font-family: $head-font;
+    font-size: 2.8rem;
+    color: sienna;
+    margin-bottom: 2rem;
+  }
+
+  &__text {
+    font-family: $main-font;
+    font-size: 2.2rem;
+    line-height: 1.8;
+    margin-bottom: 1.5rem;
+
+    &--important {
+      color: sienna;
+      font-weight: bold;
+    }
+  }
+
+  &__buttons {
+    //margin-top: 3rem;
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 3rem; // Dodajemy większy margines dla lepszej separacji
+    position: relative; // Dodajemy pozycjonowanie względne
+    z-index: 2; // Upewniamy się, że przyciski są na wierzchu
+  }
+
+  // Przyciski
+  .btn {
+    margin-top: 3rem;
+    display: inline-block;
+    font-family: $head-font;
+    font-size: 2rem;
+    padding: 1.5rem 3rem;
+    border-radius: 50px;
+    text-transform: uppercase;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer; // Dodajemy wskaźnik kursora
+    text-decoration: none; // Upewniamy się, że link nie ma podkreślenia
+
+    &--primary {
+      background: linear-gradient(135deg, goldenrod, #e6b422);
+      color: white;
+      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+
+      &:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 12px 20px rgba(0, 0, 0, 0.3);
+      }
+    }
+
+    &--secondary {
+      background: transparent;
+      color: goldenrod;
+      border: 2px solid goldenrod;
+
+      &:hover {
+        transform: translateY(-3px);
+        background: rgba(218, 165, 32, 0.1);
+      }
+    }
+  }
+
+  @media (min-width: 992px) {
+    padding: 8rem 2rem;
+
+    &__container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+  }
+}
+/*================================
+Kontakt
+================================*/
+.contact {
+  padding: 6rem 1rem;
+  background: $background;
+
+  &__title {
+    font-size: 6rem;
+    margin: 3rem 0 5rem;
+    text-align: center;
+    color: $main-color;
+    text-shadow: $text-shadow;
+    font-family: $head-font;
+  }
+
+  &__container {
+    display: flex;
+    flex-direction: column;
+    gap: 4rem;
+
+    @media (min-width: 992px) {
+      flex-direction: row;
+      align-items: flex-start;
+    }
+  }
+
+  &__info {
+    flex: 1;
+  }
+
+  &__card {
+    //background: rgba(255, 255, 255, 0.6);
+    background: $backgroud-subsection;
+    border-radius: 15px;
+    padding: 3rem;
+    box-shadow: 0 8px 20px rgba(184, 134, 11, 0.15);
+  }
+
+  &__item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 3rem;
+
+    &:hover .contact__icon {
+      transform: scale(1.1);
+    }
+  }
+
+  &__icon {
+    width: 6rem;
+    height: 6rem;
+    background: linear-gradient(135deg, goldenrod, #e6b422);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 2rem;
+    transition: transform 0.3s ease;
+
+    &--phone, &--email, &--facebook, &--instagram {
+      color: white;
+      font-size: 2.8rem;
+    }
+  }
+
+  &__details {
+    flex: 1;
+  }
+
+  &__subtitle {
+    font-family: $head-font;
+    font-size: 2.2rem;
+    color: sienna;
+    //margin-bottom: 0.5rem;
+
+    &--map {
+      //margin-bottom: 2rem;
+      text-align: center;
+    }
+  }
+
+  &__text {
+    font-family: $main-font;
+    font-size: 2.4rem;
+    color: #333;
+  }
+
+  &__social {
+    margin-top: 4rem;
+
+    &-icons {
+      display: flex;
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    &-link {
+      text-decoration: none;
+      display: inline-block;
+
+      &:hover .contact__icon {
+        transform: scale(1.1);
+      }
+    }
+  }
+
+  &__map-container {
+    flex: 1;
+    //padding: 2rem;
+  }
+
+  &__map {
+    width: 100%;
+    height: 375px;
+    border-radius: 15px;
+    overflow: hidden;
+    //box-shadow: 0 8px 20px rgba(184, 134, 11, 0.15);
+
+    &-placeholder {
+      width: 100%;
+      height: 100%;
+      //background-color: rgba(255, 255, 255, 0.6);
+      //background: $backgroud-subsection;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+
+      p {
+        font-family: $main-font;
+        font-size: 2rem;
+        color: sienna;
+        padding: 2rem;
+      }
+    }
+  }
+
+  // Responsywność
+  @media (max-width: 768px) {
+    &__item {
+      flex-direction: column;
+      text-align: center;
+    }
+
+    &__icon {
+      margin-right: 0;
+      margin-bottom: 1.5rem;
+    }
+
+    &__social {
+      text-align: center;
+
+      &-icons {
+        justify-content: center;
+      }
+    }
+  }
+}
+
+.footer {
+  // Używamy tego samego gradientu co w innych sekcjach, ale w ciemniejszej wersji
+  background: linear-gradient(135deg,
+          darken(rgba(255,253,240,1), 10%),
+          darken(rgba(255,236,179,1), 10%)
+  );
+  padding: 2rem 0;
+  border-top: 2px solid rgba(218, 165, 32, 0.3); // Subtelna linia oddzielająca
+
+  &__content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &__copyright {
+    font-family: $main-font;
+    font-size: 1.8rem;
+    color: #666;
+    text-align: center;
+
+    // Subtelna animacja przy hover
+    &:hover {
+      color: sienna;
+    }
+  }
+
+  &__year,
+  &__owner {
+    font-weight: bold;
+    color: sienna; // Złoty kolor zgodny z paletą strony
+  }
+
+  &__rights {
+    margin-left: 0.5rem;
+  }
+
+  // Responsywność dla małych ekranów
+  @media (max-width: 576px) {
+    padding: 1.5rem 0;
+
+    &__copyright {
+      font-size: 1.6rem;
+    }
+
+    // Na małych ekranach tekst może się zawijać
+    &__rights {
+      display: block;
+      margin-top: 0.5rem;
+    }
+  }
+}
+@import "destkop";
+

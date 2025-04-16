@@ -20,12 +20,14 @@ from django.conf.urls.static import static
 from django.urls import path, include
 
 from events import views
+from events.views import HomeView
+
 # from events.views import RezerwationsView
 # from events.views import HomeView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # path('', HomeView.as_view(), name='home'),
+    path('', HomeView.as_view(), name='home'),
     # path('rezerwation', RezerwationsView.as_view(), name='rezerwation'),
     path('', views.EventListView.as_view(), name='event_list'),
     path('<int:event_id>/', views.EventDetailView.as_view(), name='event_detail'),
