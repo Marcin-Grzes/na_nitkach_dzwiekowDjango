@@ -1,0 +1,618 @@
+<!doctype html>
+{% load static %}
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="description" content="Na nitkach dźwięków - relaksacyjne koncerty na misach dźwiękowych w Grodzisku
+    Mazowieckim, Milanówku i okolicach">
+    <meta name="keywords" content="relaks, misa tybetańska, gong, medytacja, rozwój duchowy">
+    <meta name="author" content="Marcin Grześ">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DynaPuff&family=Faculty+Glyphic&family=Indie+Flower&family=Original+Surfer&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href={% static "/events/static/style/style.css" %}>
+    <link rel="stylesheet" href={% static "/events/static/style/hamburgers.css" %}>
+    <link rel="stylesheet" href={% static "/events/static/style/slider.css"%}>
+    <script async defer src={% static "/events/static/js/script.js" %}></script>
+    <script async defer src={% static "/events/static/js/slider.js" %}></script>
+    <title>Na nitkach dźwięków - koncerty na misach dźwiękowych, gongu | Milanówek</title>
+</head>
+<body>
+
+<!--===================NAWIGACJA=========================-->
+<nav class="nav">
+    <div class="nav__items--destkop">
+        <a href="#about_me" class="nav__item">O mnie</a>
+        <a href="#about_therapy" class="nav__item">O terapii dźwiękiem</a>
+        <a href="#concerts" class="nav__item">Koncerty</a>
+        <a href="#firm" class="nav__item">Dla firm</a>
+        <a href="#practical" class="nav__item">Praktyczne informacje</a>
+        <a href="#contact" class="nav__item">Kontakt</a>
+    </div>
+
+    <div class="nav__items-mobile nav__items-mobile--active">
+        <a href="#about_me" class="nav__item nav__item--mobile">O mnie</a>
+        <a href="#about_therapy" class="nav__item nav__item--mobile">O terapii dźwiękiem</a>
+        <a href="#concerts" class="nav__item nav__item--mobile">Koncerty</a>
+        <a href="#firm" class="nav__item nav__item--mobile">Dla firm</a>
+        <a href="#practical" class="nav__item nav__item--mobile">Praktyczne informacje</a>
+        <a href="#contact" class="nav__item nav__item--mobile">Kontakt</a>
+    </div>
+
+    <button class="hamburger hamburger--emphatic" type="button">
+  <span class="hamburger-box">
+    <span class="hamburger-inner"></span>
+  </span>
+    </button>
+</nav>
+<!--===================HEADER=========================-->
+<header class="header">
+    <h1 class="header__heading">Na <span>nitkach</span> dźwięków</h1>
+</header>
+<main class="main">
+    <!--===================SLIDER=========================-->
+    <!--<section class="slider-background">
+        <div class="slider">
+            <div class="slider__box">
+                <img src="img/events/gong.jpg" alt="Zdjęcie natury" class="slider__img">
+                <img src="img/events/Misy_tlo.jpg" alt="Zdjęcie natury" class="slider__img">
+                <img src="img/events/DALL·E%202024-11-26%2020.32.48%20-%20A%20cozy%20massage%20room%20with%20a%20woman%20lying%20on%20her%20back%20on%20a%20soft%20yoga%20mat,%20covered%20with%20a%20delicate%20blanket.%20Around%20her%20are%20Tibetan%20singing%20bowls%20arranged%20.webp"
+                     alt="Zdjęcie natury" class="slider__img">
+            </div>
+            <button class="btn btn&#45;&#45;left"><span>&lt;</span></button>
+            <button class="btn btn&#45;&#45;right"><span>&gt;</span></button>
+        </div>
+    </section>-->
+    <!--===================O MNIE=========================-->
+    <section class="about-me" id="about_me">
+        <h2 class="about-me__title">O mnie</h2>
+        <div class="wrapper">
+            <div class="about-me__box">
+                <div class="about-me__box-img">
+                    <img src="/events/static/img/about_me_large.jpeg" alt="Zdjęcie Beaty Witkowskiej">
+                </div>
+                <div class="about-me__box-description">
+                    <p class="about-me__box-description--text">Nazywam się Beata Witkowska i od ponad 7 lat pracuję z wibracjami mis i gongów.</p>
+                    <p class="about-me__box-description--text">Dźwięki zawsze
+                        były ważną częścią mojego życia – to one prowadziły mnie przez śpiew, taniec i grę na
+                        instrumentach.</p>
+                    <p class="about-me__box-description--text">Teraz dzielę się swoją pasją, tworząc przestrzeń, gdzie każdy może znaleźć
+                        ukojenie, relaks i inspirację.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--===================O TERAPII=========================-->
+        <section class="about-therapy" id="about_therapy">
+            <h2 class="about-therapy__title">O terapii dźwiękiem</h2>
+            <div class="wrapper">
+                <div class="about-therapy__container">
+                    <div class="about-therapy__box">
+                        <h3 class="about-therapy__subtitle">Czym jest "kąpiel w dźwiękach"</h3>
+                        <p class="about-therapy__text">Wyobraź sobie moment, w którym wszystkie troski dnia codziennego rozpływają się w harmonijnej fali dźwięków. Kąpiel w dźwiękach to wyjątkowe doświadczenie, podczas którego otulają Cię kojące wibracje tybetańskich mis i majestatycznego gongu. To nie zwykły koncert – to głęboka podróż w głąb siebie, gdzie każda komórka Twojego ciała zanurza się w terapeutycznych wibracjach.</p>
+                    </div>
+
+                    <div class="about-therapy__box">
+                        <h3 class="about-therapy__subtitle">Działanie wibracji na ciało i umysł</h3>
+                        <p class="about-therapy__text">Każdy dźwięk mis i gongu to precyzyjnie dobrana częstotliwość, która:</p>
+                        <ul class="about-therapy__list">
+                            <li class="about-therapy__list-item">Delikatnie masuje Twoje ciało na poziomie komórkowym</li>
+                            <li class="about-therapy__list-item">Synchronizuje fale mózgowe, wprowadzając w stan głębokiego relaksu</li>
+                            <li class="about-therapy__list-item">Harmonizuje przepływ energii w organizmie</li>
+                            <li class="about-therapy__list-item">Uwalnia napięcia fizyczne i emocjonalne</li>
+                        </ul>
+                        <p class="about-therapy__text">Podczas sesji Twój organizm naturalnie dostosowuje się do leczniczych wibracji, pozwalając osiągnąć stan, który w medytacji zajmuje lata praktyki.</p>
+                    </div>
+
+                    <div class="about-therapy__benefits">
+                        <h3 class="about-therapy__subtitle">Korzyści zdrowotne i relaksacyjne</h3>
+                        <div class="benefits-container">
+                            <div class="benefits-box">
+                                <h4 class="benefits-box__title">Natychmiastowe efekty:</h4>
+                                <ul class="benefits-box__list">
+                                    <li class="benefits-box__item">Głęboki relaks i redukcja stresu</li>
+                                    <li class="benefits-box__item">Poprawa jakości snu</li>
+                                    <li class="benefits-box__item">Uwolnienie od napięć mięśniowych</li>
+                                    <li class="benefits-box__item">Wyciszenie umysłu i redukcja natłoku myśli</li>
+                                </ul>
+                            </div>
+                            <div class="benefits-box">
+                                <h4 class="benefits-box__title">Długotrwałe rezultaty:</h4>
+                                <ul class="benefits-box__list">
+                                    <li class="benefits-box__item">Wzmocnienie odporności organizmu</li>
+                                    <li class="benefits-box__item">Redukcja chronicznego stresu i niepokoju</li>
+                                    <li class="benefits-box__item">Poprawa koncentracji i kreatywności</li>
+                                    <li class="benefits-box__item">Większa równowaga emocjonalna</li>
+                                    <li class="benefits-box__item">Naturalne uśmierzenie bólu</li>
+                                    <li class="benefits-box__item">Przyspieszenie procesów regeneracyjnych</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="about-therapy__for-whom">
+                        <h3 class="about-therapy__subtitle">Dla kogo?</h3>
+                        <p class="about-therapy__text">Dla każdego, kto chce spróbować czegoś nowego, znaleźć chwilę spokoju i zadbać o swoje dobre samopoczucie. Nie musisz mieć żadnego doświadczenia – wystarczy, że przyjdziesz i pozwolisz dźwiękom działać.</p>
+                    </div>
+                    <div class="about-therapy__contraindications">
+                        <h3 class="about-therapy__subtitle">Przeciwskazania:</h3>
+                        <h4 class="benefits-box__title"></h4>
+                        <ul class="benefits-box__list">
+                            <li class="benefits-box__item">Jesteś w ciąży (pierwszy trymestr)</li>
+                            <li class="benefits-box__item">Masz rozrusznik serca</li>
+                            <li class="benefits-box__item">Cierpisz na epilepsję</li>
+                            <li class="benefits-box__item">Masz poważne zaburzenia psychiczne</li>
+                        </ul>
+                    </div>
+                    <div class="about-therapy__conclusion">
+                        <p class="about-therapy__text">Kąpiel w dźwiękach to więcej niż relaks – to inwestycja w Twoje zdrowie i dobrostan. Każda sesja to podróż do świata harmonii, z której wracasz odnowiony, zrelaksowany i pełen pozytywnej energii.</p>
+                        <p class="about-therapy__text">Pozwól sobie na ten wyjątkowy prezent dla ciała i duszy. Dołącz do grona osób, które odkryły moc dźwiękowej terapii i przekonaj się, jak głęboki relaks może zmienić Twoje życie.</p>
+                        <div class="cta-container">
+                            <a href="#contact" class="cta-button">Kontakt</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    <!--===================KONCERTY=========================-->
+
+    <section class="concerts" id="concerts">
+        <h2 class="concerts__title">Koncerty</h2>
+        <div class="wrapper">
+            <div class="concerts__container">
+                <!-- Koncerty grupowe regularne -->
+                <div class="concerts__box">
+                    <div class="fade-in-element">
+                    <div class="concerts__content">
+                        <div class="concerts__text-container">
+                            <h3 class="concerts__subtitle">Regularne koncerty grupowe</h3>
+                            <p class="concerts__text">Zanurz się w oceanie harmonijnych wibracji razem z innymi poszukiwaczami spokoju. Nasze regularne koncerty to przestrzeń, gdzie harmonia dźwięków łączy się z energią grupy.</p>
+                            <ul class="concerts__list">
+                                <li class="concerts__list-item">Cotygodniowe sesje w kameralnej atmosferze</li>
+                                <li class="concerts__list-item">60 minut głębokiego relaksu przy dźwiękach mis i gongu</li>
+                                <li class="concerts__list-item">Możliwość regularnej praktyki w przystępnej cenie</li>
+                                <li class="concerts__list-item">Społeczność ludzi dzielących pasję do świadomego odpoczynku</li>
+                            </ul>
+                        </div>
+                        <div class="concerts__image-container">
+                            <div class="concerts__image-placeholder">
+
+                                <span class="image-placeholder-text"><img src="/events/static/img/group-small.jpeg" alt="zdjęcie grupowe"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+
+                <!-- Koncerty prywatne -->
+                <div class="concerts__box fade-in-element">
+                    <div class="concerts__content">
+                        <div class="concerts__image-container">
+                            <div class="concerts__image-placeholder">
+                                <span class="image-placeholder-text"><img src="/events/static/img/sesja_indyw1.jpg" alt="zdjęcie koncertu w pomieszczeniu, są 2 osoby"></span>
+                            </div>
+                        </div>
+                        <div class="concerts__text-container">
+                            <h3 class="concerts__subtitle">Koncerty prywatne/na życzenie</h3>
+                            <p class="concerts__text">Szukasz wyjątkowego doświadczenia dla siebie i bliskich? Zorganizujemy koncert specjalnie dla Ciebie, tworząc niepowtarzalną atmosferę dopasowaną do Twoich oczekiwań.</p>
+                            <ul class="concerts__list">
+                                <li class="concerts__list-item">Personalizowany program dostosowany do Twoich potrzeb</li>
+                                <li class="concerts__list-item">Elastyczny wybór terminu i lokalizacji</li>
+                                <li class="concerts__list-item">Idealne na urodziny, wieczór panieński czy firmową integrację</li>
+                                <li class="concerts__list-item">Możliwość łączenia z innymi praktykami wellness</li>
+                                <li class="concerts__list-item">Niezapomniane przeżycie dla grupy przyjaciół lub rodziny</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sesje indywidualne -->
+                <div class="concerts__box fade-in-element">
+                    <div class="concerts__content">
+                        <div class="concerts__text-container">
+                            <h3 class="concerts__subtitle">Sesje indywidualne</h3>
+                            <p class="concerts__text">Potrzebujesz głębszej pracy z dźwiękiem? Nasze sesje one-on-one to personalizowane doświadczenie, gdzie cała uwaga skupiona jest na Twoich potrzebach.</p>
+                            <ul class="concerts__list">
+                                <li class="concerts__list-item">Pełna uwaga terapeuty skupiona tylko na Tobie</li>
+                                <li class="concerts__list-item">Program dopasowany do Twoich indywidualnych potrzeb</li>
+                                <li class="concerts__list-item">Możliwość połączenia z konsultacją i wywiadem</li>
+                                <li class="concerts__list-item">Intensywniejsze doświadczenie wibracji</li>
+                                <li class="concerts__list-item">Idealne przy konkretnych dolegliwościach lub we wspomaganiu terapii</li>
+                            </ul>
+                        </div>
+                        <div class="concerts__image-container">
+                            <div class="concerts__image-placeholder">
+                                <span class="image-placeholder-text"><img src="/events/static/img/indywidual-small1.jpg" alt="zdjęcie sesji indywidualnej"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Koncerty wyjazdowe -->
+                <div class="concerts__box fade-in-element">
+                    <div class="concerts__content">
+                        <div class="concerts__image-container">
+                            <div class="concerts__image-placeholder">
+                                <span class="image-placeholder-text"><img src="/events/static/img/zdj%20plenerowe2_small.jpg" alt="zdjęcie plenerowe"></span>
+                            </div>
+                        </div>
+                        <div class="concerts__text-container">
+                            <h3 class="concerts__subtitle">Koncerty wyjazdowe</h3>
+                            <p class="concerts__text">Przyjadę tam, gdzie mnie potrzebujesz, przynosząc harmonię dźwięków do każdego miejsca.</p>
+                            <ul class="concerts__list">
+                                <li class="concerts__list-item">Eventy firmowe i konferencje</li>
+                                <li class="concerts__list-item">Wydarzenia plenerowe i festiwale</li>
+                                <li class="concerts__list-item">Ośrodki wellness i SPA</li>
+                                <li class="concerts__list-item">Szkoły i centra edukacyjne</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Warsztaty i wydarzenia specjalne -->
+                <div class="concerts__box fade-in-element">
+                    <div class="concerts__content">
+                        <div class="concerts__text-container">
+                            <h3 class="concerts__subtitle">Warsztaty i wydarzenia specjalne</h3>
+                            <p class="concerts__text">Zanurz się głębiej w świat dźwięku i odkryj jego transformacyjną moc podczas naszych wyjątkowych wydarzeń.</p>
+                            <ul class="concerts__list">
+                                <li class="concerts__list-item">Weekendowe warsztaty wprowadzające do pracy z dźwiękiem</li>
+                                <li class="concerts__list-item">Całodniowe ceremonie z wykorzystaniem różnych technik</li>
+                                <li class="concerts__list-item">Cykle edukacyjne o wpływie dźwięku na organizm</li>
+                                <li class="concerts__list-item">Specjalne koncerty przy pełni księżyca</li>
+                                <li class="concerts__list-item">Retreaty łączące dźwięk z innymi praktykami</li>
+                                <li class="concerts__list-item">Zwoływanie kobiecych kręgów</li>
+                            </ul>
+                        </div>
+                        <div class="concerts__image-container">
+                            <div class="concerts__image-placeholder">
+                                <span class="image-placeholder-text"><img src="/events/static/img/spec2.jpg" alt="zdjęcie grupowe"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+<!--===================Dla firm=========================-->
+
+    <section class="business" id="firm">
+        <h2 class="business__title">Dla firm</h2>
+        <div class="wrapper">
+            <div class="business__container">
+                <!-- Intro Section -->
+                <div class="business__intro">
+                    <h3 class="business__main-heading">Dźwiękowa Harmonia dla Twojego Biznesu</h3>
+                    <p class="business__intro-text">Szukasz innowacyjnego sposobu na poprawę dobrostanu pracowników i zwiększenie efektywności zespołu? Odkryj moc terapii dźwiękiem w środowisku biznesowym!</p>
+
+                    <!-- Sugerowana grafika:
+                         Abstrakcyjna ilustracja przedstawiająca biuro z elementami muzycznymi,
+                         np. fale dźwiękowe przecinające nowoczesną przestrzeń biurową -->
+                    <div class="business__intro-graphic"><img src="/events/static/img/biuro12.jpg" alt="biuro z dźwiękami"></div>
+                </div>
+
+                <!-- Why Choose Us -->
+                <div class="business__why-us">
+                    <h3 class="business__subtitle">Dlaczego firmy wybierają koncerty relaksacyjne?</h3>
+                    <div class="benefits-grid">
+                        <!-- Benefit 1 -->
+                        <div class="benefit-card">
+                            <!-- Ikona: Bar Chart Rising -->
+                            <div class="benefit-card__icon"><img src="/events/static/img/icons/firm/benefit1.svg" alt="ikona wykresu słupkowego"></div>
+                            <p>Redukcja stresu zawodowego</p>
+                        </div>
+                        <!-- Benefit 2 -->
+                        <div class="benefit-card">
+                            <!-- Ikona: Lightning Bolt -->
+                            <div class="benefit-card__icon"><img src="/events/static/img/icons/firm/benefit2.svg" alt="ikona błyskawicy"></div>
+                            <p>Wzrost produktywności zespołu</p>
+                        </div>
+                        <!-- Benefit 3 -->
+                        <div class="benefit-card">
+                            <!-- Ikona: Users -->
+                            <div class="benefit-card__icon"><img src="/events/static/img/icons/firm/benefit3.svg" alt="ikona trzech ludzi"></div>
+                            <p>Poprawa atmosfery w pracy</p>
+                        </div>
+                        <!-- Benefit 4 -->
+                        <div class="benefit-card">
+                            <!-- Ikona: Puzzle -->
+                            <div class="benefit-card__icon"><img src="/events/static/img/icons/firm/benefit4.svg" alt="ikona zespołu trzech osób"></div>
+                            <p>Innowacyjna forma team buildingu</p>
+                        </div>
+                        <!-- Benefit 5 -->
+                        <div class="benefit-card">
+                            <!-- Ikona: Building -->
+                            <div class="benefit-card__icon"><img src="/events/static/img/icons/firm/benefit5A.svg" alt="ikona sukcesu zespołowego"></div>
+                            <p>Wzmocnienie employer brandingu</p>
+                        </div>
+                        <!-- Benefit 6 -->
+                        <div class="benefit-card">
+                            <!-- Ikona: Balance -->
+                            <div class="benefit-card__icon"><img src="/events/static/img/icons/firm/benefit6.svg" alt="ikona z człowiekiem trzymającym w jednej ręce serce a w drugiej pieniądz"></div>
+                            <p>Wsparcie work-life balance</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Services -->
+                <div class="business__services">
+                    <h3 class="business__subtitle">Nasza oferta dla firm</h3>
+                    <div class="services-container">
+                        <!-- Service 1 -->
+                        <div class="service-card">
+                            <!-- Ikona: Calendar -->
+                            <div class="service-card__icon"><img src="/events/static/img/icons/firm/service1.svg" alt="ikona kalendarza"></div>
+                            <h4 class="service-card__title">Regularne Sesje w Biurze</h4>
+                            <ul class="service-card__list">
+                                <li>Cotygodniowe lub comiesięczne koncerty</li>
+                                <li>Sesje w porze lunchu lub po pracy</li>
+                                <li>Elastyczne terminy dopasowane do grafiku firmy</li>
+                                <li>Minimum organizacji - zapewniamy cały sprzęt</li>
+                            </ul>
+                        </div>
+                        <!-- Service 2 -->
+                        <div class="service-card">
+                            <!-- Ikona: Users Group -->
+                            <div class="service-card__icon"><img src="/events/static/img/icons/firm/service2.svg" alt="ikona z 4 osobami"></div>
+                            <h4 class="service-card__title">Eventy Firmowe</h4>
+                            <ul class="service-card__list">
+                                <li>Koncerty podczas konferencji</li>
+                                <li>Sesje integracyjne</li>
+                                <li>Wydarzenia okolicznościowe</li>
+                                <li>Warsztaty team buildingowe</li>
+                            </ul>
+                        </div>
+                        <!-- Service 3 -->
+                        <div class="service-card">
+                            <!-- Ikona: Gift -->
+                            <div class="service-card__icon"><img src="/events/static/img/icons/firm/service3.svg" alt="ikona prezentu"></div>
+                            <h4 class="service-card__title">Pakiety Wellness dla Pracowników</h4>
+                            <ul class="service-card__list">
+                                <li>Karnety na regularne sesje</li>
+                                <li>Vouchery prezentowe</li>
+                                <li>Program lojalnościowy</li>
+                                <li>Sesje indywidualne dla kadry zarządzającej</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Benefits -->
+                <div class="business__benefits">
+                    <h3 class="business__subtitle">Korzyści dla Twojej organizacji</h3>
+                    <div class="benefits-columns">
+                        <div class="benefits-column">
+                            <!-- Ikona: User Check -->
+                            <div class="benefits-column__icon"><img src="/events/static/img/icons/firm/benefit-columns1.svg" alt="ikona człowieka z potwierdzeniem(ptaszek)"></div>
+                            <h4 class="benefits-column__title">Dla pracowników:</h4>
+                            <ul class="benefits-column__list">
+                                <li>Redukcja napięcia i stresu</li>
+                                <li>Poprawa koncentracji</li>
+                                <li>Większa kreatywność</li>
+                                <li>Lepszy sen i regeneracja</li>
+                                <li>Wzrost satysfakcji z pracy</li>
+                            </ul>
+                        </div>
+                        <div class="benefits-column">
+                            <!-- Ikona: Building -->
+                            <div class="benefits-column__icon"><img src="/events/static/img/icons/firm/benefit-columns2.svg" alt="ikona przedsiębiorstwa"></div>
+                            <h4 class="benefits-column__title">Dla pracodawcy:</h4>
+                            <ul class="benefits-column__list">
+                                <li>Niższa absencja chorobowa</li>
+                                <li>Wzrost efektywności zespołu</li>
+                                <li>Poprawa atmosfery w pracy</li>
+                                <li>Wyróżnienie się na rynku pracy</li>
+                                <li>Wsparcie polityki wellbeing</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+<!--                 CTA-->
+                <!--<div class="business__cta">
+                    <a href="#contact" class="btn btn&#45;&#45;primary">Umów konsultację</a>
+                </div>-->
+            </div>
+        </div>
+    </section>
+
+    <!--===================PRAKTYCZNE INFORMACJE=========================-->
+
+    <section class="practical-info" id="practical">
+        <h2 class="practical-info__title">Praktyczne informacje</h2>
+        <div class="wrapper">
+            <div class="practical-info__container">
+                <div class="practical-info__intro">
+                    <h3 class="practical-info__main-subtitle">Przygotuj się na wyjątkowe doświadczenie dźwiękowej podróży</h3>
+                </div>
+
+                <div class="practical-info__grid">
+                    <!-- Co zabrać ze sobą -->
+                    <div class="info-card">
+                        <div class="info-card__header">
+                            <div class="info-card__icon">
+                                <img src="/events/static/img/icons/Practical_information/backpack-alt-svgrepo-com.svg" alt="plecak">
+                            </div>
+                            <h3 class="info-card__title">Co zabrać ze sobą na koncert?</h3>
+                        </div>
+                        <div class="info-card__content">
+                            <div class="info-group">
+                                <h4 class="info-group__title">Wygodny strój:</h4>
+                                <ul class="info-group__list">
+                                    <li>Luźne, niekrępujące ruchów ubranie</li>
+                                    <li>Ciepłe skarpetki (sesja odbywa się bez butów)</li>
+                                    <li>Dodatkowa warstwa odzieży (podczas głębokiego relaksu temperatura ciała może spaść)</li>
+                                </ul>
+                            </div>
+                            <div class="info-group">
+                                <h4 class="info-group__title">Akcesoria dodatkowe (opcjonalnie):</h4>
+                                <ul class="info-group__list">
+                                    <li>Własna poduszka pod głowę (jeśli masz szczególne preferencje)</li>
+                                    <li>Własna mata</li>
+                                    <li>Śpiwór / koc</li>
+                                    <li>Opaska na oczy / maska do spania</li>
+                                    <li>Butelka wody</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Jak się przygotować -->
+                    <div class="info-card">
+                        <div class="info-card__header">
+                            <div class="info-card__icon">
+                                <img src="/events/static/img/icons/Practical_information/clock-three-svgrepo-com.svg" alt="zegar">
+                            </div>
+                            <h3 class="info-card__title">Jak się przygotować?</h3>
+                        </div>
+                        <div class="info-card__content">
+                            <div class="info-group">
+                                <h4 class="info-group__title">Przed koncertem:</h4>
+                                <ul class="info-group__list">
+                                    <li>Zjedz lekki posiłek minimum 1-2 godziny przed sesją</li>
+                                    <li>Ogranicz spożycie kofeiny w dniu koncertu</li>
+                                    <li>Przyjdź 10-15 minut przed rozpoczęciem, aby się wyciszyć</li>
+                                    <li>Skorzystaj z toalety przed sesją</li>
+                                </ul>
+                            </div>
+                            <div class="info-group">
+                                <h4 class="info-group__title">Zadbaj o komfort:</h4>
+                                <ul class="info-group__list">
+                                    <li>Zdejmij zegarek i biżuterię, która mogłaby przeszkadzać</li>
+                                    <li>Wyłącz telefon lub przełącz w tryb samolotowy</li>
+                                    <li>Rozluźnij lub zdejmij rzeczy uciskające (pasek, obcisłe ubrania)</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Wskazówki -->
+                    <div class="info-card">
+                        <div class="info-card__header">
+                            <div class="info-card__icon">
+                                <img src="/events/static/img/icons/Practical_information/star-alt-4-svgrepo-com.svg" alt="gwiazda">
+                            </div>
+                            <h3 class="info-card__title">Wskazówki dla najlepszego doświadczenia</h3>
+                        </div>
+                        <div class="info-card__content">
+                            <ul class="info-group__list">
+                                <li>Unikaj ciężkich posiłków przed sesją</li>
+                                <li>Nie pij alkoholu w dniu koncertu</li>
+                                <li>Przyjdź z otwartym umysłem i bez konkretnych oczekiwań</li>
+                                <li>Pozwól sobie na pełne doświadczenie bez oceniania</li>
+                                <li>Pamiętaj, że każdy koncert jest inny i wyjątkowy</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Po koncercie -->
+                    <div class="info-card">
+                        <div class="info-card__header">
+                            <div class="info-card__icon">
+                                <img src="/events/static/img/icons/Practical_information/sunset-svgrepo-com.svg" alt="zachodzące słońce">
+                            </div>
+                            <h3 class="info-card__title">Po koncercie</h3>
+                        </div>
+                        <div class="info-card__content">
+                            <ul class="info-group__list">
+                                <li>Zaplanuj czas na spokojny powrót do domu</li>
+                                <li>Pij dużo wody</li>
+                                <li>Daj sobie czas na integrację doświadczenia</li>
+                                <li>Unikaj intensywnych aktywności</li>
+                                <li>Wsłuchaj się w potrzeby swojego ciała</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="practical-info__footer">
+                    <div class="practical-info__contact">
+                        <h3 class="practical-info__subtitle">Jesteśmy tu dla Ciebie!</h3>
+                        <p class="practical-info__text">Masz pytania? Skontaktuj się z nami przed koncertem - chętnie rozwiejemy wszelkie wątpliwości.</p>
+                        <p class="practical-info__text practical-info__text--important">Pamiętaj, że najważniejsze jest Twoje dobre samopoczucie. Jeśli masz jakiekolwiek wątpliwości lub szczególne potrzeby, poinformuj nas o tym przed sesją.</p>
+                    </div>
+                    <div class="practical-info__buttons">
+<!--                        <a href="#contact" class="btn btn&#45;&#45;primary">Zarezerwuj miejsce</a>-->
+<!--                        <a href="#contact" class="btn btn&#45;&#45;secondary">Kontakt</a>-->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="contact" id="contact">
+        <h2 class="contact__title">Kontakt</h2>
+        <div class="wrapper">
+            <div class="contact__container">
+                <div class="contact__info">
+                    <div class="contact__card">
+                        <div class="contact__item">
+                            <div class="contact__icon contact__icon--phone">
+                                <img src="/events/static/img/icons/kontakt/smartphone.svg" alt="ikona telefonu">
+                            </div>
+                            <div class="contact__details">
+                                <h3 class="contact__subtitle">Zadzwoń do mnie</h3>
+                                <p class="contact__text">509 55 33 66</p>
+                            </div>
+                        </div>
+
+                        <div class="contact__item">
+                            <div class="contact__icon contact__icon--email">
+                                <img src="/events/static/img/icons/kontakt/e-mail2.svg" alt="ikona skrzynki e-mail">
+                            </div>
+                            <div class="contact__details">
+                                <h3 class="contact__subtitle">Napisz do mnie</h3>
+                                <p class="contact__text">beata@nanitkachdzwiekow.pl</p>
+                            </div>
+                        </div>
+
+                        <div class="contact__social">
+                            <h3 class="contact__subtitle">Znajdź mnie w mediach społecznościowych</h3>
+                            <div class="contact__social-icons">
+                                <a href="https://www.facebook.com/naNitkachDzwiekow" target="_blank" rel="noopener noreferrer"
+                                   class="contact__social-link" aria-label="Facebook">
+                                    <div class="contact__icon contact__icon--facebook">
+                                        <img src="/events/static/img/icons/kontakt/facebook.svg" alt="ikona facebooka">
+                                    </div>
+                                </a>
+                                <a href="https://www.instagram.com/na_nitkach_dzwiekow/" target="_blank" rel="noopener noreferrer"
+                                   class="contact__social-link" aria-label="Instagram">
+                                    <div class="contact__icon contact__icon--instagram">
+                                        <img src="/events/static/img/icons/kontakt/instagram.svg" alt="ikona instagrama">
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="contact__map-container">
+<!--                    <h3 class="contact__subtitle contact__subtitle&#45;&#45;map">Znajdź mnie</h3>-->
+                    <div class="contact__map">
+                        <!-- Tutaj wstawisz kod z Google Maps -->
+                        <div class="contact__map-placeholder">
+                            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2449.9719637033863!2d20.6620791466774!3d52.11663889987671!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x471949729aa0bc03%3A0x5c28aa464018e5e2!2zTmEgbml0a2FjaCBkxbp3acSZa8Ozdw!5e0!3m2!1spl!2spl!4v1740758402762!5m2!1spl!2spl" width="600" height="375" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+<footer class="footer">
+    <div class="wrapper">
+        <div class="footer__content">
+            <p class="footer__copyright">
+                &copy; <span class="footer__year"></span>
+                <span class="footer__owner">Beata Witkowska</span>
+                <span class="footer__rights">Wszelkie prawa zastrzeżone</span>
+            </p>
+        </div>
+    </div>
+</footer>
+</body>
+</html>

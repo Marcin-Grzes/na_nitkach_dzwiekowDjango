@@ -16,7 +16,7 @@
   font: inherit;
   color: inherit;
   text-transform: none;
-  background-color: transparent;
+  //background-color: transparent;
   border: 0;
   margin: 0;
   overflow: visible; }
@@ -42,12 +42,14 @@
 .hamburger-inner, .hamburger-inner::before, .hamburger-inner::after {
   width: 40px;
   height: 4px;
-  background-color: lightslategrey;
+  background-color: #000000;
   border-radius: 4px;
   position: absolute;
   transition-property: transform;
-  transition-duration: 0.15s;
-  transition-timing-function: ease; }
+  transition-duration: 0.5s;
+  transition-timing-function: ease;
+  //transition: background-color 0.5s ease;
+}
 .hamburger-inner::before, .hamburger-inner::after {
   content: "";
   display: block; }
