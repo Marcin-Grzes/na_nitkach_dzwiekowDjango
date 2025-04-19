@@ -212,4 +212,81 @@ ENV/
 # mkdocs documentation
 /site
 
+# Node.js
+node_modules/
+npm-debug.log
+yarn-error.log
+yarn-debug.log
+
+# Zależności
+jspm_packages/
+
+# Logi
+logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+.pnpm-debug.log*
+
+# Raporty diagnostyczne
+report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+
+# Katalogi czasu wykonania
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Katalog z wygenerowanymi raportami pokrycia kodu
+coverage
+*.lcov
+.nyc_output
+
+# Katalogi budowania/generowania
+
+public/assets/
+
+# Pliki konfiguracyjne lokalnych ustawień
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Katalog z typami dla TypeScript
+.tsbuildinfo
+typings/
+
+# Cache
+.npm
+.eslintcache
+.stylelintcache
+.rpt2_cache/
+.rts2_cache_cjs/
+.rts2_cache_es/
+.rts2_cache_umd/
+.node_repl_history
+
+# Katalogi specyficzne dla narzędzi
+.lock-wscript
+.grunt
+bower_components
+
+# Pliki wygenerowane dla Gulp/SCSS
+*.map
+*.css.map
+*.sass.map
+*.scss.map
+
+# Pliki tymczasowe
+.DS_Store
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+.lock
+
+
 # End of https://www.gitignore.io/api/macos,linux,django,python,pycharm
