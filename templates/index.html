@@ -13,8 +13,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Faculty+Glyphic&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href={% static "/../static/css/style.css" %}>
-    <link rel="stylesheet" href={% static "/../static/css/hamburgers.css" %}>
+    <link rel="stylesheet" href={% static "/../static/style/style.css" %}>
+    <link rel="stylesheet" href={% static "/../static/style/hamburgers.css" %}>
     <script defer src={% static "../static/script/script.js" %}></script>
     <script defer src={% static "../static/script/lazy-loading.js" %}></script>
     <script defer src={% static "../static/script/animations.js" %}></script>
@@ -49,11 +49,12 @@
   </span>
     </button>
 </nav>
+
 <!--===================HEADER=========================-->
 <header class="header">
     <h1 class="header__heading">Na <span>nitkach</span> dźwięków</h1>
 </header>
-
+<!--===================MAIN=========================-->
 <main class="main">
 
     <!--===================O MNIE=========================-->
@@ -63,7 +64,7 @@
             <div class="about-me__box">
                 <div class="about-me__box-img">
                     <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
-                         data-src="img/about_me_large-min.webp"
+                         data-src="{% static 'img/about_me_large-min.webp' %}"
                          alt="Zdjęcie Beaty Witkowskiej"
                          class="lazy-image">
                 </div>
@@ -208,7 +209,7 @@
                                 <div class="concerts__image-placeholder">
                                 <span class="image-placeholder-text">
                                     <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
-                                         data-src="img/group-small-min.webp"
+                                         data-src="{% static 'img/group-small-min.webp' %}"
                                          alt="zdjęcie grupowe"
                                          class="lazy-image">
                                 </span>
@@ -226,7 +227,7 @@
                                 <div class="concerts__image-placeholder">
                                 <span class="image-placeholder-text">
                                     <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
-                                         data-src="img/sesja_indyw1-min.webp"
+                                         data-src="{% static 'img/sesja_indyw1-min.webp' %}"
                                          alt="zdjęcie koncertu w pomieszczeniu, są 2 osoby"
                                          class="lazy-image">
                                 </span>
@@ -280,7 +281,7 @@
                                 <div class="concerts__image-placeholder">
                                 <span class="image-placeholder-text">
                                     <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
-                                         data-src="img/indywidual-small1-min.webp"
+                                         data-src="{% static 'img/indywidual-small1-min.webp' %}"
                                          alt="zdjęcie sesji indywidualnej"
                                          class="lazy-image">
                                 </span>
@@ -298,7 +299,7 @@
                                 <div class="concerts__image-placeholder">
                                 <span class="image-placeholder-text">
                                     <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
-                                         data-src="img/zdj_plenerowe2_small-min.webp"
+                                         data-src="{% static 'img/zdj_plenerowe2_small-min.webp' %}"
                                          alt="zdjęcie plenerowe"
                                          class="lazy-image">
                                 </span>
@@ -344,7 +345,9 @@
                                 <div class="concerts__image-placeholder">
                                 <span class="image-placeholder-text">
                                     <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
-                                         data-src="img/spec2-min.webp" alt="zdjęcie grupowe" class="lazy-image">
+                                         data-src="{% static 'img/spec2-min.webp' %}" 
+                                         alt="zdjęcie grupowe" 
+                                         class="lazy-image">
                                 </span>
                                 </div>
                             </div>
@@ -374,7 +377,9 @@
                              np. fale dźwiękowe przecinające nowoczesną przestrzeń biurową -->
                         <div class="business__intro-graphic">
                             <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
-                                 data-src="img/biuro12-min.webp" alt="biuro z dźwiękami" class="lazy-image"></div>
+                                 data-src="{% static 'img/biuro12-min.webp' %}"
+                                 alt="biuro z dźwiękami"
+                                 class="lazy-image"></div>
                     </div>
                 </div>
 

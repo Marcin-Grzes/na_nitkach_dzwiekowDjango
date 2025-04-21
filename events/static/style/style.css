@@ -1,7 +1,7 @@
 @charset "UTF-8";
 @font-face {
   font-family: "Original Surfer";
-  src: url("../../events/static/fonts/Original_Surfer/OriginalSurfer-Regular.ttf") format("truetype");
+  src: url("../fonts/Original_Surfer/OriginalSurfer-Regular.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
 }
@@ -120,7 +120,7 @@ table {
 .header {
   position: relative;
   height: 100vh;
-  background-image: url("../../events/static/img/header_small-min.webp");
+  background-image: url("../img/header_small-min.webp");
   background-attachment: scroll;
   background-size: cover;
   background-position: center;

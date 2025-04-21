@@ -17,8 +17,11 @@ from events.services import cancel_reservation
 
 class HomeView(View):
     def get(self, request):
-        return render(request, 'index1.html')
+        return render(request, 'index.html')
 
+class Base(View):
+    def get(self, request):
+        return render(request, 'base.html')
 
 class EventReservationView(View):
     """
