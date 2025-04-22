@@ -34,6 +34,15 @@ $breakpoint-desktop: 992px;
   padding: 20px;
 }
 
+@mixin section-title {
+  font-size: 6rem;
+  margin: 3rem 0 5rem;
+  text-align: center;
+  color: $main-color;
+  text-shadow: $text-shadow;
+  font-family: $head-font;
+}
+
 // Base Calendar Container
 .calendar-container {
   max-width: 1200px;

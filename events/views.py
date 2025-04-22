@@ -295,8 +295,8 @@ class CalendarEventsApiView(View):
                 'end': event.end_datetime.isoformat(),
                 'url': reverse('event_detail', args=[event.id]),
                 # Dodajemy właściwości wizualne
-                # 'backgroundColor': self.get_event_color(event.type_of_events),
-                # 'borderColor': self.get_event_color(event.type_of_events),
+                'backgroundColor': self.get_event_color(event.type_of_events),
+                'borderColor': self.get_event_color(event.type_of_events),
                 # Dodajemy informacje o dostępności
                 'extendedProps': {
                     'venue': str(event.venue),

@@ -1,9 +1,10 @@
 document.addEventListener('DOMContentLoaded', function() {
     // Inicjalizacja kalendarza
-    var calendarEl = document.getElementById('calendar');
-    var calendar = new FullCalendar.Calendar(calendarEl, {
+    let calendarEl = document.getElementById('calendar');
+    let calendar = new FullCalendar.Calendar(calendarEl, {
         initialView: 'dayGridMonth',
         locale: 'pl',
+        firstDay: 1,  // Ustawia poniedziałek jako pierwszy dzień tygodnia
         headerToolbar: {
             left: 'prev,next today',
             center: 'title',
@@ -58,7 +59,21 @@ document.addEventListener('DOMContentLoaded', function() {
                 arrow: true,
                 theme: 'light'
             });
+        },
+        windowResize: function(view) {
+        if (window.innerWidth < 768) {
+            calendar.changeView('listMonth');
+        } else {
+            calendar.changeView('dayGridMonth');
         }
+    },
+
+    // Sprawdź szerokość ekranu podczas inicjalizacji
+    viewDidMount: function() {
+        if (window.innerWidth < 768) {
+            calendar.changeView('listMonth');
+        }
+    }
     });
     calendar.render();
 
