@@ -24,7 +24,7 @@ class HomeView(View):
 
 class Base(View):
     def get(self, request):
-        return render(request, 'events/../templates/base.html')
+        return render(request, 'base.html')
 
 
 class EventReservationView(View):

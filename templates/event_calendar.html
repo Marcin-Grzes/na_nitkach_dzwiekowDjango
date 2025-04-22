@@ -1,1 +1,58 @@
 {% extends './base.html' %}
+{% load static %}
+
+
+{% block js  %}
+    <script defer src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.17/index.global.min.js"></script> 
+    <script defer src={% static "../static/script/calendar.js" %}></script>
+{% endblock %}
+{% block scss %} 
+    <link rel="stylesheet" href={% static "style/calendar.css" %}>
+ {% endblock %}
+{% block title %} <title>Kalendarz koncertów</title> {% endblock %}
+{% block content %}
+    <div class="calendar-container">
+    <h1 class="page-title">Kalendarz wydarzeń</h1>
+    
+    <div class="filter-section">
+        <div class="filter-grid">
+            <div class="filter-item">
+                <label for="event-type-filter">Filtruj po typie wydarzenia:</label>
+                <select id="event-type-filter">
+                    <option value="">Wszystkie typy</option>
+                    {% for type in event_types %}
+                        <option value="{{ type.slug }}">{{ type.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="filter-item">
+                <div class="checkbox-wrapper">
+                    <input type="checkbox" id="show-fully-booked" checked>
+                    <label for="show-fully-booked">
+                        Pokazuj w pełni zarezerwowane wydarzenia
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="calendar"></div>
+    
+    <div class="legend-section">
+        <h4>Legenda:</h4>
+        <div class="legend-grid">
+            {% for type in event_types %}
+                <div class="legend-item">
+                    <span class="color-box" style="background-color: 
+                        {% if type.slug == 'concert' %}#3788d8
+                        {% elif type.slug == 'workshop' %}#f07c4a
+                        {% elif type.slug == 'meeting' %}#8cbd46
+                        {% else %}#9d7cd8{% endif %};">
+                    </span>
+                    {{ type.name }}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+ {% endblock %}

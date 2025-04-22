@@ -36,7 +36,7 @@ urlpatterns = [
     path('tinymce/', include('tinymce.urls')),
     path('events/<int:event_id>/reservation/', views.EventReservationView.as_view(), name='event_reservation'),
     path('reservation/cancel/<uuid:token>/', views.CancelReservationView.as_view(), name='cancel_reservation'),
-    path('api/calendar-events/', views.CalendarEventsApiView.as_view, name='calendar_events_api'),
+    path('api/calendar-events/', views.CalendarEventsApiView.as_view(), name='calendar_events_api'),
 ]
 # Tylko w wersji developerskiej
 if settings.DEBUG:
