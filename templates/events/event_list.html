@@ -1,9 +1,9 @@
-{% extends 'events/base.html' %}
+{% extends 'events/base_events_old.html' %}
 
 {% block title %}Lista wydarzeń{% endblock %}
 
 {% block content %}
-<div class="row mb-4">
+{% comment %}<div class="row mb-4">
     <div class="col-md-8">
         <h2>Nadchodzące wydarzenia</h2>
     </div>
@@ -20,7 +20,7 @@
             <button type="submit" class="btn btn-primary">Filtruj</button>
         </form>
     </div>
-</div>
+</div>{% endcomment %}
 
 {% if events %}
     <div class="row row-cols-1 row-cols-md-3 g-4">

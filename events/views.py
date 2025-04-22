@@ -1,11 +1,13 @@
+from django.http import JsonResponse
 from django.utils import timezone
 from django.core.mail import send_mail
 from django.shortcuts import render, redirect, get_object_or_404
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.views import View
+from django.urls import reverse
 from django.views.generic import ListView, DetailView
-from django.views.generic.base import ContextMixin
+from django.views.generic.base import ContextMixin, TemplateView
 from honeypot.decorators import check_honeypot
 from events.forms import EventReservationForm
 from django.contrib import messages
@@ -19,9 +21,11 @@ class HomeView(View):
     def get(self, request):
         return render(request, 'index.html')
 
+
 class Base(View):
     def get(self, request):
         return render(request, 'base.html')
+
 
 class EventReservationView(View):
     """
@@ -116,6 +120,7 @@ class EventReservationView(View):
             html_message=html_message,
         )
 
+
 class EventTypeMixin(ContextMixin):
     """
     Mixin dodający typy wydarzeń do kontekstu.
@@ -151,11 +156,11 @@ class EventListView(EventTypeMixin, ListView):
 
         return queryset
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        # Dodajemy informację o wybranym typie do kontekstu
-        context['selected_type'] = self.request.GET.get('type')
-        return context
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     # Dodajemy informację o wybranym typie do kontekstu
+    #     context['selected_type'] = self.request.GET.get('type')
+    #     return context
 
 
 class EventDetailView(EventTypeMixin, DetailView):
@@ -245,3 +250,80 @@ class CancelReservationView(View):
                 messages.info(request, "Osoba z listy rezerwowej została automatycznie przesunięta na Twoje miejsce.")
 
         return redirect('home')
+
+
+class CalendarView(TemplateView):
+    """
+      Widok strony z kalendarzem wydarzeń.
+      Wykorzystuje TemplateView do renderowania strony z kalendarzem.
+      """
+
+    template_name = 'event_calendar.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # Pobierz wszystkie aktywne typy wydarzeń do filtrowania
+        context['event_types'] = EventType.objects.filter(is_active=True)
+        return context
+
+
+class CalendarEventsApiView(View):
+    """
+     API dostarczające wydarzenia w formacie kompatybilnym z FullCalendar.
+     Zwraca dane jako JSON.
+     """
+
+    def get(self, request, *args, **kwargs):
+        # Pobierz filtr typu wydarzenia z query stringa (opcjonalnie)
+        event_type = request.GET.get('type')
+
+        # Przygotuj bazowe zapytanie
+        events_query = Events.objects.filter(is_active=True)
+
+        # Zastosuj filtrowanie po typie (jeśli podano)
+        if event_type:
+            events_query = events_query.filter(type_of_events__slug=event_type)
+
+        # Konwertuj wydarzenia do formatu FullCalendar
+
+        events_data = []
+        for event in events_query:
+            events_data.append({
+                'id': event.id,
+                'title': event.title,
+                'start': event.start_datetime.isoformat(),
+                'end': event.end_datetime.isoformat(),
+                'url': reverse('event_detail', args=[event.id]),
+                # Dodajemy właściwości wizualne
+                # 'backgroundColor': self.get_event_color(event.type_of_events),
+                # 'borderColor': self.get_event_color(event.type_of_events),
+                # Dodajemy informacje o dostępności
+                'extendedProps': {
+                    'venue': str(event.venue),
+                    'available_seats': event.get_available_seats(),
+                    'is_fully_booked': event.is_fully_booked(),
+                    'event_type': event.type_of_events.name
+                }
+            })
+
+        return JsonResponse(events_data, safe=False)
+
+    def get_event_color(self, event_type):
+        """
+        Zwraca kolor na podstawie typu wydarzenia.
+        Jeśli model EventType ma pole color, używa go, w przeciwnym razie
+        stosuje domyślne kolory na podstawie sluga.
+        """
+        # Sprawdź czy model ma pole color
+        if hasattr(event_type, 'color') and event_type.color:
+            return event_type.color
+
+        # Domyślne kolory na podstawie sluga
+        colors = {
+            'concert': '#3788d8',  # niebieski
+            'workshop': '#f07c4a',  # pomarańczowy
+            'meeting': '#8cbd46',  # zielony
+            'other': '#9d7cd8'  # fioletowy
+        }
+        return colors.get(event_type.slug, '#3788d8')  # domyślny niebieski
+

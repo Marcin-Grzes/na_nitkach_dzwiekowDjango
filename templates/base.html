@@ -15,10 +15,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Faculty+Glyphic&display=swap" rel="stylesheet">
     <link rel="stylesheet" href={% static "/../static/style/style.css" %}>
     <link rel="stylesheet" href={% static "/../static/style/hamburgers.css" %}>
+    {% block scss %} {% endblock %}
+    {% block js %} {% endblock %}
     <script defer src={% static "../static/script/script.js" %}></script>
     <script defer src={% static "../static/script/lazy-loading.js" %}></script>
     <script defer src={% static "../static/script/animations.js" %}></script>
-    <title>Na nitkach dźwięków - koncerty na misach dźwiękowych, gongu | Milanówek</title>
+    {% block title %} {% endblock %}
 </head>
 <body>
 
@@ -26,6 +28,7 @@
 <nav class="nav">
     <div class="nav__items--destkop">
         <a href="{% url 'index/#about_me' %}" class="nav__item">O mnie</a>
+        <a href="{% url 'event_calendar' %}" class="nav__item">Kalendarz koncertów</a>
         <a href="{% url 'index/#about_therapy' %}" class="nav__item">O terapii dźwiękiem</a>
         <a href="{% url 'index/#concerts' %}" class="nav__item">Koncerty</a>
         <a href="{% url 'index/#firm' %}" class="nav__item">Dla firm</a>
@@ -35,6 +38,7 @@
 
     <div class="nav__items-mobile nav__items-mobile--active" id="nav-mobile">
         <a href="{% url 'index/#about_me' %}" class="nav__item nav__item--mobile">O mnie</a>
+        <a href="{% url 'event_calendar' %}" class="nav__item nav__item--mobile">Kalendarz koncertów</a>
         <a href="{% url 'index/#about_therapy' %}" class="nav__item nav__item--mobile">O terapii dźwiękiem</a>
         <a href="{% url 'index/#concerts' %}" class="nav__item nav__item--mobile">Koncerty</a>
         <a href="{% url 'index/#firm' %}" class="nav__item nav__item--mobile">Dla firm</a>

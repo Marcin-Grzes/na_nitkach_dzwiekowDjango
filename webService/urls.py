@@ -30,12 +30,13 @@ urlpatterns = [
     path('', HomeView.as_view(), name='index'),
     path('base/', Base.as_view(), name='base'),
     # path('rezerwation', RezerwationsView.as_view(), name='rezerwation'),
-    path('calendar/', views.EventListView.as_view(), name='event_list'),
+    path('calendar/', views.CalendarView.as_view(), name='event_calendar'),
     path('<int:event_id>/', views.EventDetailView.as_view(), name='event_detail'),
     path('type/<slug:type_slug>/', views.EventsByTypeView.as_view(), name='events_by_type'),
     path('tinymce/', include('tinymce.urls')),
     path('events/<int:event_id>/reservation/', views.EventReservationView.as_view(), name='event_reservation'),
     path('reservation/cancel/<uuid:token>/', views.CancelReservationView.as_view(), name='cancel_reservation'),
+    path('api/calendar-events/', views.CalendarEventsApiView.as_view, name='calendar_events_api'),
 ]
 # Tylko w wersji developerskiej
 if settings.DEBUG:

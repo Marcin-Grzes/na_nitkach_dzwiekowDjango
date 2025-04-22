@@ -26,6 +26,7 @@
 <nav class="nav">
     <div class="nav__items--destkop">
         <a href="#about_me" class="nav__item">O mnie</a>
+        <a href="{% url 'event_calendar' %}" class="nav__item">Kalendarz koncertów</a>
         <a href="#about_therapy" class="nav__item">O terapii dźwiękiem</a>
         <a href="#concerts" class="nav__item">Koncerty</a>
         <a href="#firm" class="nav__item">Dla firm</a>
@@ -35,6 +36,7 @@
 
     <div class="nav__items-mobile nav__items-mobile--active" id="nav-mobile">
         <a href="#about_me" class="nav__item nav__item--mobile">O mnie</a>
+        <a href="{% url 'event_calendar' %}" class="nav__item nav__item--mobile">Kalendarz koncertów</a>
         <a href="#about_therapy" class="nav__item nav__item--mobile">O terapii dźwiękiem</a>
         <a href="#concerts" class="nav__item nav__item--mobile">Koncerty</a>
         <a href="#firm" class="nav__item nav__item--mobile">Dla firm</a>
