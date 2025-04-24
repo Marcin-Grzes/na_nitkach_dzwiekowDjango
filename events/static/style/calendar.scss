@@ -16,6 +16,26 @@ $status-available: #28a745;
 $breakpoint-tablet: 768px;
 $breakpoint-desktop: 992px;
 
+
+@font-face {
+  font-family: "Original Surfer";
+  src: url("../fonts/Original_Surfer/OriginalSurfer-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+$head-font: "Original Surfer", sans-serif;
+$main-font: "Faculty Glyphic", sans-serif;
+$background: linear-gradient(135deg, rgba(255,255,255,0.8) 0%, rgba(255,248,227,1) 100%);
+$backgroud-subsection: linear-gradient(135deg, rgba(255,253,240,1) 0%, rgba(255,236,179,1) 100%);
+$main-color: goldenrod;
+$text-shadow: 0.5px 0.5px 0.5px saddlebrown;
+$symbol: '♪';
+$transformHover: transform 0.3s ease, box-shadow 0.3s ease;
+
+
+
+
 // Mixins
 @mixin shadow($level: 1) {
   @if $level == 1 {
@@ -43,11 +63,83 @@ $breakpoint-desktop: 992px;
   font-family: $head-font;
 }
 
-// Base Calendar Container
-.calendar-container {
-  max-width: 1200px;
+@mixin section-title-suplement {
+  position: relative;
+  z-index: 2;
+};
+
+//  Basic reset
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+}
+
+html {
+  font-size: 62.5%;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 1.6rem;
+}
+
+a {
+  text-decoration: none;
+}
+
+img {
+  height: auto;
+}
+
+input,
+button,
+textarea,
+select {
+  font-family: inherit;
+}
+
+button {
+  border: none;
+  cursor: pointer;
+}
+
+
+textarea {
+  resize: vertical;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+.wrapper {
   margin: 0 auto;
-  padding: 20px;
+  padding: 0 15px;
+  width: 100%;
+  max-width: 1200px;
+}
+
+
+// Base Calendar Container
+
+.calendar {
+  &__title {
+    @include section-title;
+    @include section-title-suplement
+  }
+}
+
+.calendar-container {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   color: $text-color;
 
@@ -56,63 +148,6 @@ $breakpoint-desktop: 992px;
     font-size: 1.8rem;
     font-weight: bold;
     color: $text-color;
-  }
-}
-
-// Filter Section
-.filter-section {
-  @include card;
-  margin-bottom: 25px;
-
-  .filter-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 20px;
-
-    @media (min-width: $breakpoint-tablet) {
-      grid-template-columns: 1fr 1fr;
-    }
-  }
-
-  .filter-item {
-    margin-bottom: 15px;
-
-    label {
-      display: block;
-      margin-bottom: 5px;
-      font-weight: 500;
-    }
-
-    select {
-      width: 100%;
-      padding: 8px 12px;
-      border: 1px solid $border-color;
-      border-radius: 4px;
-      background-color: white;
-      font-size: 0.95rem;
-
-      &:focus {
-        outline: none;
-        border-color: $primary-color;
-      }
-    }
-
-    .checkbox-wrapper {
-      display: flex;
-      align-items: center;
-      margin-top: 20px;
-
-      input[type="checkbox"] {
-        margin-right: 10px;
-        width: 18px;
-        height: 18px;
-      }
-
-      label {
-        margin-bottom: 0;
-        cursor: pointer;
-      }
-    }
   }
 }
 
@@ -131,16 +166,16 @@ $breakpoint-desktop: 992px;
   }
 
   .fc-button {
-    background-color: $primary-color;
-    border-color: $primary-color;
+    background-color: $main-color;
+    border-color: $main-color;
 
     &:hover {
-      background-color: darken($primary-color, 10%);
-      border-color: darken($primary-color, 10%);
+      background-color: darken($main-color, 10%);
+      border-color: darken($main-color, 10%);
     }
 
     &:focus {
-      box-shadow: 0 0 0 0.2rem rgba($primary-color, 0.3);
+      box-shadow: 0 0 0 0.2rem rgba($main-color, 0.3);
     }
   }
 
@@ -163,107 +198,5 @@ $breakpoint-desktop: 992px;
         margin-bottom: 10px;
       }
     }
-  }
-}
-
-// Legend
-.legend-section {
-  @include card;
-
-  h4 {
-    margin-top: 0;
-    margin-bottom: 15px;
-    font-size: 1.2rem;
-  }
-
-  .legend-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 15px;
-  }
-
-  .legend-item {
-    display: flex;
-    align-items: center;
-    margin-right: 20px;
-    margin-bottom: 10px;
-
-    .color-box {
-      display: inline-block;
-      width: 16px;
-      height: 16px;
-      margin-right: 8px;
-      border-radius: 3px;
-    }
-  }
-}
-
-// Tooltip
-.event-tooltip {
-  padding: 12px;
-  max-width: 300px;
-
-  h5 {
-    margin-top: 0;
-    margin-bottom: 10px;
-    font-size: 1.1rem;
-    font-weight: bold;
-    color: $text-color;
-  }
-
-  p {
-    margin-bottom: 8px;
-    line-height: 1.4;
-  }
-
-  .status-unavailable {
-    color: $status-unavailable;
-    font-weight: bold;
-  }
-
-  .status-available {
-    color: $status-available;
-    font-weight: bold;
-  }
-
-  .tooltip-hint {
-    font-style: italic;
-    font-size: 0.9rem;
-    opacity: 0.7;
-    margin-top: 10px;
-    margin-bottom: 0;
-  }
-
-  .event-button {
-    display: inline-block;
-    padding: 6px 12px;
-    background-color: $primary-color;
-    color: white;
-    border-radius: 4px;
-    text-decoration: none;
-    margin-top: 10px;
-    font-size: 0.9rem;
-    cursor: pointer;
-
-    &:hover {
-      background-color: darken($primary-color, 10%);
-    }
-
-    &.disabled {
-      background-color: #999;
-      cursor: not-allowed;
-    }
-  }
-}
-
-// Tippy.js Stylowanie
-.tippy-box[data-theme~='light'] {
-  background-color: white;
-  color: $text-color;
-  @include shadow(2);
-  border: 1px solid $border-color;
-
-  .tippy-arrow {
-    color: white;
   }
 }
