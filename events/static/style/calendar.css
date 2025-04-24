@@ -1,3 +1,4 @@
+@charset "UTF-8";
 @font-face {
   font-family: "Original Surfer";
   src: url("../fonts/Original_Surfer/OriginalSurfer-Regular.ttf") format("truetype");
@@ -62,7 +63,36 @@ table {
   max-width: 1200px;
 }
 
-.calendar__title {
+@media (min-width: 992px) {
+  .nav {
+    width: 100%;
+    position: relative !important;
+    top: 0;
+    left: 0;
+    z-index: 100;
+  }
+  .nav__items--destkop {
+    /*box-shadow: 10px 10px 20px 5px darkgoldenrod;
+    line-height: 60px;
+    border-radius: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    position: fixed;
+    display: inline-block;*/
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+  }
+  .nav__item {
+    padding: 0.2em;
+    color: goldenrod;
+  }
+  .nav .hamburger {
+    display: none;
+  }
+}
+.title {
   font-size: 6rem;
   margin: 3rem 0 5rem;
   text-align: center;
@@ -73,24 +103,30 @@ table {
   z-index: 2 !important;
 }
 
+.calendar {
+  background: linear-gradient(135deg, rgb(255, 253, 240) 0%, rgb(255, 236, 179) 100%);
+}
+
 .calendar-container {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   color: #333;
 }
 .calendar-container .page-title {
-  margin-bottom: 25px;
-  font-size: 1.8rem;
-  font-weight: bold;
-  color: #333;
+  font-size: 6rem;
+  padding: 3rem 0 5rem;
+  text-align: center;
+  color: goldenrod;
+  text-shadow: 0.5px 0.5px 0.5px saddlebrown;
+  font-family: "Original Surfer", sans-serif;
 }
 
 #calendar {
-  background-color: white;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.8) 0%, rgb(255, 248, 227) 100%);
   border-radius: 4px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   padding: 20px;
-  margin-bottom: 25px;
   min-height: 600px;
+  /* Dla wydarzeń o stałej wysokości (np. widoku tygodniowego) */
 }
 #calendar .fc-toolbar-title {
   font-size: 1.5rem;
@@ -101,15 +137,15 @@ table {
   }
 }
 #calendar .fc-button {
-  background-color: goldenrod;
-  border-color: goldenrod;
+  background-color: sienna;
+  border-color: sienna;
 }
 #calendar .fc-button:hover {
-  background-color: rgb(173.528, 131.34, 25.472);
-  border-color: rgb(173.528, 131.34, 25.472);
+  background-color: rgb(120.1951219512, 61.6, 33.8048780488);
+  border-color: rgb(120.1951219512, 61.6, 33.8048780488);
 }
 #calendar .fc-button:focus {
-  box-shadow: 0 0 0 0.2rem rgba(218, 165, 32, 0.3);
+  box-shadow: 0 0 0 0.2rem rgba(74, 144, 226, 0.3);
 }
 #calendar .fc-event {
   cursor: pointer;
@@ -118,6 +154,26 @@ table {
 #calendar .fc-event.fully-booked {
   opacity: 0.7;
   text-decoration: line-through;
+}
+#calendar .fc-event-title {
+  color: #333; /* kolor czcionki linku wydarzenia */
+  font-size: 1.2rem;
+  white-space: normal; /* Pozwala na zawijanie tekstu */
+  overflow: visible; /* Zapobiega ucięciu tekstu */
+  word-break: break-word; /* Zapewnia łamanie długich słów */
+  line-height: 1.2; /* Optymalizuje wysokość linii */
+  padding: 1px 2px; /* Dodaje trochę przestrzeni wokół tekstu */
+}
+#calendar .fc-event-time {
+  color: sienna;
+  font-size: 1.2rem; /* Dostosuj według potrzeb */
+}
+#calendar .fc-daygrid-event-dot {
+  display: none;
+}
+#calendar .fc-daygrid-event {
+  height: auto; /* Pozwala wydarzeniu rozszerzać się w pionie */
+  max-height: none; /* Usuwa maksymalną wysokość */
 }
 @media (max-width: 768px) {
   #calendar .fc-toolbar {

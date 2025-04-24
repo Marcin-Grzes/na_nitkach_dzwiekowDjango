@@ -5,12 +5,12 @@
 {% block js %}
 
     <script async defer src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.17/index.global.min.js"></script>
-    <script async defer src={% static "/script/calendar.js" %}></script>
+    <script async defer src={% static "/../static/script/calendar.js" %}></script>
 
 {% endblock %}
 {% block scss %}
-    <link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css' rel='stylesheet'/>
-    <link rel="stylesheet" href={% static "/style/calendar.css" %}>
+{#    <link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css' rel='stylesheet'/>#}
+    <link rel="stylesheet" href={% static '/../static/style/style.css' %}>
 {% endblock %}
 {% block title %} <title>Kalendarz koncertów</title> {% endblock %}
 {% block content %}
@@ -63,8 +63,8 @@
     </section>
 {% endblock %}
 {% block endJS %}
-    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js'></script>
-    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/locales-all.min.js'></script>
-    <script src='https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js'></script>
-    <script src='https://cdn.jsdelivr.net/npm/tippy.js@6.3.1/dist/tippy.umd.min.js'></script>
+{#    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js'></script>#}
+{#    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/locales-all.min.js'></script>#}
+{#    <script src='https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js'></script>#}
+{#    <script src='https://cdn.jsdelivr.net/npm/tippy.js@6.3.1/dist/tippy.umd.min.js'></script>#}
 {% endblock %}

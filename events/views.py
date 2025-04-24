@@ -27,6 +27,10 @@ class Base(View):
         return render(request, 'base.html')
 
 
+class TestCalendar(View):
+    def get(self, request):
+        return render(request, 'test_calendar.html')
+
 class EventReservationView(View):
     """
     Widok do rezerwacji miejsc na konkretne wydarzenie.

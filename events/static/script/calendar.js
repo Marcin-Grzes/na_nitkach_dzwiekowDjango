@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', function () {
             minute: '2-digit',
             hour12: false
         },
-        dayMaxEvents: true,
+        dayMaxEvents: false,
         /*eventDidMount: function (info) {
             // Dodaj tooltips do wydarzeń
             const props = info.event.extendedProps;

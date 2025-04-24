@@ -20,7 +20,7 @@ from django.conf.urls.static import static
 from django.urls import path, include
 
 from events import views
-from events.views import HomeView, Base
+from events.views import HomeView, Base, TestCalendar
 
 # from events.views import RezerwationsView
 # from events.views import HomeView
@@ -29,6 +29,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', HomeView.as_view(), name='index'),
     path('base/', Base.as_view(), name='base'),
+    path('test/', TestCalendar.as_view(), name='test'),
     # path('rezerwation', RezerwationsView.as_view(), name='rezerwation'),
     path('calendar/', views.CalendarView.as_view(), name='event_calendar'),
     path('<int:event_id>/', views.EventDetailView.as_view(), name='event_detail'),

@@ -14,6 +14,14 @@ $text-shadow: 0.5px 0.5px 0.5px saddlebrown;
 $symbol: '♪';
 $transformHover: transform 0.3s ease, box-shadow 0.3s ease;
 
+// calendar.css
+$text-color: #333;
+$shadow-color: rgba(0, 0, 0, 0.1);
+
+$breakpoint-tablet: 768px;
+$breakpoint-desktop: 992px;
+
+
 @mixin section-title {
   font-size: 6rem;
   margin: 3rem 0 5rem;
@@ -105,6 +113,25 @@ $transformHover: transform 0.3s ease, box-shadow 0.3s ease;
       opacity: 1;
       transform: translateY(0);
     }
+  }
+}
+
+// Mixiny kalendarza
+
+@mixin card {
+  background-color: white;
+  border-radius: 4px;
+  @include shadow(1);
+  padding: 20px;
+}
+
+@mixin shadow($level: 1) {
+  @if $level == 1 {
+    box-shadow: 0 2px 5px $shadow-color;
+  } @else if $level == 2 {
+    box-shadow: 0 4px 10px $shadow-color;
+  } @else {
+    box-shadow: 0 8px 16px $shadow-color;
   }
 }
 
@@ -1525,4 +1552,79 @@ Kontakt
   //background-color: rgba(0, 0, 0, 0.4); /* Półprzezroczyste ciemne tło */
   //box-shadow: 0 2px 5px rgba(255, 255, 255, 0.1); /* Subtelny jasny cień */
   background-color: rgba(255, 255, 255, 0.4); /* Bardziej nieprzezroczyste tło dla aktywnego menu */
+}
+
+// ==============================================
+// KALENDARZ
+// ==============================================
+
+// Base Calendar Container
+
+.calendar {
+  &__title {
+    @include section-title;
+    @include section-title-suplement;
+  }
+}
+
+.calendar-container {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  color: $text-color;
+
+  .page-title {
+    margin-bottom: 25px;
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: $text-color;
+  }
+}
+
+// Calendar
+#calendar {
+  @include card;
+  margin-bottom: 25px;
+  min-height: 600px;
+
+  .fc-toolbar-title {
+    font-size: 1.5rem;
+
+    @media (min-width: $breakpoint-tablet) {
+      font-size: 1.8rem;
+    }
+  }
+
+  .fc-button {
+    background-color: $main-color;
+    border-color: $main-color;
+
+    &:hover {
+      background-color: darken($main-color, 10%);
+      border-color: darken($main-color, 10%);
+    }
+
+    &:focus {
+      box-shadow: 0 0 0 0.2rem rgba($main-color, 0.3);
+    }
+  }
+
+  .fc-event {
+    cursor: pointer;
+    border-radius: 3px;
+
+    &.fully-booked {
+      opacity: 0.7;
+      text-decoration: line-through;
+    }
+  }
+
+  // Mobilne widoki
+  @media (max-width: $breakpoint-tablet) {
+    .fc-toolbar {
+      flex-direction: column;
+
+      .fc-toolbar-chunk {
+        margin-bottom: 10px;
+      }
+    }
+  }
 }
