@@ -69,8 +69,8 @@ table {
   color: goldenrod;
   text-shadow: 0.5px 0.5px 0.5px saddlebrown;
   font-family: "Original Surfer", sans-serif;
-  position: relative;
-  z-index: 2;
+  position: relative !important;
+  z-index: 2 !important;
 }
 
 .calendar-container {

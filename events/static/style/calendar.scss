@@ -64,8 +64,8 @@ $transformHover: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 @mixin section-title-suplement {
-  position: relative;
-  z-index: 2;
+  position: relative !important;
+  z-index: 2 !important;
 };
 
 //  Basic reset
@@ -135,7 +135,7 @@ table {
 .calendar {
   &__title {
     @include section-title;
-    @include section-title-suplement
+    @include section-title-suplement;
   }
 }
 
