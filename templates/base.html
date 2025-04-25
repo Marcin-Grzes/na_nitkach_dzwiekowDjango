@@ -18,14 +18,12 @@
     {% block scss %} {% endblock %}
     {% block js %} {% endblock %}
     <script defer src={% static "../static/script/script.js" %}></script>
-    <script defer src={% static "../static/script/lazy-loading.js" %}></script>
-    <script defer src={% static "../static/script/animations.js" %}></script>
     {% block title %} {% endblock %}
 </head>
 <body>
 
 <!--===================NAWIGACJA=========================-->
-<nav class="nav">
+<nav class="nav" style="@media (min-width: 992px) {position: relative}">
     <div class="nav__items--destkop">
         <a href="{% url 'index' %}#about_me" class="nav__item">O mnie</a>
         <a href="{% url 'event_calendar' %}" class="nav__item">Kalendarz koncertów</a>
@@ -52,10 +50,7 @@
   </span>
     </button>
 </nav>
-<!--===================HEADER=========================-->
-<header class="header">
-    <h1 class="header__heading">Na <span>nitkach</span> dźwięków</h1>
-</header>
+
 {% block content %}
 
 {% endblock %}

@@ -65,33 +65,58 @@ table {
 
 @media (min-width: 992px) {
   .nav {
-    width: 100%;
-    position: relative !important;
-    top: 0;
-    left: 0;
-    z-index: 100;
-  }
-  .nav__items--destkop {
-    /*box-shadow: 10px 10px 20px 5px darkgoldenrod;
-    line-height: 60px;
-    border-radius: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-    position: fixed;
-    display: inline-block;*/
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-  }
-  .nav__item {
-    padding: 0.2em;
-    color: goldenrod;
-  }
-  .nav .hamburger {
-    display: none;
+    position: relative;
   }
 }
+/* Style dla hamburger menu na ciemnym tle */
+.hamburger.on-dark-bg .hamburger-inner,
+.hamburger.on-dark-bg .hamburger-inner::before,
+.hamburger.on-dark-bg .hamburger-inner::after {
+  background-color: white;
+}
+
+/* Dodanie tła do przycisku hamburger menu */
+.hamburger {
+  background-color: rgba(255, 255, 255, 0.85); /* Półprzezroczyste białe tło */
+  border-radius: 8px; /* Zaokrąglone rogi */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtelny cień */
+  padding: 12px; /* Zwiększamy padding dla większej powierzchni kliknięcia */
+  transition: background-color 0.3s ease; /* Płynna animacja zmiany tła */
+  /* Dodaj do istniejących stylów */
+  backdrop-filter: blur(2px); /* Lekki efekt rozmycia tła (nie działa w starszych przeglądarkach) */
+  border: 1px solid rgba(255, 255, 255, 0.1); /* Subtelna ramka */
+}
+
+/* Dla przeglądarek, które nie obsługują backdrop-filter */
+@supports not (backdrop-filter: blur(2px)) {
+  .hamburger {
+    background-color: rgba(255, 255, 255, 0.85); /* Bardziej nieprzezroczyste tło */
+  }
+  .hamburger.on-dark-bg {
+    background-color: rgba(0, 0, 0, 0.65); /* Bardziej nieprzezroczyste tło dla ciemnego wariantu */
+  }
+}
+/* Ciemniejsze tło dla stanu hover */
+.hamburger:hover {
+  background-color: rgba(255, 255, 255, 0.85);
+}
+
+/* Wersja dla ciemnego tła */
+.hamburger.on-dark-bg {
+  background-color: rgba(0, 0, 0, 0.4); /* Półprzezroczyste ciemne tło */
+  box-shadow: 0 2px 5px rgba(255, 255, 255, 0.1); /* Subtelny jasny cień */
+}
+
+/* Wersja hover dla ciemnego tła */
+.hamburger.on-dark-bg:hover {
+  background-color: rgba(0, 0, 0, 0.65);
+}
+
+/* Zachowujemy style dla aktywnego stanu */
+.hamburger.is-active {
+  background-color: rgba(255, 255, 255, 0.4); /* Bardziej nieprzezroczyste tło dla aktywnego menu */
+}
+
 .title {
   font-size: 6rem;
   margin: 3rem 0 5rem;
@@ -108,7 +133,7 @@ table {
 }
 
 .calendar-container {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-family: "Faculty Glyphic", sans-serif;
   color: #333;
 }
 .calendar-container .page-title {

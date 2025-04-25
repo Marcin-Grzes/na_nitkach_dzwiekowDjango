@@ -1,70 +1,82 @@
-{% extends './base.html' %}
+<!DOCTYPE html>
 {% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="description" content="Na nitkach dźwięków - relaksacyjne koncerty na misach dźwiękowych w Grodzisku
+    Mazowieckim, Milanówku i okolicach">
+    <meta name="keywords" content="relaks, misa tybetańska, gong, medytacja, rozwój duchowy">
+    <meta name="author" content="Marcin Grześ">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Faculty+Glyphic&display=swap" rel="stylesheet">
+    <title>Kalendarz koncertów</title>
+    <link rel="stylesheet" href={% static '/style/calendar.css' %}>
+    <link rel="stylesheet" href="{% static '/style/hamburgers.css' %}">
+    <link rel="stylesheet" href="{% static '/style/style.css' %}">
+</head>
+<body>
 
+<!--===================NAWIGACJA=========================-->
 
-{% block js %}
+<nav class="nav" >
+    <div class="nav__items--destkop">
+        <a href="{% url 'index' %}#about_me" class="nav__item">O mnie</a>
+        <a href="{% url 'event_calendar' %}" class="nav__item">Kalendarz koncertów</a>
+        <a href="{% url 'index' %}#about_therapy" class="nav__item">O terapii dźwiękiem</a>
+        <a href="{% url 'index' %}#concerts" class="nav__item">Koncerty</a>
+        <a href="{% url 'index' %}#firm" class="nav__item">Dla firm</a>
+        <a href="{% url 'index' %}#practical" class="nav__item">Praktyczne informacje</a>
+        <a href="{% url 'index' %}#contact" class="nav__item">Kontakt</a>
+    </div>
 
-    <script async defer src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.17/index.global.min.js"></script>
-    <script async defer src={% static "/../static/script/calendar.js" %}></script>
+    <div class="nav__items-mobile nav__items-mobile--active" id="nav-mobile">
+        <a href="{% url 'index' %}#about_me" class="nav__item nav__item--mobile">O mnie</a>
+        <a href="{% url 'event_calendar' %}" class="nav__item nav__item--mobile">Kalendarz koncertów</a>
+        <a href="{% url 'index' %}#about_therapy" class="nav__item nav__item--mobile">O terapii dźwiękiem</a>
+        <a href="{% url 'index' %}#concerts" class="nav__item nav__item--mobile">Koncerty</a>
+        <a href="{% url 'index' %}#firm" class="nav__item nav__item--mobile">Dla firm</a>
+        <a href="{% url 'index' %}#practical" class="nav__item nav__item--mobile">Praktyczne informacje</a>
+        <a href="{% url 'index' %}#contact" class="nav__item nav__item--mobile">Kontakt</a>
+    </div>
 
-{% endblock %}
-{% block scss %}
-{#    <link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css' rel='stylesheet'/>#}
-    <link rel="stylesheet" href={% static '/../static/style/style.css' %}>
-{% endblock %}
-{% block title %} <title>Kalendarz koncertów</title> {% endblock %}
-{% block content %}
-    <section class="calendar">
-        <h1 class="calendar__title">Kalendarz wydarzeń</h1>
-        <div class="wrapper">
-            <div class="calendar-container">
-                {% comment %}<div class="filter-section">
-                    <div class="filter-grid">
-                        <div class="filter-item">
-                            <label for="event-type-filter">Filtruj po typie wydarzenia:</label>
-                            <select id="event-type-filter">
-                                <option value="">Wszystkie typy</option>
-                                {% for type in event_types %}
-                                    <option value="{{ type.slug }}">{{ type.name }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                        <div class="filter-item">
-                            <div class="checkbox-wrapper">
-                                <input type="checkbox" id="show-fully-booked" checked>
-                                <label for="show-fully-booked">
-                                    Pokazuj w pełni zarezerwowane wydarzenia
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                </div>{% endcomment %}
+    <button class="hamburger hamburger--emphatic" type="button" aria-label="Otwórz menu" aria-expanded="false"
+            aria-controls="nav-mobile">
+  <span class="hamburger-box">
+    <span class="hamburger-inner"></span>
+  </span>
+    </button>
+</nav>
 
-                <div id="calendar"></div>
+<!--===================KALENDARZ=========================-->
 
-                {% comment %}<div class="legend-section">
-                    <h4>Legenda:</h4>
-                    <div class="legend-grid">
-                        {% for type in event_types %}
-                            <div class="legend-item">
-                    <span class="color-box" style="background-color:
-                            {% if type.slug == 'concert' %}#3788d8
-                            {% elif type.slug == 'workshop' %}#f07c4a
-                            {% elif type.slug == 'meeting' %}#8cbd46
-                            {% else %}#9d7cd8{% endif %};">
-                    </span>
-                                {{ type.name }}
-                            </div>
-                        {% endfor %}
-                    </div>
-                </div>{% endcomment %}
-            </div>
+<section class="calendar">
+    <div class="wrapper">
+        <div class="calendar-container">
+            <h1 class="page-title">Kalendarz koncertów</h1>
+            <div id="calendar"></div>
         </div>
-    </section>
-{% endblock %}
-{% block endJS %}
-{#    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js'></script>#}
-{#    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/locales-all.min.js'></script>#}
-{#    <script src='https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js'></script>#}
-{#    <script src='https://cdn.jsdelivr.net/npm/tippy.js@6.3.1/dist/tippy.umd.min.js'></script>#}
-{% endblock %}
+    </div>
+</section>
+
+<!--===================STOPKA=========================-->
+
+<footer class="footer">
+    <div class="wrapper">
+        <div class="footer__content">
+            <p class="footer__copyright">
+                &copy; <span class="footer__year"></span>
+                <span class="footer__owner">Beata Witkowska</span>
+                <span class="footer__rights">Wszelkie prawa zastrzeżone</span>
+            </p>
+        </div>
+    </div>
+</footer>
+<script defer src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.17/index.global.min.js"></script>
+<script defer src={% static "/../static/script/calendar.js" %}></script>
+<script defer src={% static "/../static/script/script.js" %}></script>
+</body>
+</html>

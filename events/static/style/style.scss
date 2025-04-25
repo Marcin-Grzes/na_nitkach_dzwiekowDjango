@@ -14,13 +14,7 @@ $text-shadow: 0.5px 0.5px 0.5px saddlebrown;
 $symbol: '♪';
 $transformHover: transform 0.3s ease, box-shadow 0.3s ease;
 
-// calendar.css
-$text-color: #333;
-$shadow-color: rgba(0, 0, 0, 0.1);
-
-$breakpoint-tablet: 768px;
-$breakpoint-desktop: 992px;
-
+// ============= MIXINY ================= //
 
 @mixin section-title {
   font-size: 6rem;
@@ -116,24 +110,7 @@ $breakpoint-desktop: 992px;
   }
 }
 
-// Mixiny kalendarza
-
-@mixin card {
-  background-color: white;
-  border-radius: 4px;
-  @include shadow(1);
-  padding: 20px;
-}
-
-@mixin shadow($level: 1) {
-  @if $level == 1 {
-    box-shadow: 0 2px 5px $shadow-color;
-  } @else if $level == 2 {
-    box-shadow: 0 4px 10px $shadow-color;
-  } @else {
-    box-shadow: 0 8px 16px $shadow-color;
-  }
-}
+// ============= RESET ================= //
 
 *,
 *::before,
@@ -266,6 +243,44 @@ table {
 // animacja wlatująceoo menu w wersji mobilnej
 .nav-items-animation {
   animation: navItemsAnimation 1s both;
+}
+
+// min-width: 992px
+
+@media (min-width: 992px) {
+  .nav {
+    background-color: rgba(0, 0, 0, 0.8);
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+
+    &__items {
+
+      &--destkop {
+        /*box-shadow: 10px 10px 20px 5px darkgoldenrod;
+        line-height: 60px;
+        border-radius: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        position: fixed;
+        display: inline-block;*/
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        //padding: 1rem 0;
+      }
+    }
+    &__item {
+      padding: 0.2em;
+      color: $main-color;
+    }
+  }
+  .nav .hamburger {
+    display: none;
+  }
 }
 
 // Header
@@ -1389,43 +1404,6 @@ Kontakt
   }
 }
 
-// min-width: 992px
-
-@media (min-width: 992px) {
-  .nav {
-    background-color: rgba(0, 0, 0, 0.8);
-    width: 100%;
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 100;
-
-    &__items {
-
-      &--destkop {
-        /*box-shadow: 10px 10px 20px 5px darkgoldenrod;
-        line-height: 60px;
-        border-radius: 10px;
-        left: 50%;
-        transform: translateX(-50%);
-        position: fixed;
-        display: inline-block;*/
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 100%;
-        //padding: 1rem 0;
-      }
-    }
-    &__item {
-      padding: 0.2em;
-      color: $main-color;
-    }
-  }
-  .nav .hamburger {
-    display: none;
-  }
-}
 
 @media (min-width: 992px) {
   .about-therapy {
