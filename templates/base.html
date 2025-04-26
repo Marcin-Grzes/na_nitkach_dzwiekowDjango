@@ -15,6 +15,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Faculty+Glyphic&display=swap" rel="stylesheet">
     <link rel="stylesheet" href={% static "/../static/style/style.css" %}>
     <link rel="stylesheet" href={% static "/../static/style/hamburgers.css" %}>
+    <link rel="stylesheet" href={% static "/../static/style/rezervationForm.css" %}>
     {% block scss %} {% endblock %}
     {% block js %} {% endblock %}
     <script defer src={% static "../static/script/script.js" %}></script>
@@ -23,7 +24,7 @@
 <body>
 
 <!--===================NAWIGACJA=========================-->
-<nav class="nav" style="@media (min-width: 992px) {position: relative}">
+<nav class="nav" style="@media (min-width: 992px) {position: relative !important;}">
     <div class="nav__items--destkop">
         <a href="{% url 'index' %}#about_me" class="nav__item">O mnie</a>
         <a href="{% url 'event_calendar' %}" class="nav__item">Kalendarz koncertów</a>

@@ -65,7 +65,7 @@ table {
 
 @media (min-width: 992px) {
   .nav {
-    position: relative;
+    position: relative !important;
   }
 }
 /* Style dla hamburger menu na ciemnym tle */

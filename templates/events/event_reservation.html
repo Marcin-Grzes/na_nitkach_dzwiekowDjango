@@ -1,11 +1,15 @@
 {% extends 'base.html' %}
+{% load static %}
 {#{% load honeypot %}#}
+<link rel="stylesheet" href={% static "/../static/style/rezervationForm.css" %}>
 
-
-
-{% block title %}Rezerwacja - {{ event.title }}{% endblock %}
+{% block title %}<title>Rezerwacja - {{ event.title }}</title>{% endblock %}
 
 {% block content %}
+    
+    <section class="reservation-form">
+    <h2 class="reservation-form__title">Rezerwacja miejsca na {{ event.title }}</h2>
+    <div class="wrapper">
 <div class="container py-5">
     <div class="row">
         <div class="col-lg-8 mx-auto">
@@ -141,4 +145,6 @@
         </div>
     </div>
 </div>
+    </div>
+    </section>
 {% endblock %}
