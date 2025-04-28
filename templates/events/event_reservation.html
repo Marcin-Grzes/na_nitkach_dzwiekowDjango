@@ -1,150 +1,204 @@
-{% extends 'base.html' %}
+<!DOCTYPE html>
 {% load static %}
-{#{% load honeypot %}#}
-<link rel="stylesheet" href={% static "/../static/style/rezervationForm.css" %}>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="description" content="Na nitkach dźwięków - relaksacyjne koncerty na misach dźwiękowych w Grodzisku
+    Mazowieckim, Milanówku i okolicach">
+    <meta name="keywords" content="relaks, misa tybetańska, gong, medytacja, rozwój duchowy">
+    <meta name="author" content="Marcin Grześ">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Faculty+Glyphic&display=swap" rel="stylesheet">
+    {% block title %}<title>Rezerwacja - {{ event.title }}</title>{% endblock %}
+    <link rel="stylesheet" href="{% static '/style/style.css' %}">
+    <link rel="stylesheet" href="{% static '/style/hamburgers.css' %}">
+    <link rel="stylesheet" href={% static "/../static/style/reservationForm.css" %}>
+</head>
+<body>
 
-{% block title %}<title>Rezerwacja - {{ event.title }}</title>{% endblock %}
 
-{% block content %}
-    
-    <section class="reservation-form">
-    <h2 class="reservation-form__title">Rezerwacja miejsca na {{ event.title }}</h2>
-    <div class="wrapper">
-<div class="container py-5">
-    <div class="row">
-        <div class="col-lg-8 mx-auto">
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="{% url 'index' %}">Strona główna</a></li>
-                    <li class="breadcrumb-item"><a href="{% url 'event_calendar' %}">Wydarzenia</a></li>
-                    <li class="breadcrumb-item"><a href="{% url 'event_detail' event.id %}">{{ event.title }}</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Rezerwacja</li>
-                </ol>
-            </nav>
+<!--===================NAWIGACJA=========================-->
 
-            <div class="card shadow-sm">
-                <div class="card-header bg-primary text-white">
-                    <h1 class="h3 mb-0">Rezerwacja miejsca na wydarzenie</h1>
-                </div>
-                <div class="card-body">
-                    <div class="mb-4">
-                        <h2 class="h4">{{ event.title }}</h2>
-                        <p><strong>Data:</strong> {{ event.start_datetime|date:"j E Y, H:i" }}</p>
-                        <p><strong>Miejsce:</strong> {{ event.venue.name }}, {{ event.venue.address }}</p>
-                        <p><strong>Dostępne miejsca:</strong> {{ event.get_available_seats }}</p>
+<nav class="nav">
+    <div class="nav__items--destkop">
+        <a href="{% url 'index' %}#about_me" class="nav__item">O mnie</a>
+        <a href="{% url 'event_calendar' %}" class="nav__item">Kalendarz koncertów</a>
+        <a href="{% url 'index' %}#about_therapy" class="nav__item">O terapii dźwiękiem</a>
+        <a href="{% url 'index' %}#concerts" class="nav__item">Koncerty</a>
+        <a href="{% url 'index' %}#firm" class="nav__item">Dla firm</a>
+        <a href="{% url 'index' %}#practical" class="nav__item">Praktyczne informacje</a>
+        <a href="{% url 'index' %}#contact" class="nav__item">Kontakt</a>
+    </div>
+
+    <div class="nav__items-mobile nav__items-mobile--active" id="nav-mobile">
+        <a href="{% url 'index' %}#about_me" class="nav__item nav__item--mobile">O mnie</a>
+        <a href="{% url 'event_calendar' %}" class="nav__item nav__item--mobile">Kalendarz koncertów</a>
+        <a href="{% url 'index' %}#about_therapy" class="nav__item nav__item--mobile">O terapii dźwiękiem</a>
+        <a href="{% url 'index' %}#concerts" class="nav__item nav__item--mobile">Koncerty</a>
+        <a href="{% url 'index' %}#firm" class="nav__item nav__item--mobile">Dla firm</a>
+        <a href="{% url 'index' %}#practical" class="nav__item nav__item--mobile">Praktyczne informacje</a>
+        <a href="{% url 'index' %}#contact" class="nav__item nav__item--mobile">Kontakt</a>
+    </div>
+
+    <button class="hamburger hamburger--emphatic" type="button" aria-label="Otwórz menu" aria-expanded="false"
+            aria-controls="nav-mobile">
+  <span class="hamburger-box">
+    <span class="hamburger-inner"></span>
+  </span>
+    </button>
+</nav>
+
+<!--===================FORMULARZ REZERWACJI=========================-->
+
+<section class="reservation-form">
+<div class="wrapper">
+    <h1 class="reservation-form__title">Rezerwacja miejsca na: <br><span>"{{ event.title }}"</span></h1>
+
+                        <div class="reservation-form__information">
+                            <p><span>Data: </span>{{ event.start_datetime|date:"j E Y, H:i" }}</p>
+                                <p><span>Miejsce: </span> {{ event.venue.name }}, {{ event.venue.address }}, {{ event.venue.city }}</p>
+                                <p><span>Dostępne miejsca: </span> {{ event.get_available_seats }}</p>
+                            </div>
+
+                            <form method="post" novalidate class="reservation-form__form">
+                                {% csrf_token %}
+
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="{{ form.first_name.id_for_label }}"
+                                               class="form-label">{{ form.first_name.label }}</label>
+                                        {{ form.first_name }}
+                                        {% if form.first_name.errors %}
+                                            <div class="invalid-feedback d-block">{{ form.first_name.errors }}</div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="{{ form.last_name.id_for_label }}"
+                                               class="form-label">{{ form.last_name.label }}</label>
+                                        {{ form.last_name }}
+                                        {% if form.last_name.errors %}
+                                            <div class="invalid-feedback d-block">{{ form.last_name.errors }}</div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="{{ form.email.id_for_label }}"
+                                               class="form-label">{{ form.email.label }}</label>
+                                        {{ form.email }}
+                                        {% if form.email.errors %}
+                                            <div class="invalid-feedback d-block">{{ form.email.errors }}</div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="{{ form.phone_number.id_for_label }}"
+                                               class="form-label">{{ form.phone_number.label }}</label>
+                                        {{ form.phone_number }}
+                                        {% if form.phone_number.errors %}
+                                            <div class="invalid-feedback d-block">{{ form.phone_number.errors }}</div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="{{ form.participants_count.id_for_label }}"
+                                               class="form-label">{{ form.participants_count.label }}</label>
+                                        {{ form.participants_count }}
+                                        <small class="form-text text-muted">{{ form.participants_count.help_text }}</small>
+                                        {% if form.participants_count.errors %}
+                                            <div class="invalid-feedback d-block">{{ form.participants_count.errors }}</div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="{{ form.type_of_payments.id_for_label }}"
+                                               class="form-label">{{ form.type_of_payments.label }}</label>
+                                        {{ form.type_of_payments }}
+                                        {% if form.type_of_payments.errors %}
+                                            <div class="invalid-feedback d-block">{{ form.type_of_payments.errors }}</div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <div class="form-check">
+                                        {{ form.data_processing_consent }}
+                                        <label class="form-check-label"
+                                               for="{{ form.data_processing_consent.id_for_label }}">
+                                            {{ form.data_processing_consent.label }}
+                                        </label>
+                                        {% if form.data_processing_consent.errors %}
+                                            <div class="invalid-feedback d-block">{{ form.data_processing_consent.errors }}</div>
+                                        {% endif %}
+                                        <small class="form-text text-muted d-block">{{ form.data_processing_consent.help_text }}</small>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <div class="form-check">
+                                        {{ form.privacy_policy_consent }}
+                                        <label class="form-check-label"
+                                               for="{{ form.privacy_policy_consent.id_for_label }}">
+                                            {{ form.privacy_policy_consent.label }}
+                                        </label>
+                                        {% if form.privacy_policy_consent.errors %}
+                                            <div class="invalid-feedback d-block">{{ form.privacy_policy_consent.errors }}</div>
+                                        {% endif %}
+                                        <small class="form-text text-muted d-block">{{ form.privacy_policy_consent.help_text }}</small>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <div class="form-check">
+                                        {{ form.marketing_emails_consent }}
+                                        <label class="form-check-label"
+                                               for="{{ form.marketing_emails_consent.id_for_label }}">
+                                            {{ form.marketing_emails_consent.label }}
+                                        </label>
+                                        <small class="form-text text-muted d-block">{{ form.marketing_emails_consent.help_text }}</small>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <div class="form-check">
+                                        {{ form.reminder_emails_consent }}
+                                        <label class="form-check-label"
+                                               for="{{ form.reminder_emails_consent.id_for_label }}">
+                                            {{ form.reminder_emails_consent.label }}
+                                        </label>
+                                        <small class="form-text text-muted d-block">{{ form.reminder_emails_consent.help_text }}</small>
+                                    </div>
+                                </div>
+
+                                <div class="mt-4">
+                                    <a href="{% url 'event_detail' event.id %}" class="btn btn-secondary">Anuluj</a>
+                                    <button type="submit" class="btn btn-primary">Zarezerwuj miejsce</button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
-
-                    <form method="post" novalidate>
-                        {% csrf_token %}
-{#                         {% render_honeypot_field %}#}
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="{{ form.first_name.id_for_label }}" class="form-label">{{ form.first_name.label }}</label>
-                                {{ form.first_name }}
-                                {% if form.first_name.errors %}
-                                    <div class="invalid-feedback d-block">{{ form.first_name.errors }}</div>
-                                {% endif %}
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="{{ form.last_name.id_for_label }}" class="form-label">{{ form.last_name.label }}</label>
-                                {{ form.last_name }}
-                                {% if form.last_name.errors %}
-                                    <div class="invalid-feedback d-block">{{ form.last_name.errors }}</div>
-                                {% endif %}
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="{{ form.email.id_for_label }}" class="form-label">{{ form.email.label }}</label>
-                                {{ form.email }}
-                                {% if form.email.errors %}
-                                    <div class="invalid-feedback d-block">{{ form.email.errors }}</div>
-                                {% endif %}
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="{{ form.phone_number.id_for_label }}" class="form-label">{{ form.phone_number.label }}</label>
-                                {{ form.phone_number }}
-                                {% if form.phone_number.errors %}
-                                    <div class="invalid-feedback d-block">{{ form.phone_number.errors }}</div>
-                                {% endif %}
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="{{ form.participants_count.id_for_label }}" class="form-label">{{ form.participants_count.label }}</label>
-                                {{ form.participants_count }}
-                                <small class="form-text text-muted">{{ form.participants_count.help_text }}</small>
-                                {% if form.participants_count.errors %}
-                                    <div class="invalid-feedback d-block">{{ form.participants_count.errors }}</div>
-                                {% endif %}
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="{{ form.type_of_payments.id_for_label }}" class="form-label">{{ form.type_of_payments.label }}</label>
-                                {{ form.type_of_payments }}
-                                {% if form.type_of_payments.errors %}
-                                    <div class="invalid-feedback d-block">{{ form.type_of_payments.errors }}</div>
-                                {% endif %}
-                            </div>
-                        </div>
-
-                        <div class="mb-3">
-                            <div class="form-check">
-                                {{ form.data_processing_consent }}
-                                <label class="form-check-label" for="{{ form.data_processing_consent.id_for_label }}">
-                                    {{ form.data_processing_consent.label }}
-                                </label>
-                                {% if form.data_processing_consent.errors %}
-                                    <div class="invalid-feedback d-block">{{ form.data_processing_consent.errors }}</div>
-                                {% endif %}
-                                <small class="form-text text-muted d-block">{{ form.data_processing_consent.help_text }}</small>
-                            </div>
-                        </div>
-
-                        <div class="mb-3">
-                            <div class="form-check">
-                                {{ form.privacy_policy_consent }}
-                                <label class="form-check-label" for="{{ form.privacy_policy_consent.id_for_label }}">
-                                    {{ form.privacy_policy_consent.label }}
-                                </label>
-                                {% if form.privacy_policy_consent.errors %}
-                                    <div class="invalid-feedback d-block">{{ form.privacy_policy_consent.errors }}</div>
-                                {% endif %}
-                                <small class="form-text text-muted d-block">{{ form.privacy_policy_consent.help_text }}</small>
-                            </div>
-                        </div>
-
-                        <div class="mb-3">
-                            <div class="form-check">
-                                {{ form.marketing_emails_consent }}
-                                <label class="form-check-label" for="{{ form.marketing_emails_consent.id_for_label }}">
-                                    {{ form.marketing_emails_consent.label }}
-                                </label>
-                                <small class="form-text text-muted d-block">{{ form.marketing_emails_consent.help_text }}</small>
-                            </div>
-                        </div>
-
-                        <div class="mb-3">
-                            <div class="form-check">
-                                {{ form.reminder_emails_consent }}
-                                <label class="form-check-label" for="{{ form.reminder_emails_consent.id_for_label }}">
-                                    {{ form.reminder_emails_consent.label }}
-                                </label>
-                                <small class="form-text text-muted d-block">{{ form.reminder_emails_consent.help_text }}</small>
-                            </div>
-                        </div>
-
-                        <div class="mt-4">
-                            <a href="{% url 'event_detail' event.id %}" class="btn btn-secondary">Anuluj</a>
-                            <button type="submit" class="btn btn-primary">Zarezerwuj miejsce</button>
-                        </div>
-                    </form>
                 </div>
             </div>
         </div>
     </div>
-</div>
+</section>
+<!--===================STOPKA=========================-->
+
+<footer class="footer">
+    <div class="wrapper">
+        <div class="footer__content">
+            <p class="footer__copyright">
+                &copy; <span class="footer__year"></span>
+                <span class="footer__owner">Beata Witkowska</span>
+                <span class="footer__rights">Wszelkie prawa zastrzeżone</span>
+            </p>
+        </div>
     </div>
-    </section>
-{% endblock %}
+</footer>
+<script defer src={% static "/../static/script/script.js" %}></script>
+</body>

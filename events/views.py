@@ -56,7 +56,7 @@ class EventReservationView(View):
             'form': form,
             'event': event,
         }
-        return render(request, 'events/event_reservation_copy.html', context)
+        return render(request, 'events/event_reservation.html', context)
 
     # @check_honeypot
     def post(self, request, event_id):

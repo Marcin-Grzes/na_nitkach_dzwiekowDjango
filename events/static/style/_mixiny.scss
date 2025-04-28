@@ -1,0 +1,143 @@
+// FONTS
+
+@font-face {
+  font-family: "Original Surfer";
+  src: url("../fonts/Original_Surfer/OriginalSurfer-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+// ZMIENNE
+
+// CALENDAR.SCSS
+$text-color: #333;
+$shadow-color: rgba(0, 0, 0, 0.1);
+$buttonColor: linear-gradient(135deg, goldenrod, #e6b422);
+$breakpoint-tablet: 768px;
+$breakpoint-desktop: 992px;
+
+// STYLE SCSS
+$head-font: "Original Surfer", sans-serif;
+$main-font: "Faculty Glyphic", sans-serif;
+$background: linear-gradient(135deg, rgba(255,255,255,0.8) 0%, rgba(255,248,227,1) 100%);
+$backgroud-subsection: linear-gradient(135deg, rgba(255,253,240,1) 0%, rgba(255,236,179,1) 100%);
+$main-color: goldenrod;
+$text-shadow: 0.5px 0.5px 0.5px saddlebrown;
+$symbol: '♪';
+$transformHover: transform 0.3s ease, box-shadow 0.3s ease;
+
+// ============= MIXINY ================= //
+
+// CALENDAR.SCSS
+
+@mixin shadow($level: 1) {
+  @if $level == 1 {
+    box-shadow: 0 2px 5px $shadow-color;
+  } @else if $level == 2 {
+    box-shadow: 0 4px 10px $shadow-color;
+  } @else {
+    box-shadow: 0 8px 16px $shadow-color;
+  }
+}
+
+@mixin card {
+  background: $background;
+  border-radius: 4px;
+  @include shadow(1);
+  padding: 20px;
+}
+
+// STYLE SCSS
+@mixin section-title {
+  font-size: 6rem;
+  margin: 3rem 0 5rem;
+  text-align: center;
+  color: $main-color;
+  text-shadow: $text-shadow;
+  font-family: $head-font;
+}
+
+@mixin section-title-suplement {
+  position: relative;
+  z-index: 2;
+};
+
+@mixin section-subtitle {
+  font-family: $head-font;
+  font-size: 2.8rem;
+  color: sienna;
+  margin-bottom: 2rem;
+}
+
+@mixin section-subtitle-suplement {
+  position: relative;
+  padding-left: 2rem;
+
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 1rem;
+    height: 3rem;
+    background-color: goldenrod;
+    border-radius: 4px;
+  }
+};
+
+@mixin gradient-card {
+  background: $backgroud-subsection;
+  border-radius: 15px;
+  padding: 3rem;
+}
+
+@mixin card-hover-effect {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 25px rgba(184, 134, 11, 0.25);
+}
+
+@mixin custom-list {
+  list-style-type: none;
+  margin-left: 2rem;
+  margin-bottom: 2rem;
+}
+
+@mixin custom-list-item {
+  font-size: 2.2rem;
+  line-height: 1.7;
+  font-family: $main-font;
+  margin-bottom: 1rem;
+  position: relative;
+  padding-left: 3rem;
+
+  &::before {
+    content: $symbol;
+    position: absolute;
+    left: 0;
+    top: 0;
+    color: goldenrod;
+    font-size: 2.5rem;
+  }
+}
+@mixin main-text {
+  font-size: 2.4rem;
+  line-height: 1.8;
+  font-family: $main-font;
+  margin-bottom: 2rem;
+  text-align: justify;
+}
+
+@mixin fade-animation {
+  .fade-in-element {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+    will-change: opacity, transform; // Optymalizacja wydajności
+
+    &.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}

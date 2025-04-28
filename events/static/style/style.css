@@ -1336,5 +1336,14 @@ Kontakt
 /*================================
 FORMULARZ REZERWACJI
 ================================*/
+/*.reservation-form {
+  background: $background;
+  position: relative;
+  overflow: hidden;
+
+  &__title {
+    @include section-title
+  }
+}*/
 
 /*# sourceMappingURL=style.css.map */

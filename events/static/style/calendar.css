@@ -68,55 +68,6 @@ table {
     position: relative !important;
   }
 }
-/* Style dla hamburger menu na ciemnym tle */
-.hamburger.on-dark-bg .hamburger-inner,
-.hamburger.on-dark-bg .hamburger-inner::before,
-.hamburger.on-dark-bg .hamburger-inner::after {
-  background-color: white;
-}
-
-/* Dodanie tła do przycisku hamburger menu */
-.hamburger {
-  background-color: rgba(255, 255, 255, 0.85); /* Półprzezroczyste białe tło */
-  border-radius: 8px; /* Zaokrąglone rogi */
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtelny cień */
-  padding: 12px; /* Zwiększamy padding dla większej powierzchni kliknięcia */
-  transition: background-color 0.3s ease; /* Płynna animacja zmiany tła */
-  /* Dodaj do istniejących stylów */
-  backdrop-filter: blur(2px); /* Lekki efekt rozmycia tła (nie działa w starszych przeglądarkach) */
-  border: 1px solid rgba(255, 255, 255, 0.1); /* Subtelna ramka */
-}
-
-/* Dla przeglądarek, które nie obsługują backdrop-filter */
-@supports not (backdrop-filter: blur(2px)) {
-  .hamburger {
-    background-color: rgba(255, 255, 255, 0.85); /* Bardziej nieprzezroczyste tło */
-  }
-  .hamburger.on-dark-bg {
-    background-color: rgba(0, 0, 0, 0.65); /* Bardziej nieprzezroczyste tło dla ciemnego wariantu */
-  }
-}
-/* Ciemniejsze tło dla stanu hover */
-.hamburger:hover {
-  background-color: rgba(255, 255, 255, 0.85);
-}
-
-/* Wersja dla ciemnego tła */
-.hamburger.on-dark-bg {
-  background-color: rgba(0, 0, 0, 0.4); /* Półprzezroczyste ciemne tło */
-  box-shadow: 0 2px 5px rgba(255, 255, 255, 0.1); /* Subtelny jasny cień */
-}
-
-/* Wersja hover dla ciemnego tła */
-.hamburger.on-dark-bg:hover {
-  background-color: rgba(0, 0, 0, 0.65);
-}
-
-/* Zachowujemy style dla aktywnego stanu */
-.hamburger.is-active {
-  background-color: rgba(255, 255, 255, 0.4); /* Bardziej nieprzezroczyste tło dla aktywnego menu */
-}
-
 .title {
   font-size: 6rem;
   margin: 3rem 0 5rem;
@@ -124,8 +75,8 @@ table {
   color: goldenrod;
   text-shadow: 0.5px 0.5px 0.5px saddlebrown;
   font-family: "Original Surfer", sans-serif;
-  position: relative !important;
-  z-index: 2 !important;
+  position: relative;
+  z-index: 2;
 }
 
 .calendar {

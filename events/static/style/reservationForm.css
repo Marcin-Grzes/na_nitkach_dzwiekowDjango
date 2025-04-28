@@ -1,0 +1,41 @@
+@font-face {
+  font-family: "Original Surfer";
+  src: url("../fonts/Original_Surfer/OriginalSurfer-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+@media (min-width: 992px) {
+  .nav {
+    position: relative !important;
+  }
+}
+.reservation-form {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.8) 0%, rgb(255, 248, 227) 100%);
+  position: relative;
+  overflow: hidden;
+}
+.reservation-form__title {
+  font-size: 3rem;
+  margin: 6rem 0 5rem;
+  text-align: center;
+  color: goldenrod;
+  text-shadow: 0.5px 0.5px 0.5px saddlebrown;
+  font-family: "Original Surfer", sans-serif;
+}
+.reservation-form__information {
+  font-family: "Faculty Glyphic", sans-serif;
+}
+.reservation-form__information p {
+  margin: 2rem;
+}
+.reservation-form__information span {
+  font-size: 1.5rem;
+}
+
+@media (min-width: 992px) {
+  .reservation-form__title {
+    font-size: 3.5rem;
+  }
+}
+
+/*# sourceMappingURL=reservationForm.css.map */

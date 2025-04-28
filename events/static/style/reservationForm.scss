@@ -1,0 +1,48 @@
+@import 'mixiny';
+
+// MENU
+
+// min-width: 992px
+@media (min-width: 992px) {
+  .nav {
+    position: relative !important;
+  }
+}
+
+.reservation-form {
+  background: $background;
+  position: relative;
+  overflow: hidden;
+
+  &__title {
+    font-size: 3rem;
+    margin: 6rem 0 5rem;
+    text-align: center;
+    color: $main-color;
+    text-shadow: $text-shadow;
+    font-family: $head-font;
+    span {
+
+    }
+  }
+
+  &__information {
+    font-family: $main-font;
+
+    p {
+      margin: 2rem;
+    }
+    span {
+      font-size: 1.5rem;
+      //font-weight: ;
+    }
+  }
+}
+
+@media (min-width: 992px) {
+  .reservation-form {
+    &__title {
+      font-size: 3.5rem;
+    }
+  }
+}
