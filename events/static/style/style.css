@@ -365,6 +365,7 @@ table {
   border-radius: 15px;
   padding: 3rem;
   border-left: 5px solid goldenrod;
+  box-shadow: 0 8px 20px rgba(184, 134, 11, 0.15);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 .about-therapy__for-whom:hover {
@@ -377,6 +378,7 @@ table {
   border-radius: 15px;
   padding: 3rem;
   border-left: 5px solid goldenrod;
+  box-shadow: 0 8px 20px rgba(184, 134, 11, 0.15);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 .about-therapy__contraindications:hover {

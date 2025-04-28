@@ -377,6 +377,7 @@ table {
     //background: rgba(255, 255, 255, 0.3);
     @include gradient-card;
     border-left: 5px solid goldenrod;
+    box-shadow: 0 8px 20px rgba(184, 134, 11, 0.15);
     transition: $transformHover;
 
     &:hover {
@@ -390,6 +391,7 @@ table {
     margin-bottom: 4rem;
     @include gradient-card;
     border-left: 5px solid goldenrod;
+    box-shadow: 0 8px 20px rgba(184, 134, 11, 0.15);
     transition: $transformHover;
 
     &:hover {
