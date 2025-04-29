@@ -18,7 +18,7 @@ from django.utils.translation import gettext_lazy as _
 from django.core.validators import MinValueValidator, MaxValueValidator
 from tinymce.models import HTMLField
 from djmoney.models.fields import MoneyField
-
+from djmoney.models.managers import money_manager
 
 # Create your models here.
 
@@ -197,6 +197,46 @@ class EventImage(models.Model):
         return f"{self.event.title} - Zdjęcie {self.id}"
 
 
+# Definicja niestandardowego menedżera
+class EventManager(models.Manager):
+    """
+    Niestandardowy menedżer modelu Events, który automatycznie aktualizuje
+    statusy wydarzeń podczas pobierania danych z bazy.
+    """
+
+    def get_queryset(self):
+        """
+        Nadpisana metoda get_queryset, która przed zwróceniem wyników
+        aktualizuje statusy minionych wydarzeń.
+        """
+        # Najpierw pobierz standardowy queryset
+        queryset = super().get_queryset()
+
+        # Znajdź i zaktualizuj wydarzenia, które już się rozpoczęły a są nadal aktywne
+        past_events = queryset.filter(
+            is_active=True,
+            start_datetime__lt=timezone.now()
+        )
+
+        # Aktualizuj statusy, jeśli znaleziono takie wydarzenia
+        if past_events.exists():
+            past_events.update(is_active=False)
+
+        # Zwróć całość querysetu (już zaktualizowaną)
+        return queryset
+
+    def active(self):
+        """
+        Pomocnicza metoda zwracająca tylko aktywne wydarzenia.
+        """
+        return self.get_queryset().filter(is_active=True)
+
+    def upcoming(self):
+        """
+        Pomocnicza metoda zwracająca tylko przyszłe aktywne wydarzenia.
+        """
+        return self.active().filter(start_datetime__gte=timezone.now())
+
 class Events(models.Model):
     title = models.CharField(_("Tytuł wydarzenia"), max_length=200)
 
@@ -248,6 +288,8 @@ class Events(models.Model):
         help_text=_(
             "Główne zdjęcie przedstawiające wydarzenie. Dodatkowe zdjęcia można dodać po utworzeniu wydarzenia.")
     )
+
+    objects = money_manager(EventManager())
 
     # Metadane
     created_at = models.DateTimeField(_("Data utworzenia"), auto_now_add=True)
