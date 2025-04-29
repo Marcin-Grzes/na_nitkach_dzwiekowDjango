@@ -1,0 +1,26 @@
+@font-face {
+  font-family: "Original Surfer";
+  src: url("../fonts/Original_Surfer/OriginalSurfer-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+@media (min-width: 992px) {
+  .nav {
+    position: relative !important;
+  }
+}
+.event-detail {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.8) 0%, rgb(255, 248, 227) 100%);
+  position: relative;
+  overflow: hidden;
+  padding: 4rem 0;
+}
+.event-detail__title {
+  font-size: 3.5rem;
+  margin: 3rem 0 4rem;
+  color: goldenrod;
+  text-shadow: 0.5px 0.5px 0.5px saddlebrown;
+  font-family: "Original Surfer", sans-serif;
+}
+
+/*# sourceMappingURL=eventDetail.css.map */

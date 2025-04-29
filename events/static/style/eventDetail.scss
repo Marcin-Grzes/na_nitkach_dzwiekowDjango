@@ -1,0 +1,23 @@
+@import "mixiny";
+
+// min-width: 992px
+@media (min-width: 992px) {
+  .nav {
+    position: relative !important;
+  }
+}
+
+.event-detail {
+  background: $background;
+  position: relative;
+  overflow: hidden;
+  padding: 4rem 0;
+
+  &__title {
+    font-size: 3.5rem;
+    margin: 3rem 0 4rem;
+    color: $main-color;
+    text-shadow: $text-shadow;
+    font-family: $head-font;
+  }
+}
