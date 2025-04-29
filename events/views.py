@@ -31,6 +31,30 @@ class TestCalendar(View):
     def get(self, request):
         return render(request, 'test_calendar.html')
 
+
+class ReservationSuccessView(View):
+    """
+    Widok potwierdzenia rezerwacji wyświetlany po pomyślnym dokonaniu rezerwacji.
+    """
+
+    def get(self, request, event_id, reservation_id):
+        # Pobierz wydarzenie i rezerwację
+        event = get_object_or_404(Events, id=event_id, is_active=True)
+        reservation = get_object_or_404(Rezerwations, id=reservation_id)
+
+        # Sprawdź czy rezerwacja należy do tego wydarzenia
+        if reservation.event.id != event.id:
+            messages.error(request, "Wystąpił błąd. Nieprawidłowe dane rezerwacji.")
+            return redirect('event_detail', event_id=event_id)
+
+        context = {
+            'event': event,
+            'reservation': reservation,
+        }
+
+        return render(request, 'events/reservation_success.html', context)
+    
+
 class EventReservationView(View):
     """
     Widok do rezerwacji miejsc na konkretne wydarzenie.
@@ -91,8 +115,8 @@ class EventReservationView(View):
             # Wysyłka emaila potwierdzającego
             self.send_confirmation_email(reservation)
 
-            messages.success(request, message)
-            return redirect('event_detail', event_id=event_id)
+            # Przekierowanie do strony potwierdzenia zamiast wiadomości flash
+            return redirect('reservation_success', event_id=event_id, reservation_id=reservation.id)
 
         context = {'form': form, 'event': event}
         return render(request, 'events/event_reservation.html', context)
