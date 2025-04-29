@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 {% load static %}
-<html lang="en">
+<html lang="pl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
@@ -14,17 +14,14 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Faculty+Glyphic&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightbox2@2.11.3/dist/css/lightbox.min.css">
-    {% block title %}<title>Szczegóły - {{ event.title }}</title>{% endblock %}
+    {% block title %}<title>{{ event.title }}</title>{% endblock %}
     <link rel="stylesheet" href="{% static '/style/style.css' %}">
     <link rel="stylesheet" href="{% static '/style/hamburgers.css' %}">
-    <link rel="stylesheet" href={% static "/style/eventDetail.css" %}>
+    <link rel="stylesheet" href="{% static '/style/eventDetail.css' %}">
 </head>
 <body>
 
-
-
 <!--===================NAWIGACJA=========================-->
-
 <nav class="nav">
     <div class="nav__items--destkop">
         <a href="{% url 'index' %}#about_me" class="nav__item">O mnie</a>
@@ -48,27 +45,136 @@
 
     <button class="hamburger hamburger--emphatic" type="button" aria-label="Otwórz menu" aria-expanded="false"
             aria-controls="nav-mobile">
-  <span class="hamburger-box">
-    <span class="hamburger-inner"></span>
-  </span>
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
     </button>
 </nav>
 
+<!--===================SZCZEGÓŁY WYDARZENIA=========================-->
 <section class="event-detail">
     <div class="wrapper">
         <h1 class="event-detail__title">{{ event.title }}</h1>
-        <div class="annotation">
-        {% if event.is_fully_booked %}
-                    <span class="badge bg-danger">Brak miejsc</span>
-                {% else %}
-                    <span class="badge bg-success">Dostępne miejsca: {{ event.get_available_seats }}</span>
+        
+        <div class="event-detail__badge-container fade-in-element">
+            <span class="event-detail__badge event-detail__badge--primary">{{ event.type_of_events.name }}</span>
+            {% if event.is_fully_booked %}
+                <span class="event-detail__badge event-detail__badge--warning">Brak miejsc</span>
+            {% else %}
+                <span class="event-detail__badge event-detail__badge--success">Dostępne miejsca: {{ event.get_available_seats }}</span>
+            {% endif %}
+        </div>
+
+        <div class="event-detail__container">
+            <div class="event-detail__main">
+                {% if event.main_image %}
+                    <img src="{{ event.main_image.url }}" class="event-detail__image fade-in-element" alt="{{ event.title }}">
                 {% endif %}
+
+                <div class="event-detail__card fade-in-element">
+                    <h3 class="event-detail__card-title">Opis wydarzenia</h3>
+                    <div class="event-detail__card-content">
+                        {{ event.description|safe }}
+                    </div>
+                </div>
+
+                {% if images %}
+                    <div class="event-detail__gallery fade-in-element">
+                        <h3 class="event-detail__gallery-title">Galeria zdjęć</h3>
+                        <div class="event-detail__gallery-container">
+                            {% for image in images %}
+                                <div class="event-detail__gallery-item">
+                                    <a href="{{ image.image.url }}" data-lightbox="event-gallery" data-title="{{ image.caption }}">
+                                        <img src="{{ image.image.url }}" alt="{{ image.caption }}">
+                                    </a>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="event-detail__sidebar">
+                <div class="event-detail__card fade-in-element">
+                    <h3 class="event-detail__card-title">Informacje o wydarzeniu</h3>
+                    
+                    <div class="event-detail__info">
+                        <div class="event-detail__info-item">
+                            <div class="event-detail__info-label">Data rozpoczęcia:</div>
+                            <div class="event-detail__info-value">{{ event.start_datetime|date:"j E Y, H:i" }}</div>
+                        </div>
+                        
+                        <div class="event-detail__info-item">
+                            <div class="event-detail__info-label">Data zakończenia:</div>
+                            <div class="event-detail__info-value">{{ event.end_datetime|date:"j E Y, H:i" }}</div>
+                        </div>
+                        
+                        <div class="event-detail__info-item">
+                            <div class="event-detail__info-label">Miejsce:</div>
+                            <div class="event-detail__info-value">
+                                {{ event.venue.name }}<br>
+                                {{ event.venue.address }}<br>
+                                {{ event.venue.city }}
+                            </div>
+                        </div>
+                        
+                        {% if event.price %}
+                        <div class="event-detail__info-item">
+                            <div class="event-detail__info-label">Cena:</div>
+                            <div class="event-detail__info-value">{{ event.price }}</div>
+                        </div>
+                        {% endif %}
+                        
+                        <div class="event-detail__info-item">
+                            <div class="event-detail__info-label">Maksymalna liczba uczestników:</div>
+                            <div class="event-detail__info-value">{{ event.max_participants }}</div>
+                        </div>
+                        
+                        <div class="event-detail__info-item">
+                            <div class="event-detail__info-label">Dostępne miejsca:</div>
+                            <div class="event-detail__info-value">{{ event.get_available_seats }}</div>
+                        </div>
+                    </div>
+                </div>
+
+                {% if event.venue.map_iframe %}
+                <div class="event-detail__card fade-in-element">
+                    <h3 class="event-detail__card-title">Lokalizacja</h3>
+                    <div class="event-detail__map">
+                        {{ event.venue.map_iframe|safe }}
+                    </div>
+                </div>
+                {% endif %}
+                <div class="event-detail__cta fade-in-element">
+    <div class="event-detail__cta-buttons">
+        <a href="{% url 'event_calendar' %}" class="event-detail__cta-button event-detail__cta-button--secondary">Cofnij</a>
+        
+        {% if event.is_fully_booked %}
+            <div class="event-detail__cta-notice">
+                Brak miejsc! Wszystkie miejsca są już zajęte, ale możesz zapisać się na listę rezerwową.
+            </div>
+            <a href="{% url 'event_reservation' event.id %}" class="event-detail__cta-button event-detail__cta-button--alt">
+                Zapisz się na listę rezerwową
+            </a>
+            <p class="event-detail__cta-info event-detail__cta-info--warning">
+                Obecnie na liście rezerwowej: {{ event.get_waitlist_count }} osób
+            </p>
+        {% else %}
+            <a href="{% url 'event_reservation' event.id %}" class="event-detail__cta-button">
+                Zarezerwuj miejsce
+            </a>
+            <p class="event-detail__cta-info">
+                Dostępne miejsca: {{ event.get_available_seats }}
+            </p>
+        {% endif %}
+    </div>
+</div>
+            </div>
         </div>
     </div>
 </section>
 
 <!--===================STOPKA=========================-->
-
 <footer class="footer">
     <div class="wrapper">
         <div class="footer__content">
@@ -80,106 +186,10 @@
         </div>
     </div>
 </footer>
-<script defer src={% static "/../static/script/script.js" %}></script>
+
+<script defer src="{% static '/script/script.js' %}"></script>
+<script defer src="{% static '/script/animations.js' %}"></script>
+<script defer src="{% static '/script/eventDatail.js' %}"></script>
 <script src="https://cdn.jsdelivr.net/npm/lightbox2@2.11.3/dist/js/lightbox.min.js"></script>
 </body>
-
-
-    
-    <style>
-        .event-gallery img {
-            height: 150px;
-            object-fit: cover;
-            cursor: pointer;
-            margin-bottom: 15px;
-        }
-    </style>
-{% comment %}
-
-
-
-    <div class="row">
-        <div class="col-lg-8">
-            <h2>{{ event.title }}</h2>
-            <div class="mb-4">
-                <span class="badge bg-primary">{{ event.type_of_events.name }}</span>
-                {% if event.is_fully_booked %}
-                    <span class="badge bg-danger">Brak miejsc</span>
-                {% else %}
-                    <span class="badge bg-success">Dostępne miejsca: {{ event.get_available_seats }}</span>
-                {% endif %}
-            </div>
-
-            {% if event.main_image %}
-                <img src="{{ event.main_image.url }}" class="img-fluid rounded mb-4" alt="{{ event.title }}">
-            {% endif %}
-
-            <div class="card mb-4">
-                <div class="card-body">
-                    <h5 class="card-title">Opis wydarzenia</h5>
-                    <p class="card-text">{{ event.description|safe }}</p>
-                </div>
-            </div>
-
-            {% if images %}
-                <h5 class="mb-3">Galeria zdjęć</h5>
-                <div class="row event-gallery">
-                    {% for image in images %}
-                        <div class="col-6 col-md-4 col-lg-3">
-                            <a href="{{ image.image.url }}" data-lightbox="event-gallery"
-                               data-title="{{ image.caption }}">
-                                <img src="{{ image.image.url }}" class="img-fluid rounded" alt="{{ image.caption }}">
-                            </a>
-                        </div>
-                    {% endfor %}
-                </div>
-            {% endif %}
-        </div>
-
-        <div class="col-lg-4">
-            <div class="card mb-4">
-                <div class="card-header">
-                    <h5 class="card-title mb-0">Informacje o wydarzeniu</h5>
-                </div>
-                <div class="card-body">
-                    <p><strong>Data rozpoczęcia:</strong><br> {{ event.start_datetime|date:"j E Y, H:i" }}</p>
-                    <p><strong>Data zakończenia:</strong><br> {{ event.end_datetime|date:"j E Y, H:i" }}</p>
-                    <p>
-                        <strong>Miejsce:</strong><br> {{ event.venue.name }}<br>{{ event.venue.address }}, {{ event.venue.city }}
-                    </p>
-                    <p><strong>Cena: </strong><br>{{ event.price }}</p>
-                    <p><strong>Maksymalna liczba uczestników:</strong><br> {{ event.max_participants }}</p>
-                    <p><strong>Dostępne miejsca:</strong><br> {{ event.get_available_seats }}</p>
-                </div>
-            </div>
-
-            <div class="card mb-4">
-                <div class="card-header">
-                    <h5 class="card-title mb-0">Lokalizacja</h5>
-                </div>
-                <div class="card-body">
-                    {% if event.venue.map_iframe %}
-                        {{ event.venue.map_iframe|safe }}
-                    {% else %}
-                        <p class="text-muted">Brak mapy dla tej lokalizacji</p>
-                    {% endif %}
-                </div>
-            </div>
-
-            {% if event.is_fully_booked %}
-                <div class="alert alert-warning mb-3">
-                    <strong>Brak miejsc!</strong> Wszystkie miejsca są już zajęte, ale możesz zapisać się na listę
-                    rezerwową.
-                </div>
-                <a href="{% url 'event_reservation' event.id %}" class="btn btn-warning btn-lg w-100 mb-4">Zapisz się na
-                    listę rezerwową</a>
-                <p class="text-muted small">Obecnie na liście rezerwowej: {{ event.get_waitlist_count }} osób</p>
-            {% else %}
-                <a href="{% url 'event_reservation' event.id %}" class="btn btn-primary btn-lg w-100 mb-4">Zarezerwuj
-                    miejsce</a>
-                <p class="text-success">Dostępne miejsca: {{ event.get_available_seats }}</p>
-            {% endif %}
-    
-        </div>
-    </div>
-{% endcomment %}
+</html>

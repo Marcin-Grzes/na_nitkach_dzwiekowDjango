@@ -61,6 +61,9 @@
             <p><span>Data: </span>{{ event.start_datetime|date:"j E Y, H:i" }}</p>
             <p><span>Miejsce: </span> {{ event.venue.name }}, {{ event.venue.address }}, {{ event.venue.city }}</p>
             <p><span>Dostępne miejsca: </span> {{ event.get_available_seats }}</p>
+            {% if event.price %}
+                <p><span>Cena: </span> {{ event.price }}</p>
+            {% endif %}
         </div>
 
         <form method="post" novalidate>
