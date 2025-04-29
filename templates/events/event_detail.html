@@ -55,7 +55,7 @@
 <section class="event-detail">
     <div class="wrapper">
         <h1 class="event-detail__title">{{ event.title }}</h1>
-        
+
         <div class="event-detail__badge-container fade-in-element">
             <span class="event-detail__badge event-detail__badge--primary">{{ event.type_of_events.name }}</span>
             {% if event.is_fully_booked %}
@@ -68,7 +68,8 @@
         <div class="event-detail__container">
             <div class="event-detail__main">
                 {% if event.main_image %}
-                    <img src="{{ event.main_image.url }}" class="event-detail__image fade-in-element" alt="{{ event.title }}">
+                    <img src="{{ event.main_image.url }}" class="event-detail__image fade-in-element"
+                         alt="{{ event.title }}">
                 {% endif %}
 
                 <div class="event-detail__card fade-in-element">
@@ -84,7 +85,8 @@
                         <div class="event-detail__gallery-container">
                             {% for image in images %}
                                 <div class="event-detail__gallery-item">
-                                    <a href="{{ image.image.url }}" data-lightbox="event-gallery" data-title="{{ image.caption }}">
+                                    <a href="{{ image.image.url }}" data-lightbox="event-gallery"
+                                       data-title="{{ image.caption }}">
                                         <img src="{{ image.image.url }}" alt="{{ image.caption }}">
                                     </a>
                                 </div>
@@ -97,18 +99,18 @@
             <div class="event-detail__sidebar">
                 <div class="event-detail__card fade-in-element">
                     <h3 class="event-detail__card-title">Informacje o wydarzeniu</h3>
-                    
+
                     <div class="event-detail__info">
                         <div class="event-detail__info-item">
                             <div class="event-detail__info-label">Data rozpoczęcia:</div>
                             <div class="event-detail__info-value">{{ event.start_datetime|date:"j E Y, H:i" }}</div>
                         </div>
-                        
+
                         <div class="event-detail__info-item">
                             <div class="event-detail__info-label">Data zakończenia:</div>
                             <div class="event-detail__info-value">{{ event.end_datetime|date:"j E Y, H:i" }}</div>
                         </div>
-                        
+
                         <div class="event-detail__info-item">
                             <div class="event-detail__info-label">Miejsce:</div>
                             <div class="event-detail__info-value">
@@ -117,19 +119,19 @@
                                 {{ event.venue.city }}
                             </div>
                         </div>
-                        
+
                         {% if event.price %}
-                        <div class="event-detail__info-item">
-                            <div class="event-detail__info-label">Cena:</div>
-                            <div class="event-detail__info-value">{{ event.price }}</div>
-                        </div>
+                            <div class="event-detail__info-item">
+                                <div class="event-detail__info-label">Cena:</div>
+                                <div class="event-detail__info-value">{{ event.price }}</div>
+                            </div>
                         {% endif %}
-                        
+
                         <div class="event-detail__info-item">
                             <div class="event-detail__info-label">Maksymalna liczba uczestników:</div>
                             <div class="event-detail__info-value">{{ event.max_participants }}</div>
                         </div>
-                        
+
                         <div class="event-detail__info-item">
                             <div class="event-detail__info-label">Dostępne miejsca:</div>
                             <div class="event-detail__info-value">{{ event.get_available_seats }}</div>
@@ -138,41 +140,65 @@
                 </div>
 
                 {% if event.venue.map_iframe %}
-                <div class="event-detail__card fade-in-element">
-                    <h3 class="event-detail__card-title">Lokalizacja</h3>
-                    <div class="event-detail__map">
-                        {{ event.venue.map_iframe|safe }}
+                    <div class="event-detail__card fade-in-element">
+                        <h3 class="event-detail__card-title">Lokalizacja</h3>
+                        <div class="event-detail__map">
+                            {{ event.venue.map_iframe|safe }}
+                        </div>
                     </div>
-                </div>
                 {% endif %}
                 <div class="event-detail__cta fade-in-element">
-    <div class="event-detail__cta-buttons">
-        <a href="{% url 'event_calendar' %}" class="event-detail__cta-button event-detail__cta-button--secondary">Cofnij</a>
-        
-        {% if event.is_fully_booked %}
-            <div class="event-detail__cta-notice">
-                Brak miejsc! Wszystkie miejsca są już zajęte, ale możesz zapisać się na listę rezerwową.
-            </div>
-            <a href="{% url 'event_reservation' event.id %}" class="event-detail__cta-button event-detail__cta-button--alt">
-                Zapisz się na listę rezerwową
-            </a>
-            <p class="event-detail__cta-info event-detail__cta-info--warning">
-                Obecnie na liście rezerwowej: {{ event.get_waitlist_count }} osób
-            </p>
-        {% else %}
-            <a href="{% url 'event_reservation' event.id %}" class="event-detail__cta-button">
-                Zarezerwuj miejsce
-            </a>
-            <p class="event-detail__cta-info">
-                Dostępne miejsca: {{ event.get_available_seats }}
-            </p>
-        {% endif %}
-    </div>
-</div>
+
+                    <div class="event-detail__cta-buttons">
+                        <a href="{% url 'event_calendar' %}"
+                           class="event-detail__cta-button event-detail__cta-button--secondary">Cofnij</a>
+                        <div id="reservation-button-container"
+                             {% if reservation_end_time_iso %}data-reservation-end-time="{{ reservation_end_time_iso }}"{% endif %}>
+                            {% if reservation_available %}
+                                {% if event.is_fully_booked %}
+                                    <div class="event-detail__cta-notice">
+                                        Brak miejsc! Wszystkie miejsca są już zajęte, ale możesz zapisać się na listę
+                                        rezerwową.
+                                    </div>
+                                    <a href="{% url 'event_reservation' event.id %}"
+                                       class="event-detail__cta-button event-detail__cta-button--alt">
+                                        Zapisz się na listę rezerwową
+                                    </a>
+                                    <p class="event-detail__cta-info event-detail__cta-info--warning">
+                                        Obecnie na liście rezerwowej: {{ event.get_waitlist_count }} osób
+                                    </p>
+                                {% else %}
+                                    <a href="{% url 'event_reservation' event.id %}" class="event-detail__cta-button">
+                                        Zarezerwuj miejsce
+                                    </a>
+                                    <p class="event-detail__cta-info">
+                                        Dostępne miejsca: {{ event.get_available_seats }}
+                                    </p>
+                                {% endif %}
+                            {% else %}
+                                <div class="event-detail__cta-notice">
+                                    Rezerwacja online jest już niedostępna, jeśli chcesz przyjść na koncert, to zadzwoń
+                                    na numer: 509 55 33 66.
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </section>
+
+{% if debug %}
+<div style="background-color: #ffeeee; padding: 10px; margin: 10px; border: 1px solid red;">
+    <p>Debug info:</p>
+    <ul>
+        <li>reservation_available: {{ reservation_available }}</li>
+        <li>reservation_end_time_iso: {{ reservation_end_time_iso|default:"Not set" }}</li>
+        <li>is_fully_booked: {{ event.is_fully_booked }}</li>
+    </ul>
+</div>
+{% endif %}
 
 <!--===================STOPKA=========================-->
 <footer class="footer">
@@ -190,6 +216,12 @@
 <script defer src="{% static '/script/script.js' %}"></script>
 <script defer src="{% static '/script/animations.js' %}"></script>
 <script defer src="{% static '/script/eventDatail.js' %}"></script>
+<script defer src="{% static '/script/reservation-availability.js' %}"></script>
 <script src="https://cdn.jsdelivr.net/npm/lightbox2@2.11.3/dist/js/lightbox.min.js"></script>
+<!-- Na końcu strony inicjalizacja skryptu -->
+<script>
+    // Inicjalizacja monitorowania dostępności rezerwacji
+    ReservationAvailability.init();
+</script>
 </body>
 </html>

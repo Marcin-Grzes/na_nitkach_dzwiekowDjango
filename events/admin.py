@@ -218,12 +218,13 @@ class EventsAdmin(admin.ModelAdmin):
             'fields': ['start_datetime', 'end_datetime', 'venue']
         }),
         ('Ustawienia uczestników', {
-            'fields': ['max_participants']
+            'fields': ['max_participants', 'reservation_end_time']
         }),
         ('Status', {
             'fields': ['is_active']
         }),
     ]
+
 
     def duplicate_event(self, request, queryset):
         """

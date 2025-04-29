@@ -237,6 +237,7 @@ class EventManager(models.Manager):
         """
         return self.active().filter(start_datetime__gte=timezone.now())
 
+
 class Events(models.Model):
     title = models.CharField(_("Tytuł wydarzenia"), max_length=200)
 
@@ -291,6 +292,14 @@ class Events(models.Model):
 
     objects = money_manager(EventManager())
 
+    # Określenie momentu końca przyjmowania rezerwacji
+    reservation_end_time = models.DateTimeField(
+        _("Koniec przyjmowania rezerwacji"),
+        null=True,
+        blank=True,
+        help_text=_("Po tej godzinie rezerwacja online nie będzie możliwa.")
+    )
+
     # Metadane
     created_at = models.DateTimeField(_("Data utworzenia"), auto_now_add=True)
     updated_at = models.DateTimeField(_("Data aktualizacji"), auto_now=True)
@@ -318,6 +327,12 @@ class Events(models.Model):
                 raise ValidationError({
                     'start_datetime': _("Data rozpoczęcia nie może być w przeszłości.")
                 })
+
+    def is_reservation_available(self):
+        """Sprawdza czy można jeszcze dokonać rezerwacji online."""
+        if not self.reservation_end_time:
+            return True
+        return timezone.now() < self.reservation_end_time
 
     def save(self, *args, **kwargs):
         self.clean()  # Wywołanie walidacji przed zapisem

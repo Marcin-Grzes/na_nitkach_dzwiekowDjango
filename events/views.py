@@ -1,8 +1,10 @@
+from django.contrib.admin.views.decorators import staff_member_required
 from django.http import JsonResponse
 from django.utils import timezone
 from django.core.mail import send_mail
 from django.shortcuts import render, redirect, get_object_or_404
 from django.template.loader import render_to_string
+from django.utils.decorators import method_decorator
 from django.utils.html import strip_tags
 from django.views import View
 from django.urls import reverse
@@ -66,6 +68,9 @@ class EventReservationView(View):
         # Pobierz wydarzenie lub zwróć 404
         event = get_object_or_404(Events, id=event_id, is_active=True)
 
+        # Sprawdź dostępność rezerwacji (mimo że będziemy to sprawdzać dynamicznie przez JS)
+        reservation_available = event.is_reservation_available()
+
         # Sprawdź czy są jeszcze miejsca
         if event.is_fully_booked():
             messages.warning(
@@ -79,7 +84,13 @@ class EventReservationView(View):
         context = {
             'form': form,
             'event': event,
+            'reservation_available': reservation_available
         }
+
+        # Dodajemy formatowanie czasu dla JavaScript
+        if event.reservation_end_time:
+            context['reservation_end_time_iso'] = event.reservation_end_time.isoformat()
+
         return render(request, 'events/event_reservation.html', context)
 
     # @check_honeypot
@@ -209,6 +220,12 @@ class EventDetailView(EventTypeMixin, DetailView):
         context = super().get_context_data(**kwargs)
         # Dodajemy wszystkie zdjęcia wydarzenia do kontekstu
         context['images'] = self.object.images.all().order_by('order')
+        context['reservation_available'] = self.object.is_reservation_available()
+
+        # Dodajemy formatowanie czasu dla JavaScript
+        if self.object.reservation_end_time:
+            context['reservation_end_time_iso'] = self.object.reservation_end_time.isoformat()
+
         return context
 
 
@@ -355,3 +372,21 @@ class CalendarEventsApiView(View):
         }
         return colors.get(event_type.slug, '#3788d8')  # domyślny niebieski
 
+
+class ReservationAvailabilityView(View):
+    """
+    API endpoint do sprawdzania dostępności rezerwacji.
+    Zwraca JSON z informacją, czy rezerwacja jest dostępna.
+    """
+
+    def get(self, request, event_id):
+        event = get_object_or_404(Events, id=event_id, is_active=True)
+        is_available = event.is_reservation_available()
+
+        return JsonResponse({
+            'available': is_available,
+            'current_time': timezone.now().isoformat(),
+            'end_time': event.reservation_end_time.isoformat() if event.reservation_end_time else None,
+            'message': "Rezerwacja online jest już niedostępna, jeśli chcesz przyjść na koncert to zadzwoń pod numer: "
+                       "509 55 33 66." if not is_available else ""
+        })
