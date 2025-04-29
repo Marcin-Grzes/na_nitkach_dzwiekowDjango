@@ -26,12 +26,12 @@ class HomeView(View):
 
 class Base(View):
     def get(self, request):
-        return render(request, 'base.html')
+        return render(request, 'events/base.html')
 
 
 class TestCalendar(View):
     def get(self, request):
-        return render(request, 'test_calendar.html')
+        return render(request, 'events/test_calendar.html')
 
 
 class ReservationSuccessView(View):
@@ -54,7 +54,7 @@ class ReservationSuccessView(View):
             'reservation': reservation,
         }
 
-        return render(request, 'events/reservation_success.html', context)
+        return render(request, 'events/../templates/reservation_success.html', context)
     
 
 class EventReservationView(View):
@@ -91,7 +91,7 @@ class EventReservationView(View):
         if event.reservation_end_time:
             context['reservation_end_time_iso'] = event.reservation_end_time.isoformat()
 
-        return render(request, 'events/event_reservation.html', context)
+        return render(request, 'events/../templates/event_reservation.html', context)
 
     # @check_honeypot
     def post(self, request, event_id):
@@ -130,7 +130,7 @@ class EventReservationView(View):
             return redirect('reservation_success', event_id=event_id, reservation_id=reservation.id)
 
         context = {'form': form, 'event': event}
-        return render(request, 'events/event_reservation.html', context)
+        return render(request, 'events/../templates/event_reservation.html', context)
 
     def send_confirmation_email(self, reservation):
         subject = f'Potwierdzenie rezerwacji - {reservation.event.title}'
@@ -147,7 +147,7 @@ class EventReservationView(View):
         }
 
         # Generowanie wiadomości HTML z szablonu
-        html_message = render_to_string('event_reservation_confirmation.html', context)
+        html_message = render_to_string('events/event_reservation_confirmation.html', context)
         plain_message = strip_tags(html_message)
 
         # Wysyłanie emaila
@@ -208,7 +208,7 @@ class EventDetailView(EventTypeMixin, DetailView):
     Zawiera dodatkowe informacje, takie jak galeria zdjęć.
     """
     model = Events
-    template_name = 'events/event_detail.html'
+    template_name = 'events/../templates/event_detail.html'
     context_object_name = 'event'
     pk_url_kwarg = 'event_id'  # Określa nazwę parametru ID w URL
 
