@@ -1,3 +1,6 @@
+// Dodaj na początku pliku
+console.log("Skrypt reservation-availability.js zaczyna się ładować");
+
 /**
  * Moduł do sprawdzania dostępności rezerwacji wydarzenia
  * Monitoruje czas i dynamicznie aktualizuje UI gdy rezerwacja staje się niedostępna
@@ -112,3 +115,25 @@ const ReservationAvailability = {
         });
     }
 };
+// Automatycznie inicjalizuj gdy dokument jest gotowy
+// Na końcu pliku reservation-availability.js
+document.addEventListener('DOMContentLoaded', function() {
+    console.log("DOM załadowany - pierwsza próba inicjalizacji");
+    try {
+        ReservationAvailability.init();
+    } catch(e) {
+        console.error("Błąd podczas inicjalizacji na DOMContentLoaded:", e);
+    }
+});
+
+window.addEventListener('load', function() {
+    console.log("Strona w pełni załadowana - druga próba inicjalizacji");
+    try {
+        ReservationAvailability.init();
+    } catch(e) {
+        console.error("Błąd podczas inicjalizacji na window.load:", e);
+    }
+});
+
+// Na końcu pliku
+console.log("Skrypt reservation-availability.js załadowany");

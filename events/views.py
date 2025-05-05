@@ -54,7 +54,7 @@ class ReservationSuccessView(View):
             'reservation': reservation,
         }
 
-        return render(request, 'events/../templates/reservation_success.html', context)
+        return render(request, 'reservation_success.html', context)
     
 
 class EventReservationView(View):
@@ -91,7 +91,7 @@ class EventReservationView(View):
         if event.reservation_end_time:
             context['reservation_end_time_iso'] = event.reservation_end_time.isoformat()
 
-        return render(request, 'events/../templates/event_reservation.html', context)
+        return render(request, 'event_reservation.html', context)
 
     # @check_honeypot
     def post(self, request, event_id):
@@ -130,7 +130,7 @@ class EventReservationView(View):
             return redirect('reservation_success', event_id=event_id, reservation_id=reservation.id)
 
         context = {'form': form, 'event': event}
-        return render(request, 'events/../templates/event_reservation.html', context)
+        return render(request, 'event_reservation.html', context)
 
     def send_confirmation_email(self, reservation):
         subject = f'Potwierdzenie rezerwacji - {reservation.event.title}'
@@ -208,7 +208,7 @@ class EventDetailView(EventTypeMixin, DetailView):
     Zawiera dodatkowe informacje, takie jak galeria zdjęć.
     """
     model = Events
-    template_name = 'events/../templates/event_detail.html'
+    template_name = 'event_detail.html'
     context_object_name = 'event'
     pk_url_kwarg = 'event_id'  # Określa nazwę parametru ID w URL
 
