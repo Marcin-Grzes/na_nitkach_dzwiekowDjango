@@ -98,6 +98,15 @@ class EventReservationView(View):
         # Pobierz wydarzenie lub zwróć 404
         event = get_object_or_404(Events, id=event_id, is_active=True)
 
+        # Sprawdź dostępność rezerwacji
+        reservation_available = event.is_reservation_available()
+
+        # Jeśli rezerwacja nie jest dostępna, przekieruj do szczegółów wydarzenia
+        if not reservation_available:
+            messages.warning(request,
+                             "Rezerwacja online jest już niedostępna, jeśli chcesz przyjść na koncert to zadzwoń.")
+            return redirect('event_detail', event_id=event_id)
+
         # Przetwarzanie formularza
         form = EventReservationForm(request.POST)
 
@@ -129,7 +138,16 @@ class EventReservationView(View):
             # Przekierowanie do strony potwierdzenia zamiast wiadomości flash
             return redirect('reservation_success', event_id=event_id, reservation_id=reservation.id)
 
-        context = {'form': form, 'event': event}
+        context = {
+            'form': form,
+            'event': event,
+            'reservation_available': reservation_available
+        }
+
+        # Dodaj też czas zakończenia rezerwacji w ISO dla JavaScript
+        if event.reservation_end_time:
+            context['reservation_end_time_iso'] = event.reservation_end_time.isoformat()
+
         return render(request, 'event_reservation.html', context)
 
     def send_confirmation_email(self, reservation):
