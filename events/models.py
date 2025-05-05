@@ -339,8 +339,9 @@ class Events(models.Model):
         super().save(*args, **kwargs)
 
     def get_confirmed_reservations_count(self):
-        """Zwraca liczbę potwierdzonych rezerwacji"""
-        return self.reservations.filter(status=Rezerwations.ReservationStatus.CONFIRMED).count()
+        """Zwraca liczbę uczestników z potwierdzonych rezerwacji"""
+        reservations = self.reservations.filter(status=Rezerwations.ReservationStatus.CONFIRMED)
+        return sum(r.participants_count for r in reservations)
 
     def get_available_seats(self):
         """Zwraca liczbę dostępnych miejsc"""
