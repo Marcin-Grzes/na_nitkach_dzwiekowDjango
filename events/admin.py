@@ -43,6 +43,7 @@ class EventInline(admin.TabularInline):
 
 @admin.register(Rezerwations)
 class RezerwationsAdmin(admin.ModelAdmin):
+
     # Wyświetlane kolumny na liście
     list_display = ['first_name', 'last_name', 'email', 'phone_number',
                     'event', 'status', 'participants_count', 'created_at',
@@ -69,8 +70,14 @@ class RezerwationsAdmin(admin.ModelAdmin):
 
     # Grupy pól w formularzu edycji
     fieldsets = [
+        ('Wydarzenie i status', {
+            'fields': ('event', 'status')
+        }),
         ('Dane osobowe', {
             'fields': ['first_name', 'last_name', 'email', 'phone_number']
+        }),
+        ('Liczba uczestników',{
+            'fields': ['participants_count']
         }),
         ('Informacje o płatności', {
             'fields': ['type_of_payments']
@@ -193,6 +200,7 @@ class EventsAdmin(admin.ModelAdmin):
     inlines = [EventImageInline]
     autocomplete_fields = ['venue', 'type_of_events']  # Dodane pole autocomplete
     actions = ['duplicate_event']
+
 
     # Opcjonalnie, jeśli chcesz dostosować edytor do konkretnego pola w panelu administracyjnym:
 
