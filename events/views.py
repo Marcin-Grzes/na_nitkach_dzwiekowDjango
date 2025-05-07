@@ -26,7 +26,7 @@ class HomeView(View):
 
 class Base(View):
     def get(self, request):
-        return render(request, 'events/base.html')
+        return render(request, '404.html')
 
 
 class TestCalendar(View):
