@@ -6,7 +6,6 @@ from django.db.models import Max
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils import timezone
-
 from .services import cancel_reservation, send_waitlist_promotion_email
 from django.core.exceptions import ValidationError
 from django.db import models
@@ -57,7 +56,6 @@ class Rezerwations(models.Model):
         """Generuje pełny URL do anulowania rezerwacji"""
         path = reverse('cancel_reservation', kwargs={'token': self.cancellation_token})
         return f"{settings.SITE_URL}{path}"
-
 
     def cancel(self):
         """

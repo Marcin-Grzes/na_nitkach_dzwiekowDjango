@@ -214,7 +214,12 @@ class EventsAdmin(admin.ModelAdmin):
     #         kwargs['widget'] = TinyMCE(attrs={'cols': 80, 'rows': 30})
     #     return super().formfield_for_dbfield(db_field, **kwargs)
 
-
+    # Dodanie pól ze statystykami rezerwacji jako pola tylko do odczytu
+    readonly_fields = [
+        'reserved_seats_display',
+        'available_seats_display',
+        'waitlist_count_display',
+    ]
     class Media:
         js = ('admin/js/admin_enhancements.js',)
 
@@ -226,13 +231,70 @@ class EventsAdmin(admin.ModelAdmin):
             'fields': ['start_datetime', 'end_datetime', 'venue']
         }),
         ('Ustawienia uczestników', {
-            'fields': ['max_participants', 'reservation_end_time']
+            'fields': [
+                'max_participants',
+                'reservation_end_time',
+                'reserved_seats_display',
+                'available_seats_display',
+                'waitlist_count_display',
+            ]
         }),
         ('Status', {
             'fields': ['is_active']
         }),
     ]
 
+    # Metody do wyświetlania statystyk rezerwacji
+    def reserved_seats_display(self, obj):
+        reserved = obj.get_confirmed_reservations_count()
+        max_seats = obj.max_participants
+        percentage = round((reserved / max_seats) * 100) if max_seats > 0 else 0
+
+        # Formatowanie HTML z kolorami w zależności od wypełnienia
+        color = "black"
+        # if percentage > 75:
+        #     color = "orange"
+        # if percentage >= 100:
+        #     color = "red"
+
+        return format_html(
+            '<div style="font-weight: bold; color: {};">{} z {} miejsc ({} %)</div>',
+            color, reserved, max_seats, percentage
+        )
+
+    reserved_seats_display.short_description = "Zajęte miejsca"
+
+    def available_seats_display(self, obj):
+        available = obj.get_available_seats()
+        max_seats = obj.max_participants
+        percentage = round((available / max_seats) * 100) if max_seats > 0 else 0
+
+        # Formatowanie HTML z kolorami w zależności od dostępności
+        color = "black"
+        # if percentage < 25:
+        #     color = "orange"
+        # if percentage <= 0:
+        #     color = "red"
+
+        return format_html(
+            '<div style="font-weight: bold; color: {};">{} dostępnych miejsc ({} %)</div>',
+            color, available, percentage
+        )
+
+    available_seats_display.short_description = "Dostępne miejsca"
+
+    def waitlist_count_display(self, obj):
+        waitlist_count = obj.get_waitlist_count()
+
+        if waitlist_count == 0:
+            return format_html('<div style="color: black;">Brak osób na liście rezerwowej</div>')
+        else:
+            return format_html(
+                '<div style="font-weight: bold; color: black;">{} osób oczekujących</div>',
+                waitlist_count
+            )
+
+    waitlist_count_display.short_description = "Lista rezerwowa"
 
     def duplicate_event(self, request, queryset):
         """
