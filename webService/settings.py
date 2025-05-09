@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     "events.apps.EventsConfig",
     'phonenumber_field',
     'tinymce',
+    'accounts',
     # 'honeypot',
 # zabezpieczenie honeypot
 ]

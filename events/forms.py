@@ -1,5 +1,8 @@
 from django import forms
+
+from accounts.models import GuestUser
 from .models import Rezerwations, Events, EventType, Venue
+
 
 
 class EventForm(forms.ModelForm):
@@ -34,25 +37,53 @@ class EventReservationForm(forms.ModelForm):
     Pole 'event' jest ukryte i wypełniane automatycznie.
     """
 
+    """Formularz rezerwacji obsługujący zarówno użytkowników zalogowanych jak i gości"""
+    # Pola dla użytkowników niezalogowanych
+
+    first_name = forms.CharField(label="Imię", max_length=50, required=False)
+    last_name = forms.CharField(label="Nazwisko", max_length=50, required=False)
+    email = forms.EmailField(label="Adres email", required=False)
+    phone_number = forms.CharField(label="Numer telefonu", required=False)
+
+
     class Meta:
         model = Rezerwations
         fields = [
-            'first_name', 'last_name', 'email', 'participants_count', 'phone_number',
-            'type_of_payments', 'data_processing_consent', 'privacy_policy_consent',
-            'marketing_emails_consent', 'reminder_emails_consent'
+            'participants_count',
+            'type_of_payments',
+            'data_processing_consent',
+            'privacy_policy_consent',
+            'marketing_emails_consent',
+            'reminder_emails_consent'
         ]
         # event jest ustawiane automatycznie, więc nie jest w polach formularza
 
     def __init__(self, *args, **kwargs):
+        # Pobierz zalogowanego użytkownika z kwargs
+        self.user = kwargs.pop('user', None)
         super().__init__(*args, **kwargs)
+
         # Dodajemy hepltext do liczby uczestników, który będzie dynamicznie aktualizowany
         self.fields['participants_count'].help_text = "Podaj liczbę osób biorących udział w wydarzeniu."
         # Oznaczenie wymaganych zgód
         self.fields['data_processing_consent'].required = True
         self.fields['privacy_policy_consent'].required = True
 
+        if self.user is not None and self.user.is_authenticated:
+            for field in ['first_name', 'last_name', 'email', 'phone_number']:
+                self.fields[field].widget = forms.HiddenInput()
+                self.fields[field].required = True
+
+
     def clean(self):
         cleaned_data = super().clean()
+
+        # Sprawdź czy mamy wystarczające dane do identyfikacji użytkownika
+        if not self.user or not self.user.is_authenticated:
+            # Sprawdź, czy podano wszystkie wymagane pola dla gościa
+            for field in ['first_name', 'last_name', 'email', 'phone_number']:
+                if not cleaned_data.get(field):
+                    self.add_error(field, "To pole jest wymagane")
 
         # Weryfikacja obowiązkowych zgód
         if not cleaned_data.get('data_processing_consent'):
@@ -62,3 +93,29 @@ class EventReservationForm(forms.ModelForm):
             self.add_error('privacy_policy_consent', 'Akceptacja polityki prywatności jest wymagana.')
 
         return cleaned_data
+
+    def save(self, commit=True):
+        instance = super().save(commit=False)
+
+        if self.user and self.user.is_authenticated:
+        # Dla zalogowanego użytkownika
+            instance.user = self.user
+            instance.guest = None
+        else:
+            # Dla gościa - znajdź lub utwórz
+            guest, created = GuestUser.objects.get_or_create(
+                email=self.cleaned_data['email'],
+                phone_number=self.cleaned_data['phone_number'],
+                defaults={
+                    'first_name': self.cleaned_data['first_name'],
+                    'last_name': self.cleaned_data['last_name'],
+                }
+            )
+            instance.guest = guest
+            instance.user = None
+
+        if commit:
+            instance.save()
+
+        return instance
+

@@ -79,8 +79,8 @@ class EventReservationView(View):
             )
 
         # Tworzenie formularza pre-konfigurowanego dla tego wydarzenia
-        form = EventReservationForm(initial={'event': event})
-
+        # form = EventReservationForm(initial={'event': event})
+        form = EventReservationForm(user=request.user)
         context = {
             'form': form,
             'event': event,
@@ -155,13 +155,14 @@ class EventReservationView(View):
 
         # Kontekst do szablonu z danymi wydarzenia
         context = {
-            'first_name': reservation.first_name,
-            'last_name': reservation.last_name,
+            'first_name': reservation.get_full_name().split()[0],
+            'last_name': reservation.get_full_name().split()[1],
             'participants_count': reservation.participants_count,
-            'email': reservation.email,
-            'phone_number': str(reservation.phone_number),
+            'email': reservation.get_user_email(),
+            'phone_number': str(reservation.get_user_phone()),
             'payment_method': reservation.get_type_of_payments_display(),
             'event': reservation.event,  # Dodanie informacji o wydarzeniu
+            'reservation': reservation,
         }
 
         # Generowanie wiadomości HTML z szablonu

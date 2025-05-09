@@ -1,6 +1,7 @@
 import uuid
 
 from django.conf import settings
+from django.contrib.auth.models import User
 from django.core.mail import send_mail
 from django.db.models import Max
 from django.template.loader import render_to_string
@@ -18,6 +19,7 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 from tinymce.models import HTMLField
 from djmoney.models.fields import MoneyField
 from djmoney.models.managers import money_manager
+
 
 # Create your models here.
 
@@ -68,8 +70,27 @@ class Rezerwations(models.Model):
         BLIK = 'blik', _('BLIK')
 
     # Podstawowe informacje
-    first_name = models.CharField(_("Imię"), max_length=50)
-    last_name = models.CharField(_("Nazwisko"), max_length=50)
+    # first_name = models.CharField(_("Imię"), max_length=50)
+    # last_name = models.CharField(_("Nazwisko"), max_length=50)
+
+    guest = models.ForeignKey(
+        'accounts.GuestUser',
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name='guest_reservations',
+        verbose_name=_('Gość'),
+    )
+
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name='user_reservations',
+        verbose_name=_("Użytkownik zarejestrowany")
+    )
+
     participants_count = models.PositiveIntegerField(
         _("Liczba uczestników"),
         default=1,
@@ -79,8 +100,8 @@ class Rezerwations(models.Model):
         ],
         help_text=_("Podaj liczbę osób biorących udział w spotkaniu.")
     )
-    email = models.EmailField(_("Adres email"))
-    phone_number = PhoneNumberField(region='PL', verbose_name=_("Numer telefonu"))
+    # email = models.EmailField(_("Adres email"))
+    # phone_number = PhoneNumberField(region='PL', verbose_name=_("Numer telefonu"))
     type_of_payments = models.CharField(_("Typ płatności"), max_length=10,
                                         choices=PaymentType.choices, default=PaymentType.CASH)
     event = models.ForeignKey(
@@ -123,8 +144,41 @@ class Rezerwations(models.Model):
         verbose_name = _("Rezerwacja")
         verbose_name_plural = _("Rezerwacje")
 
+    def clean(self):
+        """Dodatkowa walidacja - rezerwacja musi być powiązana albo z guest albo z user"""
+        if self.guest is None or self.user is None:
+            raise ValidationError(_("Rezerwacja musi być powiązana z gościem lub użytkownikiem"))
+        if self.guest is not None and self.user is not None:
+            raise ValidationError(_("Rezerwacja nie może być jednocześnie powiązana  gościem i użytkownikiem"))
+
+    # Pomocnicze metody do pobierania danych kontaktowych
+
+    def get_user_email(self):
+        """Zwraca email użytkownika/gościa powiązanego z rezerwacją"""
+        if self.user:
+            return self.user.email
+        if self.guest:
+            return self.guest.email
+        return None
+
+    def get_user_phone(self):
+        """Zwraca telefon użytkownika/gościa powiązanego z rezerwacją"""
+        if self.user:
+            return self.user.profile.phone_number
+        if self.guest:
+            return self.guest.phone_number
+        return None
+
+    def get_full_name(self):
+        """Zwraca pełne imię i nazwisko użytkownika/gościa"""
+        if self.user:
+            return f"{self.user.first_name} {self.user.last_name}"
+        if self.guest:
+            return self.guest.get_full_name()
+        return "Nieznany"
+
     def __str__(self):
-        return f"{self.first_name} {self.last_name} - {self.created_at.strftime('%Y-%m-%d %H:%M')}"
+        return f"{self.get_full_name()} - {self.created_at.strftime('%Y-%m-%d %H:%M')}"
 
 
 class Venue(models.Model):
@@ -262,7 +316,7 @@ class Events(models.Model):
                        default_currency='PLN',
                        help_text=_("Cena za udział w wydarzeniu"),
                        null=True,
-                       blank=True,)
+                       blank=True, )
     max_participants = models.PositiveIntegerField(
         _("Maksymalna liczba uczestników"),
         default=20,
@@ -272,7 +326,7 @@ class Events(models.Model):
     reserve_list = models.PositiveIntegerField(
         _("Lista rezerwowa"),
         default=0,
-    #     defeault jest tymczasowo
+        #     defeault jest tymczasowo
     )
 
     # description = models.TextField(_("Opis wydarzenia"), blank=True)
