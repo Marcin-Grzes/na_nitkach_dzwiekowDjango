@@ -47,7 +47,7 @@ class RezerwationsAdmin(admin.ModelAdmin):
     # Wyświetlane kolumny na liście
     list_display = ['get_first_name', 'get_last_name', 'get_email', 'get_phone_number',
                     'event', 'status', 'participants_count', 'created_at',
-                    'type_of_payments', 'created_at', 'marketing_emails_consent', 'reminder_emails_consent',
+                    'type_of_payments', 'created_at', 'get_regulations_consent', 'get_newsletter_consent',
                     'consent_status']
 
     # Metody do pobierania danych użytkownika
@@ -83,15 +83,33 @@ class RezerwationsAdmin(admin.ModelAdmin):
             return obj.guest.phone_number
     get_phone_number.short_description = "Telefon"
 
+    def get_regulations_consent(self, obj):
+        if obj.user:
+            return obj.user.profile.regulations_consent
+        elif obj.guest:
+            return obj.guest.regulations_consent
+        return None
+
+    get_regulations_consent.short_description = "Akceptacja regulaminu i polityki prywatności"
+    get_regulations_consent.boolean = True # wyświetla True/False jako ✓/✗
+
+    def get_newsletter_consent(self, obj):
+        if obj.user:
+            return obj.user.profile.newsletter_consent
+        elif obj.guest:
+            return obj.guest.newsletter_consent
+        return None
+    get_newsletter_consent.short_description = "Newsletter"
+    get_regulations_consent.boolean = True
+
     # Kolumny, które po kliknięciu prowadzą do edycji
     list_display_links = ['get_first_name', 'get_last_name']
 
     # Pola do wyszukiwania
-    search_fields = ['first_name', 'last_name', 'email', 'phone_number']
+    search_fields = ['guest_first_name', 'guest_last_name', 'guest_email', 'guest_phone_number']
 
     # Filtrowanie boczne
-    list_filter = ['type_of_payments', 'data_processing_consent',
-                   'privacy_policy_consent', 'marketing_emails_consent', 'created_at', 'reminder_emails_consent', 'status', 'event', 'created_at']
+    list_filter = ['type_of_payments', 'created_at', 'status', 'event', 'created_at']
 
     actions = ['confirm_reservations', 'move_to_waitlist', 'cancel_reservations']
 
@@ -106,18 +124,14 @@ class RezerwationsAdmin(admin.ModelAdmin):
         ('Wydarzenie i status', {
             'fields': ('event', 'status')
         }),
-        ('Dane osobowe', {
-            'fields': ['first_name', 'last_name', 'email', 'phone_number']
+        ('Powiązania użytkowników', {
+            'fields': ['guest', 'user']
         }),
         ('Liczba uczestników',{
             'fields': ['participants_count']
         }),
         ('Informacje o płatności', {
             'fields': ['type_of_payments']
-        }),
-        ('Zgody', {
-            'fields': ['data_processing_consent', 'privacy_policy_consent',
-                       'marketing_emails_consent', 'reminder_emails_consent']
         }),
         ('Metadane', {
             'fields': ['created_at'],
@@ -131,8 +145,13 @@ class RezerwationsAdmin(admin.ModelAdmin):
 
     payment_display.short_description = 'Sposób płatności'
 
+    # Zmieniona implementacja consent_status
     def consent_status(self, obj):
-        return '✓' if obj.marketing_emails_consent else '✗'
+        if obj.user:
+            return '✓' if obj.user.profile.newsletter_consent else '✗'
+        elif obj.guest:
+            return '✓' if obj.guest.newsletter_consent else '✗'
+        return '?'
 
     consent_status.short_description = 'Marketing'
 

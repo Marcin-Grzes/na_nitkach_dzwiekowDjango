@@ -45,6 +45,20 @@ class EventReservationForm(forms.ModelForm):
     email = forms.EmailField(label="Adres email", required=False)
     phone_number = forms.CharField(label="Numer telefonu", required=False)
 
+    # Pola zgód przeniesione do formularza (nie bezpośrednio do modelu Rezerwations)
+
+    regulations_consent = forms.BooleanField(
+        label="Zapoznałem się z regulaminem oraz polityką prywatności.",
+        required=True,
+        help_text="Akceptacja regulaminu i polityki prywatności."
+    )
+
+    newsletter_consent = forms.BooleanField(
+        label="Chcę zapisać się na newsletter, by otrzymywać informacje o przyszłych wydarzeniach i ofertach "
+                    "specjalnych.",
+        required=False,
+        help_text="Warto zapisać się na newsletter",
+    )
 
 
     class Meta:
@@ -52,10 +66,6 @@ class EventReservationForm(forms.ModelForm):
         fields = [
             'participants_count',
             'type_of_payments',
-            # 'data_processing_consent',
-            # 'privacy_policy_consent',
-            # 'marketing_emails_consent',
-            # 'reminder_emails_consent'
         ]
         # event jest ustawiane automatycznie, więc nie jest w polach formularza
 
@@ -67,8 +77,7 @@ class EventReservationForm(forms.ModelForm):
         # Dodajemy hepltext do liczby uczestników, który będzie dynamicznie aktualizowany
         self.fields['participants_count'].help_text = "Podaj liczbę osób biorących udział w wydarzeniu."
         # Oznaczenie wymaganych zgód
-        self.fields['data_processing_consent'].required = True
-        self.fields['privacy_policy_consent'].required = True
+        self.fields['regulations_consent'].required = True
 
         if self.user is not None and self.user.is_authenticated:
             for field in ['first_name', 'last_name', 'email', 'phone_number']:
@@ -87,19 +96,17 @@ class EventReservationForm(forms.ModelForm):
                     self.add_error(field, "To pole jest wymagane")
 
         # Weryfikacja obowiązkowych zgód
-        if not cleaned_data.get('data_processing_consent'):
-            self.add_error('data_processing_consent', 'Ta zgoda jest wymagana do realizacji rezerwacji.')
-
-        if not cleaned_data.get('privacy_policy_consent'):
-            self.add_error('privacy_policy_consent', 'Akceptacja polityki prywatności jest wymagana.')
+        if not cleaned_data.get('regulations_consent'):
+            self.add_error('regulations_consent', 'Te zgody są wymagane do realizacji rezerwacji.')
 
         return cleaned_data
+
 
     def save(self, commit=True):
         instance = super().save(commit=False)
 
         if self.user and self.user.is_authenticated:
-        # Dla zalogowanego użytkownika
+        # Dla zalogowanego użytkownika to na przyszłość
             instance.user = self.user
             instance.guest = None
         else:
@@ -110,8 +117,17 @@ class EventReservationForm(forms.ModelForm):
                 defaults={
                     'first_name': self.cleaned_data['first_name'],
                     'last_name': self.cleaned_data['last_name'],
+                    'regulations_consent': self.cleaned_data['regulations_consent'],
+                    'newsletter_consent': self.cleaned_data['newsletter_consent'],
                 }
             )
+            # Aktualizujemy zgody nawet jeśli użytkownik już istnieje
+
+            if not created:
+                guest.regulations_consent = self.cleaned_data['regulations_consent']
+                guest.newsletter_consent = self.cleaned_data['newsletter_consent']
+                guest.save()
+
             instance.guest = guest
             instance.user = None
 
