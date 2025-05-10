@@ -41,25 +41,6 @@ def save_user_profile(sender, instance, **kwargs):
     instance.profile.save()
 
 
-class CustomUser(AbstractUser):
-    """Rozszerzony model użytkownika z dodatkowymi polami"""
-
-    # Dodatkowe pole na numer telefonu
-    phone_number = PhoneNumberField(_('Numer telefonu'), region='PL', blank=True)
-
-    # Pole określające, czy użytkownik był początkowo niezarejestrowany
-    was_guest = models.BooleanField(_('Był gościem'), default=False)
-
-    # Można dodać wiecej pól w przyszłości
-
-    class Meta:
-        verbose_name = _('Użytkownik')
-        verbose_name_plural = _('Użytkownicy')
-
-    def __str__(self):
-        return self.email if self.email else self.username
-
-
 class GuestUser(models.Model):
     """
     Model przechowujący dane niezarejestrowanych użytkowników (gości),
@@ -71,6 +52,31 @@ class GuestUser(models.Model):
     email = models.EmailField(_('Adres email'))
     phone_number = PhoneNumberField(_('Numer telefonu'), region='PL')
     created_at = models.DateTimeField(_('Data utworzenia'), auto_now_add=True)
+
+    # Pola zgód przeniesione z modelu Rezerwations
+    data_processing_consent = models.BooleanField(
+        _("Zgoda na przetwarzanie danych"),
+        default=False,
+        help_text=_("Wyrażam zgodę na przetwarzanie moich danych osobowych niezbędnych do realizacji spotkania.")
+    )
+
+    privacy_policy_consent = models.BooleanField(
+        _("Zgoda na politykę prywatności"),
+        default=False,
+        help_text=_("Oświadczam, że zapoznałem się z polityką prywatności i akceptuję jej warunki.")
+    )
+
+    marketing_emails_consent = models.BooleanField(
+        _("Zgoda marketingowa"),
+        default=False,
+        help_text=_("Wyrażam zgodę na otrzymywanie informacji o przyszłych wydarzeniach i ofertach specjalnych.")
+    )
+
+    reminder_emails_consent = models.BooleanField(
+        _("Zgoda na przypomnienie o spotkaniu"),
+        default=False,
+        help_text=_("Wyrażam zgodę na otrzymywanie przypomnienia o zbliżającym się koncercie")
+    )
 
     # Odniesienie do pełnego konta użytkownika (początkowo NULL)
     user = models.OneToOneField(
@@ -87,7 +93,7 @@ class GuestUser(models.Model):
         verbose_name_plural = _('Użytkownicy-goście')
         constraints = [
             # Unikalność e-mail
-            models.UniqueConstraint(fields='email', name='unique_guest'),
+            models.UniqueConstraint(fields=['email'], name='unique_guest'),
         ]
 
     def __str__(self):

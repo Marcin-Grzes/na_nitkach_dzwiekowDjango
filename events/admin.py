@@ -45,13 +45,46 @@ class EventInline(admin.TabularInline):
 class RezerwationsAdmin(admin.ModelAdmin):
 
     # Wyświetlane kolumny na liście
-    list_display = ['first_name', 'last_name', 'email', 'phone_number',
+    list_display = ['get_first_name', 'get_last_name', 'get_email', 'get_phone_number',
                     'event', 'status', 'participants_count', 'created_at',
                     'type_of_payments', 'created_at', 'marketing_emails_consent', 'reminder_emails_consent',
                     'consent_status']
 
+    # Metody do pobierania danych użytkownika
+    def get_first_name(self, obj):
+        if obj.user:
+            return obj.user.first_name
+        elif obj.guest:
+            return obj.guest.first_name
+        return None
+    get_first_name.short_description = 'Imię'
+
+
+    def get_last_name(self, obj):
+        if obj.user:
+            return obj.user.last_name
+        elif obj.guest:
+            return obj.guest.last_name
+        return None
+    get_last_name.short_description = "Nazwisko"
+
+    def get_email(self, obj):
+        if obj.user:
+            return obj.user.email
+        elif obj.guest:
+            return obj.guest.email
+        return None
+    get_email.short_description = "Email"
+
+    def get_phone_number(self, obj):
+        if obj.user:
+            return obj.user.phone_number
+        elif obj.guest:
+            return obj.guest.phone_number
+    get_phone_number.short_description = "Telefon"
+
     # Kolumny, które po kliknięciu prowadzą do edycji
-    list_display_links = ['first_name', 'last_name']
+    list_display_links = ['get_first_name', 'get_last_name']
 
     # Pola do wyszukiwania
     search_fields = ['first_name', 'last_name', 'email', 'phone_number']

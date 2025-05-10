@@ -46,15 +46,16 @@ class EventReservationForm(forms.ModelForm):
     phone_number = forms.CharField(label="Numer telefonu", required=False)
 
 
+
     class Meta:
         model = Rezerwations
         fields = [
             'participants_count',
             'type_of_payments',
-            'data_processing_consent',
-            'privacy_policy_consent',
-            'marketing_emails_consent',
-            'reminder_emails_consent'
+            # 'data_processing_consent',
+            # 'privacy_policy_consent',
+            # 'marketing_emails_consent',
+            # 'reminder_emails_consent'
         ]
         # event jest ustawiane automatycznie, więc nie jest w polach formularza
 
