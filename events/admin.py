@@ -83,8 +83,8 @@ class RezerwationsAdmin(admin.ModelAdmin):
 
     # Filtrowanie boczne
     list_filter = ['type_of_payments',
-                   'customer__regulations_consent',
-                   'customer__newsletter_consent',
+                   #'customer__regulations_consent', django krzyczy ze mu nie pasuje
+                   #'customer__newsletter_consent', j.w
                    'created_at', 'status',
                    'event']
 
@@ -117,7 +117,7 @@ class RezerwationsAdmin(admin.ModelAdmin):
     ]
 
 
-    autocomplete_fields = ['event', 'customer']
+    autocomplete_fields = ['event'] #'customer' było w środku ale Django krzyczy ze mu nie pasuje.
     # Niestandardowe wyświetlanie pól
     def payment_display(self, obj):
         return obj.get_type_of_payments_display()

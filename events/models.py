@@ -41,7 +41,9 @@ class Rezerwations(models.Model):
         Customer,
         on_delete=models.CASCADE,
         related_name="reservations",
-        verbose_name=_("Klient"), )
+        verbose_name=_("Klient"),
+        null=True, # Ważne! Dodaj to, aby migracja mogła się wykonać na istniejących danych - Tymczasowo
+    ),
 
     """Dodaj pole pozycji na liście rezerwowej (przydatne do określenia kolejności)"""
 
