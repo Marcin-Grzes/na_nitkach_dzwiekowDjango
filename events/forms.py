@@ -72,6 +72,7 @@ class EventReservationForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         # Pobierz zalogowanego użytkownika z kwargs
         self.user = kwargs.pop('user', None)
+        event = kwargs.pop('event', None)
         super().__init__(*args, **kwargs)
 
         # Dodaj print do debugowania
@@ -81,6 +82,9 @@ class EventReservationForm(forms.ModelForm):
         self.fields['participants_count'].help_text = "Podaj liczbę osób biorących udział w wydarzeniu."
         # Oznaczenie wymaganych zgód
         self.fields['regulations_consent'].required = True
+
+        # Zapisz event jako atrybut instancji
+        self.event = event
 
         # Kod odpowiedzialny za ukrywanie pól w przypadku zarejestrowanego użytkownika
 
@@ -113,40 +117,88 @@ class EventReservationForm(forms.ModelForm):
         return cleaned_data
 
 
-    # def save(self, commit=True):
-    #     instance = super().save(commit=False)
-    #
-    #     if self.user and self.user.is_authenticated:
-    #     # Dla zalogowanego użytkownika to na przyszłość
-    #         instance.user = self.user
-    #         instance.guest = None
-    #     else:
-    #         # Dla gościa - znajdź lub utwórz
-    #         guest, created = GuestUser.objects.get_or_create(
-    #             email=self.cleaned_data['email'],
-    #             defaults={
-    #                 'first_name': self.cleaned_data['first_name'],
-    #                 'last_name': self.cleaned_data['last_name'],
-    #                 'phone_numer': self.cleaned_data['phone_number'],
-    #                 'regulations_consent': self.cleaned_data['regulations_consent'],
-    #                 'newsletter_consent': self.cleaned_data['newsletter_consent'],
-    #             }
-    #         )
-    #         # Aktualizujemy zgody nawet jeśli użytkownik już istnieje
-    #
-    #         if not created:
-    #             guest.first_name =self.cleaned_data['first_name']
-    #             guest.last_name =self.cleaned_data['last_name']
-    #             guest.phone_number =self.cleaned_data['phone_number']
-    #             guest.regulations_consent = self.cleaned_data['regulations_consent']
-    #             guest.newsletter_consent = self.cleaned_data['newsletter_consent']
-    #             guest.save()
-    #
-    #         instance.guest = guest
-    #         instance.user = None
-    #
-    #     if commit:
-    #         instance.save()
-    #
-    #     return instance
+    def save(self, commit=True):
+
+        instance = Rezerwations()
+
+        # Przypisujemy dane z formularza
+
+        instance.participants_count = self.cleaned_data['participants_count']
+        instance.type_of_payments = self.cleaned_data['type_of_payments']
+
+        # Przypisujemy event, który został przekazany do formularza
+        if hasattr(self, 'event') and self.event:
+            instance.event = self.event
+
+        if self.user and self.user.is_authenticated:
+            # Dla zalogowanego użytkownika
+            instance.user = self.user
+            instance.guest = None
+        else:
+            # Dla gościa - znajdź lub utwórz
+            guest, created = GuestUser.objects.get_or_create(
+                email=self.cleaned_data['email'],
+                defaults={
+                    'first_name': self.cleaned_data['first_name'],
+                    'last_name': self.cleaned_data['last_name'],
+                    'phone_number': self.cleaned_data['phone_number'],
+                    'regulations_consent': self.cleaned_data['regulations_consent'],
+                    'newsletter_consent': self.cleaned_data['newsletter_consent'],
+                }
+            )
+
+            # Aktualizujemy dane gościa nawet jeśli użytkownik już istnieje
+            if not created:
+                guest.first_name = self.cleaned_data['first_name']
+                guest.last_name = self.cleaned_data['last_name']
+                guest.phone_number = self.cleaned_data['phone_number']
+                guest.regulations_consent = self.cleaned_data['regulations_consent']
+                guest.newsletter_consent = self.cleaned_data['newsletter_consent']
+                guest.save()
+
+            instance.guest = guest
+            instance.user = None
+
+        if commit:
+            instance.save()
+
+        return instance
+
+
+
+        # instance = super().save(commit=False)
+        #
+        # if self.user and self.user.is_authenticated:
+        # # Dla zalogowanego użytkownika to na przyszłość
+        #     instance.user = self.user
+        #     instance.guest = None
+        # else:
+        #     # Dla gościa - znajdź lub utwórz
+        #     guest, created = GuestUser.objects.get_or_create(
+        #         email=self.cleaned_data['email'],
+        #         defaults={
+        #             'first_name': self.cleaned_data['first_name'],
+        #             'last_name': self.cleaned_data['last_name'],
+        #             'phone_numer': self.cleaned_data['phone_number'],
+        #             'regulations_consent': self.cleaned_data['regulations_consent'],
+        #             'newsletter_consent': self.cleaned_data['newsletter_consent'],
+        #         }
+        #     )
+        #     # Aktualizujemy zgody nawet jeśli użytkownik już istnieje
+        #
+        #     if not created:
+        #         guest.first_name =self.cleaned_data['first_name']
+        #         guest.last_name =self.cleaned_data['last_name']
+        #         guest.phone_number =self.cleaned_data['phone_number']
+        #         guest.regulations_consent = self.cleaned_data['regulations_consent']
+        #         guest.newsletter_consent = self.cleaned_data['newsletter_consent']
+        #         guest.save()
+        #
+        #     instance.guest = guest
+        #     instance.user = None
+        #
+        # if commit:
+        #     instance.save()
+        #
+        # return instance
 

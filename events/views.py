@@ -80,7 +80,7 @@ class EventReservationView(View):
 
         # Tworzenie formularza pre-konfigurowanego dla tego wydarzenia
         # form = EventReservationForm(initial={'event': event})
-        form = EventReservationForm(user=request.user)
+        form = EventReservationForm(user=request.user, event=event)
         context = {
             'form': form,
             'event': event,
@@ -108,10 +108,10 @@ class EventReservationView(View):
             return redirect('event_detail', event_id=event_id)
 
         # Przetwarzanie formularza
-        form = EventReservationForm(request.POST)
+        form = EventReservationForm(request.POST, user=request.user, event=event)
 
         # Ręcznie ustawiamy pole wydarzenia (które jest ukryte w formularzu)
-        form.instance.event = event
+        # form.instance.event = event
 
         if form.is_valid():
             # Sprawdzenie czy liczba uczestników nie przekracza dostępnych miejsc
@@ -130,7 +130,11 @@ class EventReservationView(View):
                 message = "Twoja rezerwacja została potwierdzona."
 
             # Zapisujemy rezerwację
-            reservation = form.save()
+            reservation = form.save(commit=False)
+
+            # Upewniamy się, że wydarzenie jest przypisane
+            if not reservation.event:
+                reservation.event = event
 
             # Wysyłka emaila potwierdzającego
             self.send_confirmation_email(reservation)
