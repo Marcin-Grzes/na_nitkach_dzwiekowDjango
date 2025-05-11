@@ -39,8 +39,8 @@ def send_waitlist_promotion_email(reservation):
     context = {
         'reservation': reservation,
         'event': reservation.event,
-        'first_name': reservation.first_name,
-        'last_name': reservation.last_name,
+        'first_name': reservation.customer.first_name,
+        'last_name': reservation.customer.last_name,
     }
 
     html_message = render_to_string('emails/waitlist_promotion_notification.html', context)

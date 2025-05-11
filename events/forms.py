@@ -1,5 +1,6 @@
 from django import forms
 from .models import Rezerwations, Events, EventType, Venue
+from accounts.models import Customer
 
 
 class EventForm(forms.ModelForm):
@@ -32,13 +33,31 @@ class EventReservationForm(forms.ModelForm):
     """
     Formularz dla rezerwacji na konkretne wydarzenie.
     Pole 'event' jest ukryte i wypełniane automatycznie.
+    Łączy dane klienta i rezerwacji
     """
+
+    """Pola dla modelu Customer"""
+    first_name = forms.CharField(label="Imię", max_length=50)
+    last_name = forms.CharField(label="Nazwisko", max_length=50)
+    email = forms.EmailField(label="Adres email")
+    phone_number = forms.CharField(label="Numer telefonu")
+    regulations_consent = forms.BooleanField(
+        label="Akceptacja regulaminu i polityki prywatności.",
+        required=True,
+        help_text="Akceptuję regulamin i politykę prywatności."
+    )
+    newsletter_consent = forms.BooleanField(
+        label="Zapisz mnie na newsletter.",
+        required=False,
+        help_text="Chcę zapisać się newsletter, by otrzymywać informacje o przyszłych wydarzeniach wydarzeniach"
+                  " i ofertach specjalnych."
+    )
 
     class Meta:
         model = Rezerwations
         fields = [
-            'first_name', 'last_name', 'email', 'participants_count', 'phone_number',
-            'type_of_payments', 'regulations_consent', 'newsletter_consent'
+            'participants_count',
+            'type_of_payments',
         ]
         # event jest ustawiane automatycznie, więc nie jest w polach formularza
 
@@ -47,7 +66,7 @@ class EventReservationForm(forms.ModelForm):
         # Dodajemy hepltext do liczby uczestników, który będzie dynamicznie aktualizowany
         self.fields['participants_count'].help_text = "Podaj liczbę osób biorących udział w wydarzeniu."
         # Oznaczenie wymaganych zgód
-        self.fields['regulations_consent'].required = True
+        # self.fields['regulations_consent'].required = True
 
     def clean(self):
         cleaned_data = super().clean()

@@ -44,24 +44,49 @@ class EventInline(admin.TabularInline):
 @admin.register(Rezerwations)
 class RezerwationsAdmin(admin.ModelAdmin):
 
-    # Wyświetlane kolumny na liście
-    list_display = ['first_name', 'last_name', 'email', 'phone_number',
+    """Wyświetlane kolumny na liście"""
+
+    list_display = ['get_customer_name', 'customer_email', 'customer_phone_number',
                     'event', 'status', 'participants_count', 'created_at',
-                    'type_of_payments', 'created_at', 'newsletter_consent',
+                    'type_of_payments', 'created_at', 'get_newsletter_consent',
                     ]
 
+    """Metody pomocnicze:"""
+
+    def get_customer_name(self, obj):
+        return obj.customer.get_full_name()
+    get_customer_name.short_description = 'Imię i nazwisko'
+
+
+    def customer_email(self, obj):
+        return obj.customer.email
+    customer_email.short_description = 'Email'
+    def customer_phone_number(self, obj):
+        return obj.customer.phone_number
+    customer_phone_number.short_description = 'Numer telefonu'
+
+    def get_newsletter_consent(self, obj):
+        return obj.newsletter_consent
+    get_newsletter_consent.short_description = 'Newsletter'
+    get_newsletter_consent.boolean = True
+
+
     # Kolumny, które po kliknięciu prowadzą do edycji
-    list_display_links = ['first_name', 'last_name']
+    # list_display_links = ['first_name', 'last_name']
 
     # Pola do wyszukiwania
-    search_fields = ['first_name', 'last_name', 'email', 'phone_number']
+    search_fields = ['customer__first_name',
+                     'customer__last_name',
+                     'customer__email',
+                     'customer__phone_number',
+                     ]
 
     # Filtrowanie boczne
     list_filter = ['type_of_payments',
-                   'regulations_consent',
-                   'newsletter_consent',
+                   'customer__regulations_consent',
+                   'customer__newsletter_consent',
                    'created_at', 'status',
-                   'event', 'created_at']
+                   'event']
 
     actions = ['confirm_reservations', 'move_to_waitlist', 'cancel_reservations']
 
@@ -76,8 +101,8 @@ class RezerwationsAdmin(admin.ModelAdmin):
         ('Wydarzenie i status', {
             'fields': ('event', 'status')
         }),
-        ('Dane osobowe', {
-            'fields': ['first_name', 'last_name', 'email', 'phone_number']
+        ('Klient', {
+            'fields': ['customer']
         }),
         ('Liczba uczestników',{
             'fields': ['participants_count']
@@ -85,16 +110,14 @@ class RezerwationsAdmin(admin.ModelAdmin):
         ('Informacje o płatności', {
             'fields': ['type_of_payments']
         }),
-        ('Zgody', {
-            'fields': ['regulations_consent',
-                       'newsletter_consent']
-        }),
         ('Metadane', {
             'fields': ['created_at'],
             'classes': ['collapse']  # zwijana sekcja
         }),
     ]
 
+
+    autocomplete_fields = ['event', 'customer']
     # Niestandardowe wyświetlanie pól
     def payment_display(self, obj):
         return obj.get_type_of_payments_display()

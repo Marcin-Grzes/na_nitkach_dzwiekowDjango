@@ -11,6 +11,8 @@ from django.urls import reverse
 from django.views.generic import ListView, DetailView
 from django.views.generic.base import ContextMixin, TemplateView
 from honeypot.decorators import check_honeypot
+
+from accounts.models import Customer
 from events.forms import EventReservationForm
 from django.contrib import messages
 from events.models import EventType, Events, Rezerwations
@@ -79,7 +81,7 @@ class EventReservationView(View):
             )
 
         # Tworzenie formularza pre-konfigurowanego dla tego wydarzenia
-        form = EventReservationForm(initial={'event': event})
+        form = EventReservationForm(initial={'event': event}) #??
 
         context = {
             'form': form,
@@ -114,6 +116,36 @@ class EventReservationView(View):
         form.instance.event = event
 
         if form.is_valid():
+            """Pobierz dane klienta z formularza"""
+
+            customer_data = {
+                'first_name': form.cleaned_data['first_name'],
+                'last_name': form.cleaned_data['last_name'],
+                'email': form.cleaned_data['email'],
+                'phone_number': form.cleaned_data['phone_number'],
+                'regulations_consent': form.cleaned_data['regulations_consent'],
+                'newsletter_consent': form.cleaned_data['newsletter_consent'],
+            }
+
+            """Sprawdź czy istnieje już klient o takim e-mailu i numerze telefonu"""
+
+            try:
+                customer = Customer.objects.get(
+                    email=customer_data['email'],
+                    phone_number=customer_data['phone_number']
+                )
+                customer.first_name = customer_data['first_name']
+                customer.last_name = customer_data['last_name']
+                customer.save()
+            except Customer.DoesNotExist:
+                """Utwórz nowego klienta"""
+                customer = Customer.objects.create(**customer_data)
+
+            # Utwórz nowy obiekt rezerwacji bez zapisywania w bazie
+            reservation = form.save(commit=False)
+            reservation.customer = customer
+            reservation.event = event
+
             # Sprawdzenie czy liczba uczestników nie przekracza dostępnych miejsc
             participants_count = form.cleaned_data['participants_count']
             available_seats = event.get_available_seats()
@@ -130,7 +162,8 @@ class EventReservationView(View):
                 message = "Twoja rezerwacja została potwierdzona."
 
             # Zapisujemy rezerwację
-            reservation = form.save()
+            reservation.save()
+
 
             # Wysyłka emaila potwierdzającego
             self.send_confirmation_email(reservation)
@@ -150,18 +183,20 @@ class EventReservationView(View):
 
         return render(request, 'event_reservation.html', context)
 
+
     def send_confirmation_email(self, reservation):
         subject = f'Potwierdzenie rezerwacji - {reservation.event.title}'
 
         # Kontekst do szablonu z danymi wydarzenia
         context = {
-            'first_name': reservation.first_name,
-            'last_name': reservation.last_name,
+            'first_name': reservation.customer.first_name,
+            'last_name': reservation.customer.last_name,
             'participants_count': reservation.participants_count,
-            'email': reservation.email,
-            'phone_number': str(reservation.phone_number),
+            'email': reservation.customer.email,
+            'phone_number': str(reservation.customer.phone_number),
             'payment_method': reservation.get_type_of_payments_display(),
             'event': reservation.event,  # Dodanie informacji o wydarzeniu
+            'reservation': reservation,
         }
 
         # Generowanie wiadomości HTML z szablonu

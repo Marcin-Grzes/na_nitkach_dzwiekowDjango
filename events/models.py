@@ -18,11 +18,12 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 from tinymce.models import HTMLField
 from djmoney.models.fields import MoneyField
 from djmoney.models.managers import money_manager
-
+from accounts.models import Customer
 # Create your models here.
 
 
 class Rezerwations(models.Model):
+
     class ReservationStatus(models.TextChoices):
         CONFIRMED = 'confirmed', _('Potwierdzona')
         WAITLIST = 'waitlist', _('Lista rezerwowa')
@@ -34,7 +35,16 @@ class Rezerwations(models.Model):
         choices=ReservationStatus.choices,
         default=ReservationStatus.CONFIRMED,
     )
-    # Dodaj pole pozycji na liście rezerwowej (przydatne do określenia kolejności)
+
+    """Relacja z modelem Customer z aplikacji accounts"""
+    customer = models.ForeignKey(
+        Customer,
+        on_delete=models.CASCADE,
+        related_name="reservations",
+        verbose_name=_("Klient"), )
+
+    """Dodaj pole pozycji na liście rezerwowej (przydatne do określenia kolejności)"""
+
     waitlist_position = models.PositiveIntegerField(
         _("Pozycja na liście rezerwowej"),
         null=True,
@@ -68,8 +78,7 @@ class Rezerwations(models.Model):
         BLIK = 'blik', _('BLIK')
 
     # Podstawowe informacje
-    first_name = models.CharField(_("Imię"), max_length=50)
-    last_name = models.CharField(_("Nazwisko"), max_length=50)
+
     participants_count = models.PositiveIntegerField(
         _("Liczba uczestników"),
         default=1,
@@ -79,8 +88,8 @@ class Rezerwations(models.Model):
         ],
         help_text=_("Podaj liczbę osób biorących udział w spotkaniu.")
     )
-    email = models.EmailField(_("Adres email"))
-    phone_number = PhoneNumberField(region='PL', verbose_name=_("Numer telefonu"))
+    # Tu był pole email, phone_number
+
     type_of_payments = models.CharField(_("Typ płatności"), max_length=10,
                                         choices=PaymentType.choices, default=PaymentType.CASH)
     event = models.ForeignKey(
@@ -91,19 +100,9 @@ class Rezerwations(models.Model):
         null=True,  # Dodaj to tymczasowo
         blank=True  # Dodaj to tymczasowo
     )
-    # Pola zgód
-    regulations_consent = models.BooleanField(
-        _("Akceptacja regulaminu i polityki prywatności"),
-        default=False,
-        help_text=_("Zapoznałem się z regulaminem oraz polityką prywatności")
-    )
 
-    newsletter_consent = models.BooleanField(
-        _("Zapis na newsletter"),
-        default=False,
-        help_text=_("Chcę zapisać się na newsletter, by otrzymywać informacje o przyszłych wydarzeniach i ofertach "
-                    "specjalnych.")
-    )
+    # Tu były pola zgód
+
 
     # Metadane
     created_at = models.DateTimeField(_("Data utworzenia"), auto_now_add=True)
