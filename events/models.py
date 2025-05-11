@@ -92,28 +92,17 @@ class Rezerwations(models.Model):
         blank=True  # Dodaj to tymczasowo
     )
     # Pola zgód
-    data_processing_consent = models.BooleanField(
-        _("Zgoda na przetwarzanie danych"),
+    regulations_consent = models.BooleanField(
+        _("Akceptacja regulaminu i polityki prywatności"),
         default=False,
-        help_text=_("Wyrażam zgodę na przetwarzanie moich danych osobowych niezbędnych do realizacji spotkania.")
+        help_text=_("Zapoznałem się z regulaminem oraz polityką prywatności")
     )
 
-    privacy_policy_consent = models.BooleanField(
-        _("Zgoda na politykę prywatności"),
+    newsletter_consent = models.BooleanField(
+        _("Zapis na newsletter"),
         default=False,
-        help_text=_("Oświadczam, że zapoznałem się z polityką prywatności i akceptuję jej warunki.")
-    )
-
-    marketing_emails_consent = models.BooleanField(
-        _("Zgoda marketingowa"),
-        default=False,
-        help_text=_("Wyrażam zgodę na otrzymywanie informacji o przyszłych wydarzeniach i ofertach specjalnych.")
-    )
-
-    reminder_emails_consent = models.BooleanField(
-        _("Zgoda na przypomnienie o spotkaniu"),
-        default=False,
-        help_text=_("Wyrażam zgodę na otrzymywanie przypomnienia o zbliżającym się koncercie")
+        help_text=_("Chcę zapisać się na newsletter, by otrzymywać informacje o przyszłych wydarzeniach i ofertach "
+                    "specjalnych.")
     )
 
     # Metadane

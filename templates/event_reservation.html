@@ -128,52 +128,30 @@
 
                         <div class="reservation-form__form-group" style="grid-column: 1 / -1;">
                             <div class="reservation-form__form-check">
-                                {{ form.data_processing_consent }}
+                                {{ form.regulations_consent }}
                                 <label class="reservation-form__form-label"
-                                       for="{{ form.data_processing_consent.id_for_label }}">
-                                    {{ form.data_processing_consent.label }}
+                                       for="{{ form.regulations_consent.id_for_label }}">
+                                    {{ form.regulations_consent.label }}
                                 </label>
                             </div>
-                            {% if form.data_processing_consent.errors %}
-                                <div class="reservation-form__form-block">{{ form.data_processing_consent.errors }}</div>
+                            {% if form.regulations_consent.errors %}
+                                <div class="reservation-form__form-block">{{ form.regulations_consent.errors }}</div>
                             {% endif %}
-                            <small class="reservation-form__form-text">{{ form.data_processing_consent.help_text }}</small>
+                            <small class="reservation-form__form-text">{{ form.regulations_consent.help_text }}</small>
                         </div>
 
                         <div class="reservation-form__form-group" style="grid-column: 1 / -1;">
                             <div class="reservation-form__form-check">
-                                {{ form.privacy_policy_consent }}
+                                {{ form.newsletter_consent }}
                                 <label class="reservation-form__form-label"
-                                       for="{{ form.privacy_policy_consent.id_for_label }}">
-                                    {{ form.privacy_policy_consent.label }}
+                                       for="{{ form.newsletter_consent.id_for_label }}">
+                                    {{ form.newsletter_consent.label }}
                                 </label>
                             </div>
-                            {% if form.privacy_policy_consent.errors %}
-                                <div class="reservation-form__form-block">{{ form.privacy_policy_consent.errors }}</div>
+                            {% if form.newsletter_consent.errors %}
+                                <div class="reservation-form__form-block">{{ form.newsletter_consent.errors }}</div>
                             {% endif %}
-                            <small class="reservation-form__form-text">{{ form.privacy_policy_consent.help_text }}</small>
-                        </div>
-
-                        <div class="reservation-form__form-group" style="grid-column: 1 / -1;">
-                            <div class="reservation-form__form-check">
-                                {{ form.marketing_emails_consent }}
-                                <label class="reservation-form__form-label"
-                                       for="{{ form.marketing_emails_consent.id_for_label }}">
-                                    {{ form.marketing_emails_consent.label }}
-                                </label>
-                            </div>
-                            <small class="reservation-form__form-text">{{ form.marketing_emails_consent.help_text }}</small>
-                        </div>
-
-                        <div class="reservation-form__form-group" style="grid-column: 1 / -1;">
-                            <div class="reservation-form__form-check">
-                                {{ form.reminder_emails_consent }}
-                                <label class="reservation-form__form-label"
-                                       for="{{ form.reminder_emails_consent.id_for_label }}">
-                                    {{ form.reminder_emails_consent.label }}
-                                </label>
-                            </div>
-                            <small class="reservation-form__form-text">{{ form.reminder_emails_consent.help_text }}</small>
+                            <small class="reservation-form__form-text">{{ form.newsletter_consent.help_text }}</small>
                         </div>
 
                         <div class="reservation-form__form-buttons">

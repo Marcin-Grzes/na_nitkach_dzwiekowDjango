@@ -47,8 +47,8 @@ class RezerwationsAdmin(admin.ModelAdmin):
     # Wyświetlane kolumny na liście
     list_display = ['first_name', 'last_name', 'email', 'phone_number',
                     'event', 'status', 'participants_count', 'created_at',
-                    'type_of_payments', 'created_at', 'marketing_emails_consent', 'reminder_emails_consent',
-                    'consent_status']
+                    'type_of_payments', 'created_at', 'newsletter_consent',
+                    ]
 
     # Kolumny, które po kliknięciu prowadzą do edycji
     list_display_links = ['first_name', 'last_name']
@@ -57,8 +57,11 @@ class RezerwationsAdmin(admin.ModelAdmin):
     search_fields = ['first_name', 'last_name', 'email', 'phone_number']
 
     # Filtrowanie boczne
-    list_filter = ['type_of_payments', 'data_processing_consent',
-                   'privacy_policy_consent', 'marketing_emails_consent', 'created_at', 'reminder_emails_consent', 'status', 'event', 'created_at']
+    list_filter = ['type_of_payments',
+                   'regulations_consent',
+                   'newsletter_consent',
+                   'created_at', 'status',
+                   'event', 'created_at']
 
     actions = ['confirm_reservations', 'move_to_waitlist', 'cancel_reservations']
 
@@ -83,8 +86,8 @@ class RezerwationsAdmin(admin.ModelAdmin):
             'fields': ['type_of_payments']
         }),
         ('Zgody', {
-            'fields': ['data_processing_consent', 'privacy_policy_consent',
-                       'marketing_emails_consent', 'reminder_emails_consent']
+            'fields': ['regulations_consent',
+                       'newsletter_consent']
         }),
         ('Metadane', {
             'fields': ['created_at'],
@@ -99,9 +102,8 @@ class RezerwationsAdmin(admin.ModelAdmin):
     payment_display.short_description = 'Sposób płatności'
 
     def consent_status(self, obj):
-        return '✓' if obj.marketing_emails_consent else '✗'
+        return '✓' if obj.newsletter_consent else '✗'
 
-    consent_status.short_description = 'Marketing'
 
     def confirm_reservations(self, request, queryset):
         updated = queryset.update(status=Rezerwations.ReservationStatus.CONFIRMED, waitlist_position=None)
