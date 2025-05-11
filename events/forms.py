@@ -74,26 +74,37 @@ class EventReservationForm(forms.ModelForm):
         self.user = kwargs.pop('user', None)
         super().__init__(*args, **kwargs)
 
+        # Dodaj print do debugowania
+        print(f"User authenticated: {self.user is not None and self.user.is_authenticated}")
+
         # Dodajemy hepltext do liczby uczestników, który będzie dynamicznie aktualizowany
         self.fields['participants_count'].help_text = "Podaj liczbę osób biorących udział w wydarzeniu."
         # Oznaczenie wymaganych zgód
         self.fields['regulations_consent'].required = True
 
-        if self.user is not None and self.user.is_authenticated:
-            for field in ['first_name', 'last_name', 'email', 'phone_number']:
-                self.fields[field].widget = forms.HiddenInput()
-                self.fields[field].required = True
+        # Kod odpowiedzialny za ukrywanie pól w przypadku zarejestrowanego użytkownika
+
+        # if self.user is not None and self.user.is_authenticated:
+        #     print("Ukrywanie pól dla zalogowanego użytkownika")
+        #     for field in ['first_name', 'last_name', 'email', 'phone_number']:
+        #         self.fields[field].widget = forms.HiddenInput()
+        #         self.fields[field].required = True
+        # else:
+        #     # Dla niezalogowanego użtkownika ustawiamy pola jako wymagane
+        #     print("Ustawianie pól jako wymagane dla niezalogowanego użytkownika")
+        #     for field in ['first_name', 'last_name', 'email', 'phone_number']:
+        #         self.fields[field].required = True
 
 
     def clean(self):
         cleaned_data = super().clean()
 
         # Sprawdź czy mamy wystarczające dane do identyfikacji użytkownika
-        if not self.user or not self.user.is_authenticated:
-            # Sprawdź, czy podano wszystkie wymagane pola dla gościa
-            for field in ['first_name', 'last_name', 'email', 'phone_number']:
-                if not cleaned_data.get(field):
-                    self.add_error(field, "To pole jest wymagane")
+        # if not self.user or not self.user.is_authenticated:
+        #     # Sprawdź, czy podano wszystkie wymagane pola dla gościa
+        #     for field in ['first_name', 'last_name', 'email', 'phone_number']:
+        #         if not cleaned_data.get(field):
+        #             self.add_error(field, "To pole jest wymagane")
 
         # Weryfikacja obowiązkowych zgód
         if not cleaned_data.get('regulations_consent'):
@@ -102,37 +113,40 @@ class EventReservationForm(forms.ModelForm):
         return cleaned_data
 
 
-    def save(self, commit=True):
-        instance = super().save(commit=False)
-
-        if self.user and self.user.is_authenticated:
-        # Dla zalogowanego użytkownika to na przyszłość
-            instance.user = self.user
-            instance.guest = None
-        else:
-            # Dla gościa - znajdź lub utwórz
-            guest, created = GuestUser.objects.get_or_create(
-                email=self.cleaned_data['email'],
-                phone_number=self.cleaned_data['phone_number'],
-                defaults={
-                    'first_name': self.cleaned_data['first_name'],
-                    'last_name': self.cleaned_data['last_name'],
-                    'regulations_consent': self.cleaned_data['regulations_consent'],
-                    'newsletter_consent': self.cleaned_data['newsletter_consent'],
-                }
-            )
-            # Aktualizujemy zgody nawet jeśli użytkownik już istnieje
-
-            if not created:
-                guest.regulations_consent = self.cleaned_data['regulations_consent']
-                guest.newsletter_consent = self.cleaned_data['newsletter_consent']
-                guest.save()
-
-            instance.guest = guest
-            instance.user = None
-
-        if commit:
-            instance.save()
-
-        return instance
+    # def save(self, commit=True):
+    #     instance = super().save(commit=False)
+    #
+    #     if self.user and self.user.is_authenticated:
+    #     # Dla zalogowanego użytkownika to na przyszłość
+    #         instance.user = self.user
+    #         instance.guest = None
+    #     else:
+    #         # Dla gościa - znajdź lub utwórz
+    #         guest, created = GuestUser.objects.get_or_create(
+    #             email=self.cleaned_data['email'],
+    #             defaults={
+    #                 'first_name': self.cleaned_data['first_name'],
+    #                 'last_name': self.cleaned_data['last_name'],
+    #                 'phone_numer': self.cleaned_data['phone_number'],
+    #                 'regulations_consent': self.cleaned_data['regulations_consent'],
+    #                 'newsletter_consent': self.cleaned_data['newsletter_consent'],
+    #             }
+    #         )
+    #         # Aktualizujemy zgody nawet jeśli użytkownik już istnieje
+    #
+    #         if not created:
+    #             guest.first_name =self.cleaned_data['first_name']
+    #             guest.last_name =self.cleaned_data['last_name']
+    #             guest.phone_number =self.cleaned_data['phone_number']
+    #             guest.regulations_consent = self.cleaned_data['regulations_consent']
+    #             guest.newsletter_consent = self.cleaned_data['newsletter_consent']
+    #             guest.save()
+    #
+    #         instance.guest = guest
+    #         instance.user = None
+    #
+    #     if commit:
+    #         instance.save()
+    #
+    #     return instance
 
