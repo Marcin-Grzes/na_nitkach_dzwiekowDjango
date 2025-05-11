@@ -54,19 +54,19 @@ class RezerwationsAdmin(admin.ModelAdmin):
     """Metody pomocnicze:"""
 
     def get_customer_name(self, obj):
-        return obj.customer.get_full_name()
+        return obj.customer.get_full_name() if obj.customer else '-'
     get_customer_name.short_description = 'Imię i nazwisko'
 
 
     def customer_email(self, obj):
-        return obj.customer.email
+        return obj.customer.email if obj.customer else '-'
     customer_email.short_description = 'Email'
     def customer_phone_number(self, obj):
-        return obj.customer.phone_number
+        return obj.customer.phone_number if obj.customer else '-'
     customer_phone_number.short_description = 'Numer telefonu'
 
     def get_newsletter_consent(self, obj):
-        return obj.newsletter_consent
+        return obj.customer.newsletter_consent if obj.customer else False
     get_newsletter_consent.short_description = 'Newsletter'
     get_newsletter_consent.boolean = True
 
@@ -117,7 +117,7 @@ class RezerwationsAdmin(admin.ModelAdmin):
     ]
 
 
-    autocomplete_fields = ['event'] #'customer' było w środku ale Django krzyczy ze mu nie pasuje.
+    autocomplete_fields = ['event', 'customer']  #'customer' było w środku ale Django krzyczy ze mu nie pasuje.
     # Niestandardowe wyświetlanie pól
     def payment_display(self, obj):
         return obj.get_type_of_payments_display()

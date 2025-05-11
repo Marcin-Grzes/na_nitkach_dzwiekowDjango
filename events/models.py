@@ -43,7 +43,7 @@ class Rezerwations(models.Model):
         related_name="reservations",
         verbose_name=_("Klient"),
         null=True, # Ważne! Dodaj to, aby migracja mogła się wykonać na istniejących danych - Tymczasowo
-    ),
+    )
 
     """Dodaj pole pozycji na liście rezerwowej (przydatne do określenia kolejności)"""
 
@@ -114,8 +114,10 @@ class Rezerwations(models.Model):
         verbose_name_plural = _("Rezerwacje")
 
     def __str__(self):
-        return f"{self.first_name} {self.last_name} - {self.created_at.strftime('%Y-%m-%d %H:%M')}"
-
+        if self.customer:
+            return f"{self.customer.first_name} {self.customer.last_name} - {self.created_at.strftime('%Y-%m-%d %H:%M')}"
+        else:
+            return f"Rezerwacja #{self.id} - {self.created_at.strftime('%Y-%m-%d %H:%M')}"
 
 class Venue(models.Model):
     name = models.CharField(_("Nazwa miejsca"), max_length=100)

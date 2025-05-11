@@ -57,7 +57,7 @@ class ReservationSuccessView(View):
         }
 
         return render(request, 'reservation_success.html', context)
-    
+
 
 class EventReservationView(View):
     """
@@ -81,7 +81,7 @@ class EventReservationView(View):
             )
 
         # Tworzenie formularza pre-konfigurowanego dla tego wydarzenia
-        form = EventReservationForm(initial={'event': event}) #??
+        form = EventReservationForm(initial={'event': event})  #??
 
         context = {
             'form': form,
@@ -164,7 +164,6 @@ class EventReservationView(View):
             # Zapisujemy rezerwację
             reservation.save()
 
-
             # Wysyłka emaila potwierdzającego
             self.send_confirmation_email(reservation)
 
@@ -182,7 +181,6 @@ class EventReservationView(View):
             context['reservation_end_time_iso'] = event.reservation_end_time.isoformat()
 
         return render(request, 'event_reservation.html', context)
-
 
     def send_confirmation_email(self, reservation):
         subject = f'Potwierdzenie rezerwacji - {reservation.event.title}'
@@ -208,7 +206,7 @@ class EventReservationView(View):
             subject,
             plain_message,
             None,  # używa DEFAULT_FROM_EMAIL z ustawień
-            [reservation.email],
+            [reservation.customer.email],
             html_message=html_message,
         )
 
