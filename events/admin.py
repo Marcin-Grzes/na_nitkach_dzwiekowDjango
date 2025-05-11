@@ -7,7 +7,7 @@ from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 from tinymce.widgets import TinyMCE
 
-from .models import Rezerwations, EventType, EventImage, Events, Venue
+from .models import Reservations, EventType, EventImage, Events, Venue
 
 
 # Register your models here.
@@ -41,8 +41,8 @@ class EventInline(admin.TabularInline):
         return False
 
 
-@admin.register(Rezerwations)
-class RezerwationsAdmin(admin.ModelAdmin):
+@admin.register(Reservations)
+class ReservationsAdmin(admin.ModelAdmin):
 
     """Wyświetlane kolumny na liście"""
 
@@ -129,7 +129,7 @@ class RezerwationsAdmin(admin.ModelAdmin):
 
 
     def confirm_reservations(self, request, queryset):
-        updated = queryset.update(status=Rezerwations.ReservationStatus.CONFIRMED, waitlist_position=None)
+        updated = queryset.update(status=Reservations.ReservationStatus.CONFIRMED, waitlist_position=None)
         self.message_user(request, f"{updated} rezerwacji zostało potwierdzonych.")
 
     confirm_reservations.short_description = "Potwierdź wybrane rezerwacje"
@@ -137,8 +137,8 @@ class RezerwationsAdmin(admin.ModelAdmin):
     def move_to_waitlist(self, request, queryset):
         # Dla każdej rezerwacji obliczamy pozycję na liście rezerwowej
         for reservation in queryset:
-            if reservation.status != Rezerwations.ReservationStatus.WAITLIST:
-                reservation.status = Rezerwations.ReservationStatus.WAITLIST
+            if reservation.status != Reservations.ReservationStatus.WAITLIST:
+                reservation.status = Reservations.ReservationStatus.WAITLIST
                 reservation.waitlist_position = reservation.event.get_next_waitlist_position()
                 reservation.save()
 
@@ -156,7 +156,7 @@ class RezerwationsAdmin(admin.ModelAdmin):
                 count += 1
                 # Sprawdź czy spowodowało to przesunięcie z listy rezerwowej
                 if reservation.event.reservations.filter(
-                        status=Rezerwations.ReservationStatus.CONFIRMED,
+                        status=Reservations.ReservationStatus.CONFIRMED,
                         waitlist_position__isnull=True
                 ).exists():
                     waitlist_promotions += 1

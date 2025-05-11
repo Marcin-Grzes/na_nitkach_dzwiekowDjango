@@ -15,7 +15,7 @@ from honeypot.decorators import check_honeypot
 from accounts.models import Customer
 from events.forms import EventReservationForm
 from django.contrib import messages
-from events.models import EventType, Events, Rezerwations
+from events.models import EventType, Events, Reservations
 from events.services import cancel_reservation
 
 
@@ -44,7 +44,7 @@ class ReservationSuccessView(View):
     def get(self, request, event_id, reservation_id):
         # Pobierz wydarzenie i rezerwację
         event = get_object_or_404(Events, id=event_id, is_active=True)
-        reservation = get_object_or_404(Rezerwations, id=reservation_id)
+        reservation = get_object_or_404(Reservations, id=reservation_id)
 
         # Sprawdź czy rezerwacja należy do tego wydarzenia
         if reservation.event.id != event.id:
@@ -153,12 +153,12 @@ class EventReservationView(View):
             # Ustawiamy status rezerwacji
             if event.is_fully_booked() or participants_count > available_seats:
                 # Dodanie do listy rezerwowej
-                form.instance.status = Rezerwations.ReservationStatus.WAITLIST
+                form.instance.status = Reservations.ReservationStatus.WAITLIST
                 form.instance.waitlist_position = event.get_next_waitlist_position()
                 message = "Zostałeś dodany do listy rezerwowej. Powiadomimy Cię, jeśli zwolni się miejsce."
             else:
                 # Standardowa rezerwacja
-                form.instance.status = Rezerwations.ReservationStatus.CONFIRMED
+                form.instance.status = Reservations.ReservationStatus.CONFIRMED
                 message = "Twoja rezerwacja została potwierdzona."
 
             # Zapisujemy rezerwację
@@ -312,10 +312,10 @@ class EventsByTypeView(EventListView):
 class CancelReservationView(View):
     def get(self, request, token):
         """Wyświetla stronę potwierdzenia anulowania rezerwacji"""
-        reservation = get_object_or_404(Rezerwations, cancellation_token=token)
+        reservation = get_object_or_404(Reservations, cancellation_token=token)
 
         # Sprawdź czy można anulować rezerwację
-        if reservation.status == Rezerwations.ReservationStatus.CANCELLED:
+        if reservation.status == Reservations.ReservationStatus.CANCELLED:
             messages.warning(request, "Ta rezerwacja została już anulowana.")
             return redirect('home')
 
@@ -325,10 +325,10 @@ class CancelReservationView(View):
 
     def post(self, request, token):
         """Obsługuje anulowanie rezerwacji"""
-        reservation = get_object_or_404(Rezerwations, cancellation_token=token)
+        reservation = get_object_or_404(Reservations, cancellation_token=token)
 
         # Sprawdź czy można anulować rezerwację
-        if reservation.status == Rezerwations.ReservationStatus.CANCELLED:
+        if reservation.status == Reservations.ReservationStatus.CANCELLED:
             messages.warning(request, "Ta rezerwacja została już anulowana.")
             return redirect('home')
 
@@ -338,9 +338,9 @@ class CancelReservationView(View):
         messages.success(request, "Twoja rezerwacja została pomyślnie anulowana.")
 
         # Jeśli anulowana rezerwacja była potwierdzona, informuj o automatycznym przesunięciu z listy rezerwowej
-        if reservation.status == Rezerwations.ReservationStatus.CONFIRMED:
+        if reservation.status == Reservations.ReservationStatus.CONFIRMED:
             if reservation.event.reservations.filter(
-                    status=Rezerwations.ReservationStatus.CONFIRMED,
+                    status=Reservations.ReservationStatus.CONFIRMED,
                     waitlist_position__isnull=True
             ).exclude(id=reservation.id).exists():
                 messages.info(request, "Osoba z listy rezerwowej została automatycznie przesunięta na Twoje miejsce.")

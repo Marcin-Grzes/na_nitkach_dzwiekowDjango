@@ -22,7 +22,7 @@ from accounts.models import Customer
 # Create your models here.
 
 
-class Rezerwations(models.Model):
+class Reservations(models.Model):
 
     class ReservationStatus(models.TextChoices):
         CONFIRMED = 'confirmed', _('Potwierdzona')
@@ -330,7 +330,7 @@ class Events(models.Model):
 
     def get_confirmed_reservations_count(self):
         """Zwraca liczbę uczestników z potwierdzonych rezerwacji"""
-        reservations = self.reservations.filter(status=Rezerwations.ReservationStatus.CONFIRMED)
+        reservations = self.reservations.filter(status=Reservations.ReservationStatus.CONFIRMED)
         return sum(r.participants_count for r in reservations)
 
     def get_available_seats(self):
@@ -343,11 +343,11 @@ class Events(models.Model):
 
     def get_waitlist_count(self):
         """Zwraca liczbę osób na liście rezerwowej"""
-        return self.reservations.filter(status=Rezerwations.ReservationStatus.WAITLIST).count()
+        return self.reservations.filter(status=Reservations.ReservationStatus.WAITLIST).count()
 
     def get_next_waitlist_position(self):
         """Zwraca następną pozycję na liście rezerwowej"""
         max_position = self.reservations.filter(
-            status=Rezerwations.ReservationStatus.WAITLIST
+            status=Reservations.ReservationStatus.WAITLIST
         ).aggregate(Max('waitlist_position'))['waitlist_position__max'] or 0
         return max_position + 1

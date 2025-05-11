@@ -6,22 +6,22 @@ from django.utils.html import strip_tags
 # Zmieniona funkcja - nie używa self
 def cancel_reservation(reservation):
     """Anuluje rezerwację i przesuwa osobę z listy rezerwowej jeśli istnieje"""
-    from .models import Rezerwations  # Import wewnątrz funkcji by uniknąć cyklicznych importów
+    from .models import Reservations  # Import wewnątrz funkcji by uniknąć cyklicznych importów
 
-    if reservation.status == Rezerwations.ReservationStatus.CONFIRMED:
+    if reservation.status == Reservations.ReservationStatus.CONFIRMED:
         # Zmiana statusu na anulowany
-        reservation.status = Rezerwations.ReservationStatus.CANCELLED
+        reservation.status = Reservations.ReservationStatus.CANCELLED
         reservation.save()
 
         # Sprawdź czy są osoby na liście rezerwowej
         event = reservation.event
         waitlist_reservation = event.reservations.filter(
-            status=Rezerwations.ReservationStatus.WAITLIST
+            status=Reservations.ReservationStatus.WAITLIST
         ).order_by('waitlist_position').first()
 
         if waitlist_reservation:
             # Przesuń osobę z listy rezerwowej na potwierdzoną
-            waitlist_reservation.status = Rezerwations.ReservationStatus.CONFIRMED
+            waitlist_reservation.status = Reservations.ReservationStatus.CONFIRMED
             waitlist_reservation.waitlist_position = None
             waitlist_reservation.save()
 

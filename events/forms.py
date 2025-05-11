@@ -1,5 +1,5 @@
 from django import forms
-from .models import Rezerwations, Events, EventType, Venue
+from .models import Reservations, Events, EventType, Venue
 from accounts.models import Customer
 
 
@@ -54,7 +54,7 @@ class EventReservationForm(forms.ModelForm):
     )
 
     class Meta:
-        model = Rezerwations
+        model = Reservations
         fields = [
             'participants_count',
             'type_of_payments',
