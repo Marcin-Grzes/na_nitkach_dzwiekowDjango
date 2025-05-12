@@ -224,35 +224,33 @@ class UniversalReservationView(ReservationEmailMixin, View):
 
         form = UniversalReservationForm()
 
-        """ Pobierz aktywne wydarzenia do kontekstu (dla JavaScript) """
-        events = Events.objects.filter(
-            is_active=True,
-            start_datetime__gte=timezone.now()
-        ).order_by('start_datetime')
-
-        events_data = {}
-        for event in events:
-            print(f"Processing event ID: {event.id}, title: {event.title}")
-            events_data[str(event.id)] = {
-                'title': event.title,
-                'start_datetime': event.start_datetime.isoformat(),
-                'venue_name': event.venue.name,
-                'venue_address': event.venue.address,
-                'venue_city': event.venue.city,
-                'price': str(event.price) if event.price else 'Brak informacji',
-                'available_seats': event.get_available_seats(),
-                'is_fully_booked': event.is_fully_booked(),
-                'reservation_end_time_iso': event.reservation_end_time.isoformat() if event.reservation_end_time else None,
-                'reservation_available': event.is_reservation_available(),
-            }
-            print(f"Added data for event {event.id}")
-        # Po pętli
-        print("Final events_data keys:", list(events_data.keys()))
+        # """ Pobierz aktywne wydarzenia do kontekstu (dla JavaScript) """
+        # events = Events.objects.filter(
+        #     is_active=True,
+        #     start_datetime__gte=timezone.now()
+        # ).order_by('start_datetime')
+        #
+        # events_data = {}
+        # for event in events:
+        #     print(f"Processing event ID: {event.id}, title: {event.title}")
+        #     events_data[str(event.id)] = {
+        #         'title': event.title,
+        #         'start_datetime': event.start_datetime.isoformat(),
+        #         'venue_name': event.venue.name,
+        #         'venue_address': event.venue.address,
+        #         'venue_city': event.venue.city,
+        #         'price': str(event.price) if event.price else 'Brak informacji',
+        #         'available_seats': event.get_available_seats(),
+        #         'is_fully_booked': event.is_fully_booked(),
+        #         'reservation_end_time_iso': event.reservation_end_time.isoformat() if event.reservation_end_time else None,
+        #         'reservation_available': event.is_reservation_available(),
+        #     }
+        #     print(f"Added data for event {event.id}")
+        # # Po pętli
+        # print("Final events_data keys:", list(events_data.keys()))
 
         context = {
             'form': form,
-            'events_data': json.dumps(events_data),
-            'events': events,
         }
 
         return render(request, 'universal_reservation_form.html', context)
@@ -348,6 +346,37 @@ class UniversalReservationView(ReservationEmailMixin, View):
         }
 
         return render(request, 'universal_reservation_form.html', context)
+
+class EventsDataApiView(View):
+    """
+    API dostarczające dane o aktywnych wydarzeniach w formacie JSON
+    """
+    def get(self, request):
+        """  Pobierz wszystkie aktywne, przyszłe wydarzenia """
+        events = Events.objects.filter(
+            is_active=True,
+            start_datetime__gte=timezone.now()
+        ).order_by('start_datetime')
+
+        """ Przygotuj dane w formacie JSON """
+        events_data = {}
+        for event in events:
+            events_data[str(event.id)] = {
+                'id': event.id,
+                'title': event.title,
+                'start_datetime': event.start_datetime.isoformat(),
+                'end_datetime': event.end_datetime.isoformat(),
+                'venue_name': event.venue.name,
+                'venue_address': event.venue.address,
+                'venue_city': event.venue.city,
+                'price': str(event.price) if event.price else "Brak informacji",
+                'available_seats': event.get_available_seats(),
+                'is_fully_booked': event.is_fully_booked(),
+                'reservation_end_time_iso': event.reservation_end_time.isoformat() if event.reservation_end_time else None,
+                'reservation_available': event.is_reservation_available(),
+            }
+        """ Zwróć dane w formie odpowiedzi JSON """
+        return JsonResponse(events_data)
 
 
 class EventTypeMixin(ContextMixin):

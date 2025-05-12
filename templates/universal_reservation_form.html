@@ -55,7 +55,7 @@
 <!--===================FORMULARZ REZERWACJI=========================-->
 <section class="reservation-form">
     <div class="wrapper">
-        <h1 class="reservation-form__title">Rezerwacja miejsca na: <br><span>"{{ event.title }}"</span></h1>
+        <h1 class="reservation-form__title">Ładowanie danych wydarzeń...</h1>
 
         <div class="reservation-form__information" id="event-info">
             <p><strong>Wybierz wydarzenie z listy, aby zobaczyć szczegóły</strong></p>
@@ -67,14 +67,14 @@
                 <div class="reservation-form__form">
                     <!-- Wybór wydarzenia -->
                     <div class="reservation-form__form-group" style="grid-column: 1 / -1;">
-                        <label for="{{ form.event.id_for_label }}" class="reservation-form__form-label">
-                            {{ form.event.label }}
+                        <label for="event-selector" class="reservation-form__form-label">
+                            Wybierz wydarzenie
                         </label>
-                        {{ form.event }}
+                        <select id="event-selector" name="event" class="form-control">
+                            <option value="">Ładowanie wydarzeń...</option>
+                        </select>
                         {% if form.event.errors %}
-                        <div class="reservation-form__form-block">
-                            {{ form.event.errors }}
-                        </div>
+                            <div class="reservation-form__form-block">{{ form.event.errors }}</div>
                         {% endif %}
                     </div>
                 
@@ -155,7 +155,7 @@
                 </small>
                 </div>
                 <div class="reservation-form__form-buttons">
-                    <a href="{% url 'index' %}" class="btn--secondary">Przejdź na stronę główną</a>
+                    <a href="{% url 'index' %}" class="btn btn--secondary">Przejdź na stronę główną</a>
                     <button type="submit" class="btn btn-primary" id="submit-button" disabled>Zarezerwuj miejsce</button>
                 </div>
                 </div>
@@ -178,14 +178,6 @@
     </div>
 </footer>
 <script defer src={% static "/../static/script/script.js" %}></script>
-<script defer src="{% static '/../static/script/universal_reservation_form.js' %}"></script>
-<!-- Skrypt inicjalizujący dane dla zewnętrznego JavaScript -->
-<script>
-    // Przekaz dane wydarzeń do zewnętrznego skryptu
-    eventsData = {{ events_data|safe }};
-    console.log('Loaded events data:', eventsData);
-    console.log('Events data type:', typeof eventsData);
-    console.log('Events data content:', JSON.stringify(eventsData, null, 2));
-</script>
+<script defer src="{% static '/../static/script/universal_reservation_api.js' %}"></script>
 </body>
 </html>

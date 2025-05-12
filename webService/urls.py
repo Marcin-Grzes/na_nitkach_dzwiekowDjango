@@ -21,7 +21,7 @@ from django.urls import path, include
 
 from events import views
 from events.views import (HomeView, Base, TestCalendar, ReservationSuccessView, ReservationAvailabilityView,
-                          UniversalReservationView)
+                          UniversalReservationView, EventsDataApiView)
 
 # from events.views import ReservationsView
 # from events.views import HomeView
@@ -43,6 +43,7 @@ urlpatterns = [
     path('api/calendar-events/', views.CalendarEventsApiView.as_view(), name='calendar_events_api'),
     path('api/events/<int:event_id>/check-reservation/', ReservationAvailabilityView.as_view(), name='check_reservation_availability'),
     path('reservation/', views.UniversalReservationView.as_view(), name='reservation'),
+    path('api/events-data/', views.EventsDataApiView.as_view(), name='events_data_api'),
 ]
 # Tylko w wersji developerskiej
 if settings.DEBUG:
