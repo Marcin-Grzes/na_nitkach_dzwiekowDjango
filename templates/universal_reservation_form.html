@@ -66,7 +66,7 @@
                 {% csrf_token %}
                 <div class="reservation-form__form">
                     <!-- Wybór wydarzenia -->
-                    <div class="reservation-form__form-group" style="grid-column: 1 / -1">
+                    <div class="reservation-form__form-group" style="grid-column: 1 / -1;">
                         <label for="{{ form.event.id_for_label }}" class="reservation-form__form-label">
                             {{ form.event.label }}
                         </label>
@@ -140,7 +140,7 @@
                 </small>
                 </div>
                 
-                <div class="reservation-form__form-group">
+                <div class="reservation-form__form-group" style="grid-column: 1 / -1;">
                     <label for="{{ form.newsletter_consent.id_for_label }}" class="reservation-form__form-label">
                         {{ form.newsletter_consent.label }}
                     </label>
@@ -183,6 +183,9 @@
 <script>
     // Przekaz dane wydarzeń do zewnętrznego skryptu
     eventsData = {{ events_data|safe }};
+    console.log('Loaded events data:', eventsData);
+    console.log('Events data type:', typeof eventsData);
+    console.log('Events data content:', JSON.stringify(eventsData, null, 2));
 </script>
 </body>
 </html>

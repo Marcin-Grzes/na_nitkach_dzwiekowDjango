@@ -8,8 +8,16 @@ const updateEventInfo = function () {
     const eventSelector = document.getElementById('event-selector');
     const eventInfo = document.getElementById('event-info');
     const submitButton = document.getElementById('submit-button');
+    console.log("DOM elements:", {
+        eventSelector,
+        eventInfo,
+        submitButton
+    });
 
     const selectedEventId = eventSelector.value;
+    console.log("Selected event ID:", selectedEventId);
+    console.log("Available events:", Object.keys(eventsData));
+    console.log("Event data for selected ID:", eventsData[selectedEventId]);
 
     if (selectedEventId && eventsData[selectedEventId]) {
         const event = eventsData[selectedEventId];
@@ -60,9 +68,12 @@ const updateEventInfo = function () {
 document.addEventListener('DOMContentLoaded', function (){
     const eventSelector = document.getElementById('event-selector');
     if (eventSelector) {
+        console.log("Found event selector with value:", eventSelector.value);
         // Dodaj nasłuchiwanie na zmiany w selektorze wydarzeń
         eventSelector.addEventListener('change', updateEventInfo);
         // Początkowa aktualizacja
         updateEventInfo();
+    } else {
+        console.error("Event selector not found in DOM!");
     }
 });

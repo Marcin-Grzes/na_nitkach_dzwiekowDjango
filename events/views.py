@@ -232,7 +232,8 @@ class UniversalReservationView(ReservationEmailMixin, View):
 
         events_data = {}
         for event in events:
-            events_data[event.id] = {
+            print(f"Processing event ID: {event.id}, title: {event.title}")
+            events_data[str(event.id)] = {
                 'title': event.title,
                 'start_datetime': event.start_datetime.isoformat(),
                 'venue_name': event.venue.name,
@@ -244,6 +245,9 @@ class UniversalReservationView(ReservationEmailMixin, View):
                 'reservation_end_time_iso': event.reservation_end_time.isoformat() if event.reservation_end_time else None,
                 'reservation_available': event.is_reservation_available(),
             }
+            print(f"Added data for event {event.id}")
+        # Po pętli
+        print("Final events_data keys:", list(events_data.keys()))
 
         context = {
             'form': form,
