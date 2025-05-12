@@ -1,4 +1,7 @@
+import json
+
 from django.contrib.admin.views.decorators import staff_member_required
+
 from django.http import JsonResponse
 from django.utils import timezone
 from django.core.mail import send_mail
@@ -13,7 +16,7 @@ from django.views.generic.base import ContextMixin, TemplateView
 from honeypot.decorators import check_honeypot
 
 from accounts.models import Customer
-from events.forms import EventReservationForm
+from events.forms import EventReservationForm, UniversalReservationForm
 from django.contrib import messages
 from events.models import EventType, Events, Reservations
 from events.services import cancel_reservation
@@ -59,7 +62,36 @@ class ReservationSuccessView(View):
         return render(request, 'reservation_success.html', context)
 
 
-class EventReservationView(View):
+class ReservationEmailMixin:
+    """Mixin dostarczający metody wysyłania emaili dla widoków rezerwacji"""
+
+    def send_confirmation_email(self, reservation):
+        subject = f'Potwierdzenie rezerwacji - {reservation.event.title}'
+
+        context = {
+            'first_name': reservation.customer.first_name,
+            'last_name': reservation.customer.last_name,
+            'participants_count': reservation.participants_count,
+            'email': reservation.customer.email,
+            'phone_number': str(reservation.customer.phone_number),
+            'payment_method': reservation.get_type_of_payments_display(),
+            'event': reservation.event,
+            'reservation': reservation,
+        }
+
+        html_message = render_to_string('events/event_reservation_confirmation.html', context)
+        plain_message = strip_tags(html_message)
+
+        send_mail(
+            subject,
+            plain_message,
+            None,  # używa DEFAULT_FROM_EMAIL z ustawień
+            [reservation.customer.email],
+            html_message=html_message,
+        )
+
+
+class EventReservationView(ReservationEmailMixin, View):
     """
     Widok do rezerwacji miejsc na konkretne wydarzenie.
     Przyjmuje ID wydarzenia z URL i tworzy odpowiednią rezerwację.
@@ -182,33 +214,136 @@ class EventReservationView(View):
 
         return render(request, 'event_reservation.html', context)
 
-    def send_confirmation_email(self, reservation):
-        subject = f'Potwierdzenie rezerwacji - {reservation.event.title}'
 
-        # Kontekst do szablonu z danymi wydarzenia
+class UniversalReservationView(ReservationEmailMixin, View):
+    """
+    Widok uniwersalnego formularza rezerwacji z możliwością wyboru wydarzenia z listy
+    """
+
+    def get(self, request):
+
+        form = UniversalReservationForm()
+
+        """ Pobierz aktywne wydarzenia do kontekstu (dla JavaScript) """
+        events = Events.objects.filter(
+            is_active=True,
+            start_datetime__gte=timezone.now()
+        ).order_by('start_datetime')
+
+        events_data = {}
+        for event in events:
+            events_data[event.id] = {
+                'title': event.title,
+                'start_datetime': event.start_datetime.isoformat(),
+                'venue_name': event.venue.name,
+                'venue_address': event.venue.address,
+                'venue_city': event.venue.city,
+                'price': str(event.price) if event.price else 'Brak informacji',
+                'available_seats': event.get_available_seats(),
+                'is_fully_booked': event.is_fully_booked(),
+                'reservation_end_time_iso': event.reservation_end_time.isoformat() if event.reservation_end_time else None,
+                'reservation_available': event.is_reservation_available(),
+            }
+
         context = {
-            'first_name': reservation.customer.first_name,
-            'last_name': reservation.customer.last_name,
-            'participants_count': reservation.participants_count,
-            'email': reservation.customer.email,
-            'phone_number': str(reservation.customer.phone_number),
-            'payment_method': reservation.get_type_of_payments_display(),
-            'event': reservation.event,  # Dodanie informacji o wydarzeniu
-            'reservation': reservation,
+            'form': form,
+            'events_data': json.dumps(events_data),
+            'events': events,
         }
 
-        # Generowanie wiadomości HTML z szablonu
-        html_message = render_to_string('events/event_reservation_confirmation.html', context)
-        plain_message = strip_tags(html_message)
+        return render(request, 'universal_reservation_form.html', context)
 
-        # Wysyłanie emaila
-        send_mail(
-            subject,
-            plain_message,
-            None,  # używa DEFAULT_FROM_EMAIL z ustawień
-            [reservation.customer.email],
-            html_message=html_message,
-        )
+    def post(self, request):
+        form = UniversalReservationForm(request.POST)
+
+        if form.is_valid():
+            event = form.cleaned_data['event']
+
+            """ Sprawdź dostępność rezerwacji dla wybranego wydarzenia """
+            if not event.is_reservation_avalaible():
+                messages.warning(request, "Rezerwacja online jest już niedostępna dla wybranego wydarzenia.")
+                return redirect('universal_reservation')
+
+            """ Pobierz dane klienta z formularza """
+            customer_data = {
+                'first_name': form.cleaned_data['first_name'],
+                'last_name': form.cleaned_data['last_name'],
+                'email': form.cleaned_data['email'],
+                'phone_number': form.cleaned_data['phone_number'],
+                'regulations_consent': form.cleaned_data['regulations_consent'],
+                'newsletter_consent': form.cleaned_data['newsletter_consent'],
+            }
+
+            """Sprawdź czy istnieje już klient o takim e-mailu i numerze telefonu"""
+
+            try:
+                customer = Customer.objects.get(
+                    email=customer_data['email'],
+                    phone_number=customer_data['phone_number']
+                )
+                customer.first_name = customer_data['first_name']
+                customer.last_name = customer_data['last_name']
+                customer.save()
+            except Customer.DoesNotExist:
+                """Utwórz nowego klienta"""
+                customer = Customer.objects.create(**customer_data)
+
+            # Utwórz nowy obiekt rezerwacji bez zapisywania w bazie
+            reservation = form.save(commit=False)
+            reservation.customer = customer
+            reservation.event = event
+
+            # Sprawdzenie czy liczba uczestników nie przekracza dostępnych miejsc
+            participants_count = form.cleaned_data['participants_count']
+            available_seats = event.get_available_seats()
+
+            # Ustawiamy status rezerwacji
+            if event.is_fully_booked() or participants_count > available_seats:
+                # Dodanie do listy rezerwowej
+                form.instance.status = Reservations.ReservationStatus.WAITLIST
+                form.instance.waitlist_position = event.get_next_waitlist_position()
+                message = "Zostałeś dodany do listy rezerwowej. Powiadomimy Cię, jeśli zwolni się miejsce."
+            else:
+                # Standardowa rezerwacja
+                form.instance.status = Reservations.ReservationStatus.CONFIRMED
+                message = "Twoja rezerwacja została potwierdzona."
+
+            # Zapisujemy rezerwację
+            reservation.save()
+
+            # Wysyłka emaila potwierdzającego
+            self.send_confirmation_email(reservation)
+
+            # Przekierowanie do strony potwierdzenia zamiast wiadomości flash
+            return redirect('reservation_success', event_id=event.id, reservation_id=reservation.id)
+        # Jeśli formularz zawiera błędy, wyświetl go ponownie
+        events = Events.objects.filter(
+            is_active=True,
+            start_datetime__gte=timezone.now()
+        ).order_by('start_datetime')
+
+        events_data = {}
+        for event in events:
+            events_data[event.id] = {
+                'title': event.title,
+                'start_datetime': event.start_datetime.isoformat(),
+                'venue_name': event.venue.name,
+                'venue_address': event.venue.address,
+                'venue_city': event.venue.city,
+                'price': str(event.price) if event.price else "Brak informacji",
+                'available_seats': event.get_available_seats(),
+                'is_fully_booked': event.is_fully_booked(),
+                'reservation_end_time_iso': event.reservation_end_time.isoformat() if event.reservation_end_time else None,
+                'reservation_available': event.is_reservation_available(),
+            }
+
+        context = {
+            'form': form,
+            'events_data': json.dumps(events_data),
+            'events': events,
+        }
+
+        return render(request, 'universal_reservation_form.html', context)
 
 
 class EventTypeMixin(ContextMixin):

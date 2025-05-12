@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="description" content="Na nitkach dźwięków - relaksacyjne koncerty na misach dźwiękowych w Grodzisku
+    Mazowieckim, Milanówku i okolicach">
+    <meta name="keywords" content="relaks, misa tybetańska, gong, medytacja, rozwój duchowy">
+    <meta name="author" content="Marcin Grześ">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Faculty+Glyphic&display=swap" rel="stylesheet">
+    {% block title %}<title>Rezerwacja</title>{% endblock %}
+    <link rel="stylesheet" href="{% static '/style/style.css' %}">
+    <link rel="stylesheet" href="{% static '/style/hamburgers.css' %}">
+    <link rel="stylesheet" href="{% static '/style/reservationForm.css' %}">
+</head>
+<body>
+
+
+<!--===================NAWIGACJA=========================-->
+
+<nav class="nav">
+    <div class="nav__items--destkop">
+        <a href="{% url 'index' %}#about_me" class="nav__item">O mnie</a>
+        <a href="{% url 'event_calendar' %}" class="nav__item">Kalendarz koncertów</a>
+        <a href="{% url 'index' %}#about_therapy" class="nav__item">O terapii dźwiękiem</a>
+        <a href="{% url 'index' %}#concerts" class="nav__item">Koncerty</a>
+        <a href="{% url 'index' %}#firm" class="nav__item">Dla firm</a>
+        <a href="{% url 'index' %}#practical" class="nav__item">Praktyczne informacje</a>
+        <a href="{% url 'index' %}#contact" class="nav__item">Kontakt</a>
+    </div>
+
+    <div class="nav__items-mobile nav__items-mobile--active" id="nav-mobile">
+        <a href="{% url 'index' %}#about_me" class="nav__item nav__item--mobile">O mnie</a>
+        <a href="{% url 'event_calendar' %}" class="nav__item nav__item--mobile">Kalendarz koncertów</a>
+        <a href="{% url 'index' %}#about_therapy" class="nav__item nav__item--mobile">O terapii dźwiękiem</a>
+        <a href="{% url 'index' %}#concerts" class="nav__item nav__item--mobile">Koncerty</a>
+        <a href="{% url 'index' %}#firm" class="nav__item nav__item--mobile">Dla firm</a>
+        <a href="{% url 'index' %}#practical" class="nav__item nav__item--mobile">Praktyczne informacje</a>
+        <a href="{% url 'index' %}#contact" class="nav__item nav__item--mobile">Kontakt</a>
+    </div>
+
+    <button class="hamburger hamburger--emphatic" type="button" aria-label="Otwórz menu" aria-expanded="false"
+            aria-controls="nav-mobile">
+  <span class="hamburger-box">
+    <span class="hamburger-inner"></span>
+  </span>
+    </button>
+</nav>
+
+<!--===================FORMULARZ REZERWACJI=========================-->
+<section class="reservation-form">
+    <div class="wrapper">
+        <h1 class="reservation-form__title">Rezerwacja miejsca na: <br><span>"{{ event.title }}"</span></h1>
+
+        <div class="reservation-form__information" id="event-info">
+            <p><strong>Wybierz wydarzenie z listy, aby zobaczyć szczegóły</strong></p>
+        </div>
+        
+        <div class="reservation-form-container">
+            <form method="post" novalidate id="reservation-form">
+                {% csrf_token %}
+                <div class="reservation-form__form">
+                    <!-- Wybór wydarzenia -->
+                    <div class="reservation-form__form-group" style="grid-column: 1 / -1">
+                        <label for="{{ form.event.id_for_label }}" class="reservation-form__form-label">
+                            {{ form.event.label }}
+                        </label>
+                        {{ form.event }}
+                        {% if form.event.errors %}
+                        <div class="reservation-form__form-block">
+                            {{ form.event.errors }}
+                        </div>
+                        {% endif %}
+                    </div>
+                
+                    <!-- Pozostałe pola formularza -->
+                
+                <div class="reservation-form__form-group">
+                    <label for="{{ form.first_name.id_for_label }}" class="reservation-form__form-label">
+                        {{ form.first_name.label }}
+                    </label>
+                    {{ form.first_name }}
+                    {% if form.first_name.errors %}
+                    <div class="reservation-form__form-block">{{ form.first_name.errors }}</div>
+                    {% endif %}
+                </div>
+                
+                <div class="reservation-form__form-group">
+                    <label for="{{ form.last_name.id_for_label }}" class="reservation-form__form-label">
+                        {{ form.last_name.label }}
+                    </label>
+                    {{ form.last_name }}
+                    {% if form.last_name.errors %}
+                    <div class="reservation-form__form-block">{{ form.last_name.errors }}</div>
+                    {% endif %}
+                </div>
+                <div class="reservation-form__form-group">
+                    <label for="{{ form.email.id_for_label }}" class="reservation-form__form-label">
+                        {{ form.email.label }}
+                    </label>
+                    {{ form.email }}
+                    {% if form.email.errors %}
+                    <div class="reservation-form__form-block">{{ form.email.errors }}</div>
+                    {% endif %}
+                </div>
+                <div class="reservation-form__form-group">
+                    <label for="{{ form.phone_number.id_for_label }}" class="reservation-form__form-label">
+                        {{ form.phone_number.label }}
+                    </label>
+                    {{ form.phone_number }}
+                    {% if form.phone_number.errors %}
+                    <div class="reservation-form__form-block">{{ form.phone_number.errors }}</div>
+                    {% endif %}
+                </div>
+                <div class="reservation-form__form-group">
+                    <label for="{{ form.participants_count.id_for_label }}" class="reservation-form__form-label">
+                        {{ form.participants_count.label }}
+                    </label>
+                    {{ form.participants_count }}
+                    {% if form.participants_count.errors %}
+                    <div class="reservation-form__form-block">{{ form.participants_count.errors }}</div>
+                    {% endif %}
+                </div>
+                
+                <div class="reservation-form__form-group">
+                    <label for="{{ form.regulations_consent.id_for_label }}" class="reservation-form__form-label">
+                        {{ form.regulations_consent.label }}
+                    </label>
+                    {{ form.regulations_consent }}
+                    {% if form.regulations_consent.errors %}
+                    <div class="reservation-form__form-block">{{ form.regulations_consent.errors }}</div>
+                    {% endif %}
+                <small class="reservation-form__form-text">
+                    {{ form.regulations_consent.help_text }}
+                </small>
+                </div>
+                
+                <div class="reservation-form__form-group">
+                    <label for="{{ form.newsletter_consent.id_for_label }}" class="reservation-form__form-label">
+                        {{ form.newsletter_consent.label }}
+                    </label>
+                    {{ form.newsletter_consent }}
+                    {% if form.newsletter_consent.errors %}
+                    <div class="reservation-form__form-block">
+                        {{ form.newsletter_consent.errors }}
+                    </div>
+                    {% endif %}
+                <small class="reservation-form__form-text">
+                    {{ form.newsletter_consent.help_text }}
+                </small>
+                </div>
+                <div class="reservation-form__form-buttons">
+                    <a href="{% url 'index' %}" class="btn--secondary">Przejdź na stronę główną</a>
+                    <button type="submit" class="btn btn-primary" id="submit-button" disabled>Zarezerwuj miejsce</button>
+                </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+<!--===================STOPKA=========================-->
+
+<footer class="footer">
+    <div class="wrapper">
+        <div class="footer__content">
+            <p class="footer__copyright">
+                &copy; <span class="footer__year"></span>
+                <span class="footer__owner">Beata Witkowska</span>
+                <span class="footer__rights">Wszelkie prawa zastrzeżone</span>
+            </p>
+        </div>
+    </div>
+</footer>
+<script defer src={% static "/../static/script/script.js" %}></script>
+<script defer src="{% static '/../static/script/universal_reservation_form.js' %}"></script>
+<!-- Skrypt inicjalizujący dane dla zewnętrznego JavaScript -->
+<script>
+    // Przekaz dane wydarzeń do zewnętrznego skryptu
+    eventsData = {{ events_data|safe }};
+</script>
+</body>
+</html>

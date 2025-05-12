@@ -1,3 +1,5 @@
+from django.utils import timezone
+
 from django import forms
 from .models import Reservations, Events, EventType, Venue
 from accounts.models import Customer
@@ -76,3 +78,60 @@ class EventReservationForm(forms.ModelForm):
             self.add_error('regulations_consent', 'Ta zgoda jest wymagana do realizacji rezerwacji.')
 
         return cleaned_data
+
+
+class UniversalReservationForm(forms.ModelForm):
+
+    """ Uniwersalny formularz z możliwością wyboru wydarzenia z listy """
+
+    event = forms.ModelChoiceField(
+        queryset=Events.objects.none(), # # Pusty queryset, będzie aktualizowany w __init__
+        label="Wybierz wydarzenie",
+        widget=forms.Select(attrs={'class': 'form-control', 'id': 'event-selector'}),
+    )
+
+    """ Pozostałe pola jak w EventReservationForm """
+
+    first_name = forms.CharField(label="Imię", max_length=50)
+    last_name = forms.CharField(label="Nazwisko", max_length=50)
+    email = forms.EmailField(label="Adres email")
+    phone_number = forms.CharField(label="Numer telefonu")
+    regulations_consent = forms.BooleanField(
+        label="Akceptacja regulaminu i polityki prywatności.",
+        required=True,
+        help_text="Akceptuję regulamin i politykę prywatności."
+    )
+    newsletter_consent = forms.BooleanField(
+        label="Zapisz mnie na newsletter.",
+        required=False,
+        help_text="Chcę zapisać się newsletter, by otrzymywać informacje o przyszłych wydarzeniach wydarzeniach"
+                  " i ofertach specjalnych."
+    )
+
+    class Meta:
+        model = Reservations
+        fields = [
+            'event',
+            'participants_count',
+            'type_of_payments',
+        ]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Ustaw queryset dla aktywnych przyszłych wydarzeń
+        self.fields['event'].queryset = Events.objects.filter(
+            is_active=True,
+            start_datetime__gte=timezone.now()
+        ).order_by('start_datetime')
+
+        self.fields['participants_count'].help_text = "Podaj liczbę osób biorących udział w wydarzeniu."
+
+    def clean(self):
+        cleaned_data = super().clean()
+
+        # Weryfikacja obowiązkowych zgód
+        if not cleaned_data.get('regulations_consent'):
+            self.add_error('regulations_consent', 'Ta zgoda jest wymagana do realizacji rezerwacji.')
+
+        return cleaned_data
+
