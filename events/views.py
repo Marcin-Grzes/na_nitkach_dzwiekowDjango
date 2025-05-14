@@ -262,7 +262,7 @@ class UniversalReservationView(ReservationEmailMixin, View):
             event = form.cleaned_data['event']
 
             """ Sprawdź dostępność rezerwacji dla wybranego wydarzenia """
-            if not event.is_reservation_avalaible():
+            if not event.is_reservation_available():
                 messages.warning(request, "Rezerwacja online jest już niedostępna dla wybranego wydarzenia.")
                 return redirect('universal_reservation')
 

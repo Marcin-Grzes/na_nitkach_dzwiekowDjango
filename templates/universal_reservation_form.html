@@ -59,14 +59,16 @@
 
         <div class="reservation-form__information" id="event-info">
             <p><strong>Wybierz wydarzenie z listy, aby zobaczyć szczegóły</strong></p>
+            <!-- Wybór wydarzenia -->
+                    
         </div>
-        
+
         <div class="reservation-form-container">
             <form method="post" novalidate id="reservation-form">
                 {% csrf_token %}
                 <div class="reservation-form__form">
-                    <!-- Wybór wydarzenia -->
-                    <div class="reservation-form__form-group" style="grid-column: 1 / -1;">
+                
+                <div class="reservation-form__form-group" style="grid-column: 1 / -1;">
                         <label for="event-selector" class="reservation-form__form-label">
                             Wybierz wydarzenie
                         </label>
@@ -77,87 +79,99 @@
                             <div class="reservation-form__form-block">{{ form.event.errors }}</div>
                         {% endif %}
                     </div>
-                
+                    
+
                     <!-- Pozostałe pola formularza -->
-                
-                <div class="reservation-form__form-group">
-                    <label for="{{ form.first_name.id_for_label }}" class="reservation-form__form-label">
-                        {{ form.first_name.label }}
-                    </label>
-                    {{ form.first_name }}
-                    {% if form.first_name.errors %}
-                    <div class="reservation-form__form-block">{{ form.first_name.errors }}</div>
-                    {% endif %}
-                </div>
-                
-                <div class="reservation-form__form-group">
-                    <label for="{{ form.last_name.id_for_label }}" class="reservation-form__form-label">
-                        {{ form.last_name.label }}
-                    </label>
-                    {{ form.last_name }}
-                    {% if form.last_name.errors %}
-                    <div class="reservation-form__form-block">{{ form.last_name.errors }}</div>
-                    {% endif %}
-                </div>
-                <div class="reservation-form__form-group">
-                    <label for="{{ form.email.id_for_label }}" class="reservation-form__form-label">
-                        {{ form.email.label }}
-                    </label>
-                    {{ form.email }}
-                    {% if form.email.errors %}
-                    <div class="reservation-form__form-block">{{ form.email.errors }}</div>
-                    {% endif %}
-                </div>
-                <div class="reservation-form__form-group">
-                    <label for="{{ form.phone_number.id_for_label }}" class="reservation-form__form-label">
-                        {{ form.phone_number.label }}
-                    </label>
-                    {{ form.phone_number }}
-                    {% if form.phone_number.errors %}
-                    <div class="reservation-form__form-block">{{ form.phone_number.errors }}</div>
-                    {% endif %}
-                </div>
-                <div class="reservation-form__form-group">
-                    <label for="{{ form.participants_count.id_for_label }}" class="reservation-form__form-label">
-                        {{ form.participants_count.label }}
-                    </label>
-                    {{ form.participants_count }}
-                    {% if form.participants_count.errors %}
-                    <div class="reservation-form__form-block">{{ form.participants_count.errors }}</div>
-                    {% endif %}
-                </div>
-                
-                <div class="reservation-form__form-group">
-                    <label for="{{ form.regulations_consent.id_for_label }}" class="reservation-form__form-label">
-                        {{ form.regulations_consent.label }}
-                    </label>
-                    {{ form.regulations_consent }}
-                    {% if form.regulations_consent.errors %}
-                    <div class="reservation-form__form-block">{{ form.regulations_consent.errors }}</div>
-                    {% endif %}
-                <small class="reservation-form__form-text">
-                    {{ form.regulations_consent.help_text }}
-                </small>
-                </div>
-                
-                <div class="reservation-form__form-group" style="grid-column: 1 / -1;">
-                    <label for="{{ form.newsletter_consent.id_for_label }}" class="reservation-form__form-label">
-                        {{ form.newsletter_consent.label }}
-                    </label>
-                    {{ form.newsletter_consent }}
-                    {% if form.newsletter_consent.errors %}
-                    <div class="reservation-form__form-block">
-                        {{ form.newsletter_consent.errors }}
+
+                    <div class="reservation-form__form-group">
+                        <label for="{{ form.first_name.id_for_label }}" class="reservation-form__form-label">
+                            {{ form.first_name.label }}
+                        </label>
+                        {{ form.first_name }}
+                        {% if form.first_name.errors %}
+                            <div class="reservation-form__form-block">{{ form.first_name.errors }}</div>
+                        {% endif %}
                     </div>
-                    {% endif %}
-                <small class="reservation-form__form-text">
-                    {{ form.newsletter_consent.help_text }}
-                </small>
-                </div>
-                <div class="reservation-form__form-buttons">
-                    <a href="{% url 'index' %}" class="btn btn--secondary">Przejdź na stronę główną</a>
-                    <button type="submit" class="btn btn-primary" id="submit-button" disabled>Zarezerwuj miejsce</button>
-                </div>
+
+                    <div class="reservation-form__form-group">
+                        <label for="{{ form.last_name.id_for_label }}" class="reservation-form__form-label">
+                            {{ form.last_name.label }}
+                        </label>
+                        {{ form.last_name }}
+                        {% if form.last_name.errors %}
+                            <div class="reservation-form__form-block">{{ form.last_name.errors }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="reservation-form__form-group">
+                        <label for="{{ form.email.id_for_label }}" class="reservation-form__form-label">
+                            {{ form.email.label }}
+                        </label>
+                        {{ form.email }}
+                        {% if form.email.errors %}
+                            <div class="reservation-form__form-block">{{ form.email.errors }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="reservation-form__form-group">
+                        <label for="{{ form.phone_number.id_for_label }}" class="reservation-form__form-label">
+                            {{ form.phone_number.label }}
+                        </label>
+                        {{ form.phone_number }}
+                        {% if form.phone_number.errors %}
+                            <div class="reservation-form__form-block">{{ form.phone_number.errors }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="reservation-form__form-group">
+                        <label for="{{ form.participants_count.id_for_label }}" class="reservation-form__form-label">
+                            {{ form.participants_count.label }}
+                        </label>
+                        {{ form.participants_count }}
+                        {% if form.participants_count.errors %}
+                            <div class="reservation-form__form-block">{{ form.participants_count.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="reservation-form__form-group">
+                        <label for="{{ form.type_of_payments.id_for_label }}"
+                               class="reservation-form__form-label">{{ form.type_of_payments.label }}</label>
+                        {{ form.type_of_payments }}
+                        {% if form.type_of_payments.errors %}
+                            <div class="reservation-form__form-block">{{ form.type_of_payments.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="reservation-form__form-group" style="grid-column: 1 / -1;">
+                            <div class="reservation-form__form-check">
+                                {{ form.regulations_consent }}
+                                <label class="reservation-form__form-label"
+                                       for="{{ form.regulations_consent.id_for_label }}">
+                                    {{ form.regulations_consent.label }}
+                                </label>
+                            </div>
+                            {% if form.regulations_consent.errors %}
+                                <div class="reservation-form__form-block">{{ form.regulations_consent.errors }}</div>
+                            {% endif %}
+                            <small class="reservation-form__form-text">{{ form.regulations_consent.help_text }}</small>
+                        </div>
+
+                    <div class="reservation-form__form-group" style="grid-column: 1 / -1;">
+                            <div class="reservation-form__form-check">
+                                {{ form.newsletter_consent }}
+                                <label class="reservation-form__form-label"
+                                       for="{{ form.newsletter_consent.id_for_label }}">
+                                    {{ form.newsletter_consent.label }}
+                                </label>
+                            </div>
+                            {% if form.newsletter_consent.errors %}
+                                <div class="reservation-form__form-block">{{ form.newsletter_consent.errors }}</div>
+                            {% endif %}
+                            <small class="reservation-form__form-text">{{ form.newsletter_consent.help_text }}</small>
+                        </div>
+                
+                    <div class="reservation-form__form-buttons">
+                        <a href="{% url 'index' %}" class="btn btn-secondary">Przejdź na stronę główną</a>
+                        <button type="submit" class="btn btn-primary" id="submit-button" disabled>Zarezerwuj miejsce
+                        </button>
+                    </div>
                 </div>
             </form>
         </div>
