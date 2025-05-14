@@ -1,6 +1,7 @@
 import json
 
 from django.contrib.admin.views.decorators import staff_member_required
+from django.db import IntegrityError
 
 from django.http import JsonResponse
 from django.utils import timezone
@@ -277,11 +278,11 @@ class UniversalReservationView(ReservationEmailMixin, View):
             }
 
             """Sprawdź czy istnieje już klient o takim e-mailu i numerze telefonu"""
-
+            """Pierwsze rozwiązanie - występuje błąd"""
             try:
                 customer = Customer.objects.get(
                     email=customer_data['email'],
-                    phone_number=customer_data['phone_number']
+                    # phone_number=customer_data['phone_number']
                 )
                 customer.first_name = customer_data['first_name']
                 customer.last_name = customer_data['last_name']
@@ -289,6 +290,50 @@ class UniversalReservationView(ReservationEmailMixin, View):
             except Customer.DoesNotExist:
                 """Utwórz nowego klienta"""
                 customer = Customer.objects.create(**customer_data)
+
+            """Drugie rozwiązanie - występuje błąd"""
+            # defaults = customer_data.copy()
+            # email = defaults.pop('email')
+            # phone_number = defaults.pop('phone_number')
+            #
+            # customer, created = Customer.objects.get_or_create(
+            #     email=email,
+            #     phone_number=phone_number,
+            #     defaults=defaults
+            # )
+            # if not created:
+            #     """Jeśli klient istniał, aktualizujemy jego dane"""
+            #     customer.first_name = customer_data['first_name']
+            #     customer.last_name = customer_data['last_name']
+            #     customer.save()
+
+            # Normalizacja danych - usunięcie białych znaków
+            # email = customer_data['email'].strip().lower()
+            # phone_number = str(customer_data['phone_number'])
+
+
+            """Rozwiązanie trzecie"""
+            # Spróbuj znaleźć klienta z elastycznym zapytaniem
+            # try:
+            #     # Najpierw sprawdź z dokładnym dopasowaniem
+            #     customer = Customer.objects.get(
+            #         email=email,
+            #         phone_number=phone_number
+            # )
+            #     # Aktualizuj dane, jeśli klient istnieje
+            #     customer.first_name = customer_data['first_name']
+            #     customer.last_name = customer_data['last_name']
+            #     customer.save(update_fields=['first_name', 'last_name'])
+            #
+            # except Customer.DoesNotExist:
+            #     try:
+            #         customer = Customer.objects.create(**customer_data)
+            #     except IntegrityError:
+            #         """Jeśli nadal występuje problem, szukamy jeszcze raz. Może ktoś inny właśnie utworzył tego klienta"""
+            #         customer = Customer.objects.get(
+            #             email=email,
+            #             phone_number=phone_number
+            #         )
 
             # Utwórz nowy obiekt rezerwacji bez zapisywania w bazie
             reservation = form.save(commit=False)

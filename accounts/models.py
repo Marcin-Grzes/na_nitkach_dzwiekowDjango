@@ -33,7 +33,7 @@ class Customer(models.Model):
         verbose_name = _("Klient")
         verbose_name_plural = _("Klienci")
         """Dodajemy unikalność dla kombinacji email i numer telefonu"""
-        unique_together = [["email", "phone_number"]]
+        unique_together = ["email"]
 
     def __str__(self):
         return f"{self.first_name} {self.last_name} {self.email}"
