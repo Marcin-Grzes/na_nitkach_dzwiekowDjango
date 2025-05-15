@@ -7,6 +7,7 @@ from django.urls import reverse
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 from tinymce.widgets import TinyMCE
+from accounts.admin_base import MetadataAdminModel
 
 from accounts import models
 from .models import Reservations, EventType, EventImage, Events, Venue
@@ -44,7 +45,7 @@ class EventInline(admin.TabularInline):
 
 
 @admin.register(Reservations)
-class ReservationsAdmin(admin.ModelAdmin):
+class ReservationsAdmin(MetadataAdminModel):
 
     change_list_template = '../templates/admin/change_list.html'
 
@@ -53,6 +54,7 @@ class ReservationsAdmin(admin.ModelAdmin):
     list_display = ['get_customer_name', 'customer_email', 'customer_phone_number',
                     'event', 'status', 'participants_count', 'created_at',
                     'type_of_payments', 'created_at', 'get_newsletter_consent',
+                    'updated_at', 'created_by_admin', 'created_ip', 'updated_ip',
                     ]
 
     """Metody pomocnicze:"""
@@ -143,10 +145,10 @@ class ReservationsAdmin(admin.ModelAdmin):
         ('Informacje o płatności', {
             'fields': ['type_of_payments']
         }),
-        ('Metadane', {
-            'fields': ['created_at'],
-            'classes': ['collapse']  # zwijana sekcja
-        }),
+        # ('Metadane', {
+        #     'fields': ['created_at', 'updated_at', 'created_by_admin', 'created_ip', 'updated_ip'],
+        #     'classes': ['collapse']  # zwijana sekcja
+        # }),
     ]
 
 
@@ -248,7 +250,7 @@ class EventImageAdmin(admin.ModelAdmin):
 
 
 @admin.register(Events)
-class EventsAdmin(admin.ModelAdmin):
+class EventsAdmin(MetadataAdminModel):
     form = EventAdminForm
     list_display = ['title', 'type_of_events', 'start_datetime', 'end_datetime',
                     'venue','price', 'max_participants', 'get_available_seats', 'is_active']

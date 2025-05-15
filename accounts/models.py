@@ -1,12 +1,16 @@
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
 from django.utils.translation import gettext_lazy as _
-
+from .models_base import BaseMetadataModel
 
 # Create your models here.
-"""Model użytkownika dokonującego rezerwacji bez powiązania z systemem authenticity Django.
-Bez logowania i rejestracji"""
-class Customer(models.Model):
+
+
+class Customer(BaseMetadataModel):
+    """
+    Model użytkownika dokonującego rezerwacji bez powiązania z systemem authenticity Django.
+    Bez logowania i rejestracji
+    """
     first_name = models.CharField(_("Imię"), max_length=50)
     last_name = models.CharField(_("Nazwisko"), max_length=50)
     email = models.EmailField(_("Adres email"))
@@ -25,9 +29,6 @@ class Customer(models.Model):
         help_text=_("Chcę zapisać się na newsletter, by otrzymywać informacje o przyszłych wydarzeniach i ofertach "
                     "specjalnych.")
     )
-
-    # Metadane
-    created_at = models.DateTimeField(_("Data utworzenia"), auto_now_add=True)
 
     class Meta:
         verbose_name = _("Klient")

@@ -165,19 +165,24 @@ class EventReservationView(ReservationEmailMixin, View):
             try:
                 customer = Customer.objects.get(
                     email=customer_data['email'],
-                    phone_number=customer_data['phone_number']
+                    # phone_number=customer_data['phone_number']
                 )
                 customer.first_name = customer_data['first_name']
                 customer.last_name = customer_data['last_name']
+                customer.updated_ip = request.client_ip  # Dodaj IP aktualizacji
                 customer.save()
             except Customer.DoesNotExist:
                 """Utwórz nowego klienta"""
+                customer_data['created_ip'] = request.client_ip # Dodaj IP utworzenia
+                customer_data['created_by_admin'] = False # Utworzone przez klienta
                 customer = Customer.objects.create(**customer_data)
 
             # Utwórz nowy obiekt rezerwacji bez zapisywania w bazie
             reservation = form.save(commit=False)
             reservation.customer = customer
             reservation.event = event
+            reservation.created_ip = request.client_ip # Dodaj IP utworzenia
+            reservation.created_by_admin = False # Utworzone przez klienta
 
             # Sprawdzenie czy liczba uczestników nie przekracza dostępnych miejsc
             participants_count = form.cleaned_data['participants_count']
@@ -286,9 +291,12 @@ class UniversalReservationView(ReservationEmailMixin, View):
                 )
                 customer.first_name = customer_data['first_name']
                 customer.last_name = customer_data['last_name']
+                customer.updated_ip = request.client_ip  # Dodaj IP aktualizacji
                 customer.save()
             except Customer.DoesNotExist:
                 """Utwórz nowego klienta"""
+                customer_data['created_ip'] = request.client_ip  # Dodaj IP utworzenia
+                customer_data['created_by_admin'] = False  # Utworzone przez klienta
                 customer = Customer.objects.create(**customer_data)
 
             """Drugie rozwiązanie - występuje błąd"""
@@ -339,6 +347,8 @@ class UniversalReservationView(ReservationEmailMixin, View):
             reservation = form.save(commit=False)
             reservation.customer = customer
             reservation.event = event
+            reservation.created_ip = request.client_ip  # Dodaj IP utworzenia
+            reservation.created_by_admin = False  # Utworzone przez klienta
 
             # Sprawdzenie czy liczba uczestników nie przekracza dostępnych miejsc
             participants_count = form.cleaned_data['participants_count']

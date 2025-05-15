@@ -20,10 +20,11 @@ from tinymce.models import HTMLField
 from djmoney.models.fields import MoneyField
 from djmoney.models.managers import money_manager
 from accounts.models import Customer
+from accounts.models_base import BaseMetadataModel
 # Create your models here.
 
 
-class Reservations(models.Model):
+class Reservations(BaseMetadataModel):
 
     class ReservationStatus(models.TextChoices):
         CONFIRMED = 'confirmed', _('Potwierdzona')
@@ -43,7 +44,7 @@ class Reservations(models.Model):
         on_delete=models.CASCADE,
         related_name="reservations",
         verbose_name=_("Klient"),
-        null=True, # Ważne! Dodaj to, aby migracja mogła się wykonać na istniejących danych - Tymczasowo
+        null=True,  # Ważne! Dodaj to, aby migracja mogła się wykonać na istniejących danych - Tymczasowo
     )
 
     """Dodaj pole pozycji na liście rezerwowej (przydatne do określenia kolejności)"""
@@ -106,9 +107,8 @@ class Reservations(models.Model):
 
     # Tu były pola zgód
 
-
     # Metadane
-    created_at = models.DateTimeField(_("Data utworzenia"), auto_now_add=True)
+    # created_at = models.DateTimeField(_("Data utworzenia"), auto_now_add=True)
 
     class Meta:
         verbose_name = _("Rezerwacja")
@@ -120,7 +120,8 @@ class Reservations(models.Model):
         else:
             return f"Rezerwacja #{self.id} - {self.created_at.strftime('%Y-%m-%d %H:%M')}"
 
-class Venue(models.Model):
+
+class Venue(BaseMetadataModel):
     name = models.CharField(_("Nazwa miejsca"), max_length=100)
     address = models.CharField(_("Adres"), max_length=255)
     city = models.CharField(_("Miasto"), max_length=100)
@@ -144,7 +145,7 @@ class Venue(models.Model):
         return f"{self.name}, {self.address}, {self.city}"
 
 
-class EventType(models.Model):
+class EventType(BaseMetadataModel):
     name = models.CharField(_("Nazwa typu"), max_length=100)
     description = models.TextField(_("Opis"), blank=True)
     slug = models.SlugField(_("Identyfikator"), unique=True)
@@ -165,7 +166,7 @@ class EventType(models.Model):
         super().save(*args, **kwargs)
 
 
-class EventImage(models.Model):
+class EventImage(BaseMetadataModel):
     event = models.ForeignKey(
         'Events',
         on_delete=models.CASCADE,
@@ -229,7 +230,7 @@ class EventManager(models.Manager):
         return self.active().filter(start_datetime__gte=timezone.now())
 
 
-class Events(models.Model):
+class Events(BaseMetadataModel):
     title = models.CharField(_("Tytuł wydarzenia"), max_length=200)
 
     type_of_events = models.ForeignKey(
@@ -264,8 +265,7 @@ class Events(models.Model):
 
     reserve_list = models.PositiveIntegerField(
         _("Lista rezerwowa"),
-        default=0,
-    #     defeault jest tymczasowo
+        default=0,  # defeault jest tymczasowo
     )
 
     # description = models.TextField(_("Opis wydarzenia"), blank=True)
@@ -292,8 +292,8 @@ class Events(models.Model):
     )
 
     # Metadane
-    created_at = models.DateTimeField(_("Data utworzenia"), auto_now_add=True)
-    updated_at = models.DateTimeField(_("Data aktualizacji"), auto_now=True)
+    # created_at = models.DateTimeField(_("Data utworzenia"), auto_now_add=True)
+    # updated_at = models.DateTimeField(_("Data aktualizacji"), auto_now=True)
     is_active = models.BooleanField(_("Aktywne"), default=True)
 
     class Meta:
