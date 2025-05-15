@@ -1,5 +1,6 @@
 import uuid
 
+from django.db.models import Sum
 from django.conf import settings
 from django.core.mail import send_mail
 from django.db.models import Max
@@ -344,6 +345,15 @@ class Events(models.Model):
     def get_waitlist_count(self):
         """Zwraca liczbę osób na liście rezerwowej"""
         return self.reservations.filter(status=Reservations.ReservationStatus.WAITLIST).count()
+
+    def get_waitlist_participants_count(self):
+        """ Zwraca łączną liczbę uczestników na liście rezerwowej """
+        result = self.reservations.filter(
+            status=Reservations.ReservationStatus.WAITLIST
+        ).aggregate(
+            total=Sum('participants_count')
+        )['total']
+        return result or 0
 
     def get_next_waitlist_position(self):
         """Zwraca następną pozycję na liście rezerwowej"""

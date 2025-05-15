@@ -165,7 +165,7 @@
                                         Zapisz się na listę rezerwową
                                     </a>
                                     <p class="event-detail__cta-info event-detail__cta-info--warning">
-                                        Obecnie na liście rezerwowej: {{ event.get_waitlist_count }} osób
+                                        Ilość osób na liście rezerwowej: {{ event.get_waitlist_participants_count }}.
                                     </p>
                                 {% else %}
                                     <a href="{% url 'event_reservation' event.id %}" class="event-detail__cta-button">

@@ -276,7 +276,7 @@ class EventsAdmin(admin.ModelAdmin):
     readonly_fields = [
         'reserved_seats_display',
         'available_seats_display',
-        'waitlist_count_display',
+        'waitlist_participants_count',
     ]
     class Media:
         js = ('admin/js/admin_enhancements.js',)
@@ -294,7 +294,7 @@ class EventsAdmin(admin.ModelAdmin):
                 'reservation_end_time',
                 'reserved_seats_display',
                 'available_seats_display',
-                'waitlist_count_display',
+                'waitlist_participants_count',
             ]
         }),
         ('Status', {
@@ -341,8 +341,8 @@ class EventsAdmin(admin.ModelAdmin):
 
     available_seats_display.short_description = "Dostępne miejsca"
 
-    def waitlist_count_display(self, obj):
-        waitlist_count = obj.get_waitlist_count()
+    def waitlist_participants_count(self, obj):
+        waitlist_count = obj.get_waitlist_participants_count()
 
         if waitlist_count == 0:
             return format_html('<div style="color: black;">Brak osób na liście rezerwowej</div>')
@@ -352,7 +352,7 @@ class EventsAdmin(admin.ModelAdmin):
                 waitlist_count
             )
 
-    waitlist_count_display.short_description = "Lista rezerwowa"
+    waitlist_participants_count.short_description = "Lista rezerwowa"
 
     def duplicate_event(self, request, queryset):
         """
