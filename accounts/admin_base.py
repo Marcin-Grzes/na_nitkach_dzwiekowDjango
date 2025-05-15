@@ -13,12 +13,12 @@ class MetadataAdminModel(admin.ModelAdmin):
         metadata_fields = ['created_at', 'updated_at', 'created_ip', 'updated_ip']
 
         for field in metadata_fields:
-            if field in readonly_fields:
+            if field not in readonly_fields:
                 readonly_fields.append(field)
 
         return readonly_fields
 
-    def get_fields(self, request, obj=None):
+    def get_fieldsets(self, request, obj=None):
         """Dodaje sekcję metadanych do fieldsets, jeśli nie istnieje"""
         fieldsets = list(super().get_fieldsets(request, obj))
 
