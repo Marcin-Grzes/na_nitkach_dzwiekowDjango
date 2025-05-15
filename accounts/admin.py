@@ -1,10 +1,36 @@
 from django.contrib import admin
+from django.utils.html import format_html
 
 from accounts.admin_base import MetadataAdminModel
 from accounts.models import Customer
+from events.models import Reservations
 
 
 # Register your models here.
+
+class CustomerReservationInline(admin.TabularInline):
+    model = Reservations
+    extra = 0  # Brak dodatkowych pustych formularzy
+    readonly_fields = ['event_info', 'status', 'participants_count', 'type_of_payments', 'created_at']
+    fields = ['event_info', 'status', 'participants_count', 'type_of_payments', 'created_at']
+    can_delete = False # Nie można usuwać rezerwacji z tego widoku
+    show_change_link = True # Dodaje link do edycji rezerwacji
+
+    def event_info(self, obj):
+        if obj.event_info:
+            return format_html(
+                '<strong>{}</strong><br/>{}<br/>{}',
+                obj.event.title,
+                obj.event.start_datetime.strftime('%d.%m.%Y %H:%M'),
+                obj.event.venue.name if obj.event.venue else ''
+            )
+            return "-"
+    event_info.short_description = "Wydarzenie (nazwa, data, miejsce)"
+
+    def has_add_permission(self, request, obj=None):
+        return False  # Nie można dodawać rezerwacji z tego widoku
+
+
 
 @admin.register(Customer)
 class CustomUserAdmin(MetadataAdminModel):
@@ -41,3 +67,4 @@ class CustomUserAdmin(MetadataAdminModel):
     ]
 
     readonly_fields = ['created_at']
+    inlines = [CustomerReservationInline]
