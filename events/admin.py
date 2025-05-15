@@ -1,12 +1,14 @@
 from django import forms
 from django.contrib import admin, messages
 from django.core.exceptions import ValidationError
+from django.db.models import Sum
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 from tinymce.widgets import TinyMCE
 
+from accounts import models
 from .models import Reservations, EventType, EventImage, Events, Venue
 
 
@@ -44,6 +46,8 @@ class EventInline(admin.TabularInline):
 @admin.register(Reservations)
 class ReservationsAdmin(admin.ModelAdmin):
 
+    change_list_template = '../templates/admin/change_list.html'
+
     """Wyświetlane kolumny na liście"""
 
     list_display = ['get_customer_name', 'customer_email', 'customer_phone_number',
@@ -69,6 +73,35 @@ class ReservationsAdmin(admin.ModelAdmin):
         return obj.customer.newsletter_consent if obj.customer else False
     get_newsletter_consent.short_description = 'Newsletter'
     get_newsletter_consent.boolean = True
+
+    def changelist_view(self, request, extra_context=None):
+        """Dodaje sumę uczestników dla wyfiltrowanych rezerwacji"""
+        response = super().changelist_view(request, extra_context)
+
+        # Sprawdź czy jest widok zmiany listy z wynikami
+        if hasattr(response, 'context_data') and 'cl' in response.context_data:
+            cl = response.context_data['cl']
+            queryset = cl.queryset
+
+            # Jeśli mamy wyniki po filtrowaniu
+            if queryset is not None:
+                # Oblicz sumę uczestników
+                total_participants = queryset.aggregate(
+                    total_participants=Sum('participants_count')
+                )['total_participants'] or 0
+
+                # Dodaj do kontekstu
+                response.context_data['total_participants'] = total_participants
+
+                # Jeśli filtrujemy po evencie, dodaj nazwę
+                event_id = request.GET.get('event__id__exact')
+                if event_id:
+                    try:
+                        event = Events.objects.get(id=event_id)
+                        response.context_data['filtered_event'] = event
+                    except Events.DoesNotExist:
+                        pass
+        return response
 
 
     # Kolumny, które po kliknięciu prowadzą do edycji
