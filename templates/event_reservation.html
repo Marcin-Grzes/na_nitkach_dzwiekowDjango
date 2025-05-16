@@ -58,7 +58,8 @@
         <h1 class="reservation-form__title">Rezerwacja miejsca na: <br><span>"{{ event.title }}"</span></h1>
 
         <div class="reservation-form__information">
-            <p><span>Data: </span>{{ event.start_datetime|date:"j E Y, H:i" }}</p>
+            <p><span>Data: </span>{{ event.start_datetime|date:"j E Y" }}</p>
+            <p><span>Godzina rozpoczęcia: </span>{{ event.start_datetime|date:"H:i" }}</p>
             <p><span>Miejsce: </span> {{ event.venue.name }}, {{ event.venue.address }}, {{ event.venue.city }}</p>
             <p><span>Dostępne miejsca: </span> {{ event.get_available_seats }}</p>
             {% if event.price %}

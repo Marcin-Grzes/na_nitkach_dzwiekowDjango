@@ -540,7 +540,7 @@ class CancelReservationView(View):
         # Sprawdź czy można anulować rezerwację
         if reservation.status == Reservations.ReservationStatus.CANCELLED:
             messages.warning(request, "Ta rezerwacja została już anulowana.")
-            return redirect('home')
+            return redirect('index')
 
         return render(request, 'events/cancel_reservation_confirm.html', {
             'reservation': reservation
@@ -553,7 +553,7 @@ class CancelReservationView(View):
         # Sprawdź czy można anulować rezerwację
         if reservation.status == Reservations.ReservationStatus.CANCELLED:
             messages.warning(request, "Ta rezerwacja została już anulowana.")
-            return redirect('home')
+            return redirect('index')
 
         # Anuluj rezerwację
         cancel_reservation(reservation)
@@ -568,7 +568,7 @@ class CancelReservationView(View):
             ).exclude(id=reservation.id).exists():
                 messages.info(request, "Osoba z listy rezerwowej została automatycznie przesunięta na Twoje miejsce.")
 
-        return redirect('home')
+        return redirect('index')
 
 
 class CalendarView(TemplateView):
