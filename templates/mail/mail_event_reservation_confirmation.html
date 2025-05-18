@@ -1,0 +1,218 @@
+<!-- templates/emails/event_reservation_confirmation.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>
+        {% if reservation.status == 'confirmed' %}
+        Potwierdzenie rezerwacji
+        {% elif reservation.status == 'waitlist'%}
+        Potwierdzenie rezerwacji na liście rezerwowej
+        {% else %}
+        Anulowanie rezerwacji
+        {% endif %}
+    </title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Faculty+Glyphic&family=Original+Surfer&display=swap');
+
+        body {
+            font-family: "Faculty Glyphic", sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, rgba(255,255,255,0.8) 0%, rgba(255,248,227,1) 100%);
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, rgba(255, 253, 240, 1) 0%, rgba(255, 236, 179, 1) 100%);
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(184, 134, 11, 0.15);
+        }
+
+        .header {
+            background: linear-gradient(135deg, goldenrod, #e6b422);
+            color: white;
+            padding: 15px;
+            text-align: center;
+            border-radius: 15px 15px 0 0;
+            margin: -20px -20px 20px -20px;
+        }
+
+        .header h1 {
+            font-family: "Original Surfer", sans-serif;
+            font-size: 28px;
+            margin: 0;
+            text-shadow: 0.5px 0.5px 0.5px saddlebrown;
+        }
+
+        h2 {
+            color: sienna;
+            font-family: "Original Surfer", sans-serif;
+            font-size: 22px;
+        }
+
+        .details {
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .details ul {
+            padding-left: 20px;
+        }
+
+        .details li {
+            margin-bottom: 10px;
+            list-style-type: none;
+            position: relative;
+            padding-left: 25px;
+        }
+
+        .details li::before {
+            content: "♪";
+            position: absolute;
+            left: 0;
+            color: goldenrod;
+            font-size: 18px;
+        }
+
+        .details strong {
+            color: sienna;
+            font-weight: bold;
+        }
+
+        .box {
+            background: linear-gradient(135deg, rgba(255,253,240,1) 0%, rgba(255,236,179,1) 100%);
+            border-left: 5px solid goldenrod;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(184, 134, 11, 0.1);
+        }
+
+        .box h2 {
+            color: sienna;
+            margin-top: 0;
+        }
+
+
+        .box strong {
+            color: sienna;
+            font-size: 20px;
+        }
+
+        .cancel-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #dc3545, #c82333);
+            color: white !important;
+            font-family: Georgia, 'Times New Roman', serif;
+            font-size: 16px;
+            padding: 10px 25px;
+            border-radius: 50px;
+            text-transform: uppercase;
+            text-decoration: none;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            margin: 15px 0;
+            text-align: center;
+        }
+
+        .cancel-box {
+            background-color: rgba(255, 255, 255, 0.5);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        p {
+            font-size: 16px;
+            line-height: 1.8;
+        }
+
+        .footer {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid rgba(218, 165, 32, 0.3);
+            font-size: 14px;
+            color: #666;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1> {% if reservation.status == 'confirmed' %}
+            Potwierdzenie rezerwacji
+            {% elif reservation.status == 'waitlist'%}
+            Potwierdzenie rezerwacji na liście rezerwowej
+            {% else %}
+            Anulowanie rezerwacji
+            {% endif %}</h1>
+    </div>
+
+    <p>Witaj <strong>{{ first_name }} {{ last_name }}</strong>,</p>
+
+    {% if reservation.status == 'confirmed' %}
+    <div class="box">
+        <h2>Rezerwacja potwierdzona</h2>
+        <p>Potwierdzamy rezerwację na wydarzenie "<strong>{{ event.title }}</strong>". Poniżej znajdziesz szczegóły:</p>
+    </div>
+    {% elif reservation.status == 'waitlist'%}
+    <div class="box">
+        <h2>Lista rezerwowa</h2>
+        <p>Znajdujesz się na liście rezerwowej na wydarzenie "<strong>{{ event.title }}</strong>".</p>
+        <p>Twoja pozycja na liście: <strong>{{ reservation.waitlist_position }}</strong></p>
+        <p>Powiadomimy Cię, jeśli zwolni się miejsce.</p>
+    </div>
+    {% else %}
+    <div class="box">
+        <h2>Anulowanie rezerwacji</h2>
+        <p>Twoja rezerwacja na wydarzenie "<strong>{{ event.title }}</strong>" została anulowania</p>
+    </div>
+    {% endif %}
+
+    <div class="details">
+        <h2>Szczegóły wydarzenia:</h2>
+        <ul>
+            <li><strong>Nazwa wydarzenia:</strong> {{ event.title }}</li>
+            <li><strong>Data rozpoczęcia:</strong> {{ event.start_datetime|date:"j E Y, H:i" }}</li>
+            <li><strong>Miejsce:</strong> {{ event.venue.name }}, {{ event.venue.address }}, {{ event.venue.city }}</li>
+        </ul>
+
+        <h2>Szczegóły rezerwacji:</h2>
+        <ul>
+            <li><strong>Imię i nazwisko:</strong> {{ first_name }} {{ last_name }}</li>
+            <li><strong>Email:</strong> {{ email }}</li>
+            <li><strong>Numer telefonu:</strong> {{ phone_number }}</li>
+            <li><strong>Liczba uczestników:</strong> {{ participants_count }}</li>
+            <li><strong>Sposób płatności:</strong> {{ payment_method }}</li>
+        </ul>
+    </div>
+
+    {% if not reservation.status == 'cancelled' %}
+    <div class="cancel-box">
+        <p>Jeśli chcesz anulować swoją rezerwację, możesz to zrobić klikając w poniższy przycisk:</p>
+        <a href="{{ reservation.get_cancellation_url }}" class="cancel-button">Anuluj rezerwację</a>
+        <p><small>Link jest unikalny dla Twojej rezerwacji. Prosimy nie udostępniać go innym osobom.</small></p>
+    </div>
+    {% endif %}
+
+    <p>W razie jakichkolwiek pytań, prosimy o kontakt pod numerem telefonu <strong>509 55 33 66</strong> lub mailowo na adres <strong>beata@nanitkachdzwiekow.pl</strong>.</p>
+
+    <p>Z poważaniem,<br>
+        <strong>Beata Witkowska</strong><br>
+        Na Nitkach Dźwięków</p>
+
+    <div class="footer">
+        <p>&copy; 2025 Beata Witkowska - Wszelkie prawa zastrzeżone</p>
+        <p>Wiadomość została wygenerowana automatycznie, prosimy na nią nie odpowiadać.</p>
+    </div>
+</div>
+</body>
+</html>

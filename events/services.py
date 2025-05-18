@@ -43,7 +43,7 @@ def send_waitlist_promotion_email(reservation):
         'last_name': reservation.customer.last_name,
     }
 
-    html_message = render_to_string('emails/waitlist_promotion_notification.html', context)
+    html_message = render_to_string('mail/mail_event_reservation_confirmation.html', context)
     plain_message = strip_tags(html_message)
 
     send_mail(

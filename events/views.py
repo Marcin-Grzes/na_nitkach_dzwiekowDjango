@@ -66,8 +66,31 @@ class ReservationSuccessView(View):
 class ReservationEmailMixin:
     """Mixin dostarczający metody wysyłania emaili dla widoków rezerwacji"""
 
-    def send_confirmation_email(self, reservation):
-        subject = f'Potwierdzenie rezerwacji - {reservation.event.title}'
+    def send_email(self, reservation, email_type):
+        """
+        Wysyła e-mail związany z rezerwacją.
+         Parametry:
+        - reservation: obiekt rezerwacji
+        - email_type: typ emaila - 'confirmation', 'cancellation', 'waitlist_promotion'
+        """
+
+        email_types = {
+            'confirmation': {
+                'subject': f'Potwierdzenie rezerwacji - {reservation.event.title}',
+                'template': 'mail/mail_event_reservation_confirmation.html',
+            },
+            'cancellation': {
+                'subject': f'Anulowanie rezerwacji - {reservation.event.title}',
+                'template': 'mail/mail_event_reservation_confirmation.html',
+            },
+        }
+
+        # Sprawdź czy żądany typ emaila jest obsługiwany
+
+        if email_type not in email_types:
+            raise ValueError(f'Nieobsługiwany typ emaila {email_type}')
+
+        email_config = email_types[email_type]
 
         context = {
             'first_name': reservation.customer.first_name,
@@ -80,11 +103,11 @@ class ReservationEmailMixin:
             'reservation': reservation,
         }
 
-        html_message = render_to_string('events/event_reservation_confirmation.html', context)
+        html_message = render_to_string(email_config['template'], context)
         plain_message = strip_tags(html_message)
 
         send_mail(
-            subject,
+            email_config['subject'],
             plain_message,
             None,  # używa DEFAULT_FROM_EMAIL z ustawień
             [reservation.customer.email],
@@ -126,7 +149,7 @@ class EventReservationView(ReservationEmailMixin, View):
         if event.reservation_end_time:
             context['reservation_end_time_iso'] = event.reservation_end_time.isoformat()
 
-        return render(request, 'event_reservation.html', context)
+        return render(request, 'event_reservation_form.html', context)
 
     # @check_honeypot
     def post(self, request, event_id):
@@ -203,7 +226,7 @@ class EventReservationView(ReservationEmailMixin, View):
             reservation.save()
 
             # Wysyłka emaila potwierdzającego
-            self.send_confirmation_email(reservation)
+            self.send_email(reservation, 'confirmation')
 
             # Przekierowanie do strony potwierdzenia zamiast wiadomości flash
             return redirect('reservation_success', event_id=event_id, reservation_id=reservation.id)
@@ -218,7 +241,7 @@ class EventReservationView(ReservationEmailMixin, View):
         if event.reservation_end_time:
             context['reservation_end_time_iso'] = event.reservation_end_time.isoformat()
 
-        return render(request, 'event_reservation.html', context)
+        return render(request, 'event_reservation_form.html', context)
 
 
 class UniversalReservationView(ReservationEmailMixin, View):
@@ -369,7 +392,7 @@ class UniversalReservationView(ReservationEmailMixin, View):
             reservation.save()
 
             # Wysyłka emaila potwierdzającego
-            self.send_confirmation_email(reservation)
+            self.send_email(reservation, 'confirmation')
 
             # Przekierowanie do strony potwierdzenia zamiast wiadomości flash
             return redirect('reservation_success', event_id=event.id, reservation_id=reservation.id)
@@ -532,7 +555,7 @@ class EventsByTypeView(EventListView):
         return context
 
 
-class CancelReservationView(View):
+class CancelReservationView(ReservationEmailMixin, View):
     def get(self, request, token):
         """Wyświetla stronę potwierdzenia anulowania rezerwacji"""
         reservation = get_object_or_404(Reservations, cancellation_token=token)
@@ -542,7 +565,7 @@ class CancelReservationView(View):
             messages.warning(request, "Ta rezerwacja została już anulowana.")
             return redirect('index')
 
-        return render(request, 'events/cancel_reservation_confirm.html', {
+        return render(request, 'cancel_reservation.html', {
             'reservation': reservation
         })
 
@@ -557,6 +580,9 @@ class CancelReservationView(View):
 
         # Anuluj rezerwację
         cancel_reservation(reservation)
+
+        # Wysyła e-mail z potwierdzeniem anulowania rezerwacji
+        self.send_email(reservation, 'cancellation')
 
         messages.success(request, "Twoja rezerwacja została pomyślnie anulowana.")
 
