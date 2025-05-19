@@ -578,22 +578,31 @@ class CancelReservationView(ReservationEmailMixin, View):
             messages.warning(request, "Ta rezerwacja została już anulowana.")
             return redirect('index')
 
+        # Zapisz oryginalny status
+        # original_status = reservation.status
+
         # Anuluj rezerwację
         cancel_reservation(reservation)
 
         # Wysyła e-mail z potwierdzeniem anulowania rezerwacji
         self.send_email(reservation, 'cancellation')
 
-        messages.success(request, "Twoja rezerwacja została pomyślnie anulowana.")
+        # Dostosuj komunikat w zależności od oryginalnego statusu
+        # if original_status == Reservations.ReservationStatus.WAITLIST:
+        #     messages.success(request, "Twoja rezerwacja na liście rezerwowej została pomyślnie anulowana.")
+        # else:  # CONFIRMED
+        #     messages.success(request, "Twoja rezerwacja została pomyślnie anulowana.")
+
+        # messages.success(request, "Twoja rezerwacja została pomyślnie anulowana.")
 
         # Jeśli anulowana rezerwacja była potwierdzona, informuj o automatycznym przesunięciu z listy rezerwowej
-        if reservation.status == Reservations.ReservationStatus.CONFIRMED:
-            if reservation.event.reservations.filter(
-                    status=Reservations.ReservationStatus.CONFIRMED,
-                    waitlist_position__isnull=True
-            ).exclude(id=reservation.id).exists():
-                messages.info(request, "Osoba z listy rezerwowej została automatycznie przesunięta na Twoje miejsce.")
-
+        # if reservation.status == Reservations.ReservationStatus.CONFIRMED:
+        #     if reservation.event.reservations.filter(
+        #             status=Reservations.ReservationStatus.CONFIRMED,
+        #             waitlist_position__isnull=True
+        #     ).exclude(id=reservation.id).exists():
+        #         messages.info(request, "Osoba z listy rezerwowej została automatycznie przesunięta na Twoje miejsce.")
+        #
         return redirect('index')
 
 

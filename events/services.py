@@ -8,26 +8,46 @@ def cancel_reservation(reservation):
     """Anuluje rezerwację i przesuwa osobę z listy rezerwowej jeśli istnieje"""
     from .models import Reservations  # Import wewnątrz funkcji by uniknąć cyklicznych importów
 
+    if reservation.status == Reservations.ReservationStatus.WAITLIST:
+        reservation.status = Reservations.ReservationStatus.CANCELLED
+        reservation.save()
+        return True
+
     if reservation.status == Reservations.ReservationStatus.CONFIRMED:
+        event = reservation.event
+
+
         # Zmiana statusu na anulowany
         reservation.status = Reservations.ReservationStatus.CANCELLED
         reservation.save()
 
-        # Sprawdź czy są osoby na liście rezerwowej
-        event = reservation.event
-        waitlist_reservation = event.reservations.filter(
+        # Sprawdź liczbę dostępnych miejsc po anulowaniu
+        available_seats = event.get_available_seats()
+
+        # Sprawdź, czy są osoby na liście rezerwowej
+        waitlist_reservations = event.reservations.filter(
             status=Reservations.ReservationStatus.WAITLIST
-        ).order_by('waitlist_position').first()
+        ).order_by('waitlist_position')
 
-        if waitlist_reservation:
-            # Przesuń osobę z listy rezerwowej na potwierdzoną
-            waitlist_reservation.status = Reservations.ReservationStatus.CONFIRMED
-            waitlist_reservation.waitlist_position = None
-            waitlist_reservation.save()
+        for waitlist_reservation in waitlist_reservations:
 
-            # Wyślij powiadomienie o potwierdzeniu rezerwacji
-            send_waitlist_promotion_email(waitlist_reservation)
+            # Sprawdź, czy jest wystarczająco miejsc dla tej rezerwacji
+            if waitlist_reservation.participants_count <= available_seats:
 
+                # Przesuń osobę z listy rezerwowej na potwierdzoną
+                waitlist_reservation.status = Reservations.ReservationStatus.CONFIRMED
+                waitlist_reservation.waitlist_position = None
+                waitlist_reservation.save()
+
+                # Wyślij powiadomienie o potwierdzeniu rezerwacji
+                send_waitlist_promotion_email(waitlist_reservation)
+
+                # Zmniejsz liczbę dostępnych miejsc
+                available_seats -= waitlist_reservation.participants_count
+
+                # Jeśli nie ma już wystarczającej liczby miejsc dla kolejnych rezerwacji, przerwij
+                if available_seats <= 0:
+                    break
         return True
     return False
 
