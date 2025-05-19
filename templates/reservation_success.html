@@ -79,8 +79,7 @@
                 <p class="success-confirmation__text">Dziękujemy za dołączenie do listy rezerwowej na wydarzenie <span
                         class="success-confirmation__event-title">"{{ event.title }}"</span>.</p>
                 <p class="success-confirmation__waitlist-info">Aktualnie wszystkie miejsca są zajęte, ale zostałeś
-                    dodany do listy rezerwowej na pozycji <strong>{{ reservation.waitlist_position }}</strong>.
-                    Powiadomimy Cię, jeśli zwolni się miejsce.</p>
+                    dodany do listy rezerwowej. Powiadomimy Cię, jeśli zwolni się miejsce.</p>
                 <div class="success-confirmation__details">
                     <p><span>Data wydarzenia:</span> {{ event.start_datetime|date:"j E Y, H:i" }}</p>
                     <p><span>Miejsce:</span> {{ event.venue.name }}, {{ event.venue.address }}</p>

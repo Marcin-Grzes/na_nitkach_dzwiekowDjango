@@ -41,6 +41,10 @@ def send_waitlist_promotion_email(reservation):
         'event': reservation.event,
         'first_name': reservation.customer.first_name,
         'last_name': reservation.customer.last_name,
+        'participants_count': reservation.participants_count,
+        'email': reservation.customer.email,
+        'phone_number': str(reservation.customer.phone_number),
+        'payment_method': reservation.get_type_of_payments_display(),
     }
 
     html_message = render_to_string('mail/mail_event_reservation_confirmation.html', context)
@@ -50,6 +54,6 @@ def send_waitlist_promotion_email(reservation):
         subject,
         plain_message,
         None,  # używa DEFAULT_FROM_EMAIL z ustawień
-        [reservation.email],
+        [reservation.customer.email],
         html_message=html_message,
     )

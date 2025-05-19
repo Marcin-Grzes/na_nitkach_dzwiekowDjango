@@ -79,7 +79,7 @@ class Reservations(BaseMetadataModel):
 
     class PaymentType(models.TextChoices):
         CASH = 'cash', _('Gotówka na miejscu')
-        BLIK = 'blik', _('BLIK')
+        BLIK = 'blik', _('Przedpłata BLIK')
 
     # Podstawowe informacje
 
