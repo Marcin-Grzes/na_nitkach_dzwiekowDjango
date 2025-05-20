@@ -11,6 +11,7 @@ from accounts.admin_base import MetadataAdminModel
 
 from accounts import models
 from .models import Reservations, EventType, EventImage, Events, Venue
+from .views import ReservationEmailMixin
 
 
 # Register your models here.
@@ -45,8 +46,7 @@ class EventInline(admin.TabularInline):
 
 
 @admin.register(Reservations)
-class ReservationsAdmin(MetadataAdminModel):
-
+class ReservationsAdmin(ReservationEmailMixin, MetadataAdminModel):
     change_list_template = '../templates/admin/change_list.html'
 
     """Wyświetlane kolumny na liście"""
@@ -59,20 +59,61 @@ class ReservationsAdmin(MetadataAdminModel):
 
     """Metody pomocnicze:"""
 
+    def save_model(self, request, obj, form, change):
+        """
+        Metoda wywoływana przy zapisie modelu w panelu administratora.
+        Wykrywa zmiany statusu i utworzenie nowej rezerwacji i wysyła odpowiednie powiadomienia e-mail.
+        """
+
+        # Zapisanie oryginalnego stanu przed zapisem, jeśli obiekt juz istnieje
+        if change and obj.pk:
+            old_obj = Reservations.objects.get(pk=obj.pk)
+            old_status = old_obj.status
+        else:
+            old_status = None
+
+        # Wywołanie standardowej metody zapisu
+        super().save_model(request, obj, form, change)
+
+        # Przypadek 1: Nowa rezerwacja utworzona przez administratora
+        if not change:
+            # Wysłanie odpowiedniego powiadomienia w zależności od statusu nowej rezerwacji
+            if obj.status == Reservations.ReservationStatus.CONFIRMED:
+                self.send_email(obj, 'confirmation')
+                self.message_user(request, f"Utworzono nową rezerwację. Wysłano powiadomienie do {obj.customer.email}.")
+            elif obj.status == Reservations.ReservationStatus.WAITLIST:
+                self.send_email(obj, 'confirmation')  # Używamy tego samego szablonu
+                self.message_user(request,
+                                  f"Utworzono nową rezerwację na liście rezerwowej. Wysłano powiadomienie do {obj.customer.email}.")
+
+        # Przypadek 2: Zmiana statusu istniejącej rezerwacji
+        elif old_status != obj.status:
+            # Wysłanie odpowiedniego powiadomienia w zależności od nowego statusu
+            if obj.status == Reservations.ReservationStatus.CONFIRMED:
+                self.send_email(obj, 'confirmation')
+            elif obj.status == Reservations.ReservationStatus.WAITLIST:
+                self.send_email(obj, 'confirmation')  # Używamy tego samego szablonu dla listy rezerwowej
+            elif obj.status == Reservations.ReservationStatus.CANCELLED:
+                self.send_email(obj, 'cancellation')
+
     def get_customer_name(self, obj):
         return obj.customer.get_full_name() if obj.customer else '-'
-    get_customer_name.short_description = 'Imię i nazwisko'
 
+    get_customer_name.short_description = 'Imię i nazwisko'
 
     def customer_email(self, obj):
         return obj.customer.email if obj.customer else '-'
+
     customer_email.short_description = 'Email'
+
     def customer_phone_number(self, obj):
         return obj.customer.phone_number if obj.customer else '-'
+
     customer_phone_number.short_description = 'Numer telefonu'
 
     def get_newsletter_consent(self, obj):
         return obj.customer.newsletter_consent if obj.customer else False
+
     get_newsletter_consent.short_description = 'Newsletter'
     get_newsletter_consent.boolean = True
 
@@ -104,7 +145,6 @@ class ReservationsAdmin(MetadataAdminModel):
                     except Events.DoesNotExist:
                         pass
         return response
-
 
     # Kolumny, które po kliknięciu prowadzą do edycji
     # list_display_links = ['first_name', 'last_name']
@@ -139,7 +179,7 @@ class ReservationsAdmin(MetadataAdminModel):
         ('Klient', {
             'fields': ['customer']
         }),
-        ('Liczba uczestników',{
+        ('Liczba uczestników', {
             'fields': ['participants_count']
         }),
         ('Informacje o płatności', {
@@ -151,8 +191,8 @@ class ReservationsAdmin(MetadataAdminModel):
         # }),
     ]
 
-
     autocomplete_fields = ['event', 'customer']  #'customer' było w środku ale Django krzyczy ze mu nie pasuje.
+
     # Niestandardowe wyświetlanie pól
     def payment_display(self, obj):
         return obj.get_type_of_payments_display()
@@ -162,41 +202,64 @@ class ReservationsAdmin(MetadataAdminModel):
     def consent_status(self, obj):
         return '✓' if obj.newsletter_consent else '✗'
 
-
     def confirm_reservations(self, request, queryset):
         updated = queryset.update(status=Reservations.ReservationStatus.CONFIRMED, waitlist_position=None)
+
+        for reservation in queryset:
+            # Odświeżamy obiekt, aby uzyskać zaktualizowane dane
+            reservation.refresh_from_db()
+            if reservation.status == Reservations.ReservationStatus.CONFIRMED:
+                self.send_email(reservation, 'confirmation')
+
         self.message_user(request, f"{updated} rezerwacji zostało potwierdzonych.")
 
     confirm_reservations.short_description = "Potwierdź wybrane rezerwacje"
 
     def move_to_waitlist(self, request, queryset):
+        """Przenosi wybrane rezerwacje na listę rezerwową i wysyła powiadomienia"""
         # Dla każdej rezerwacji obliczamy pozycję na liście rezerwowej
+        count = 0
+
         for reservation in queryset:
             if reservation.status != Reservations.ReservationStatus.WAITLIST:
                 reservation.status = Reservations.ReservationStatus.WAITLIST
                 reservation.waitlist_position = reservation.event.get_next_waitlist_position()
                 reservation.save()
 
+                # Wysyłanie e-maila z informacją o dodaniu do listy rezerwowej
+                self.send_email(reservation, 'confirmation')
+                count += 1
+
         self.message_user(request, f"{queryset.count()} rezerwacji przeniesionych na listę rezerwową.")
 
     move_to_waitlist.short_description = "Przenieś wybrane rezerwacje na listę rezerwową"
 
     def cancel_reservations(self, request, queryset):
+        """Anuluje wybrane rezerwacje, aktualizuje listę rezerwową i wysyła powiadomienia"""
         # Używamy metody cancel dla każdej rezerwacji
         count = 0
         waitlist_promotions = 0
 
         for reservation in queryset:
+            original_status = reservation.status
             if reservation.cancel():
                 count += 1
-                # Sprawdź czy spowodowało to przesunięcie z listy rezerwowej
-                if reservation.event.reservations.filter(
+
+                # Wysyłanie e-maila o anulowaniu rezerwacji
+                self.send_email(reservation, 'cancellation')
+
+                # Sprawdzanie czy nastąpiło przesunięcie z listy rezerwowej
+                if original_status == Reservations.ReservationStatus.CONFIRMED:
+                    promoted_reservations = reservation.event.reservations.filter(
                         status=Reservations.ReservationStatus.CONFIRMED,
                         waitlist_position__isnull=True
-                ).exists():
-                    waitlist_promotions += 1
+                    ).exclude(id=reservation.id)
 
-        message = f"{count} rezerwacji zostało anulowanych."
+                    # Uwaga: powiadomienia dla osób z listy rezerwowej są już wysyłane
+                    # przez funkcję cancel_reservation poprzez wywołanie send_waitlist_promotion_email
+                    waitlist_promotions += promoted_reservations.count()
+
+        message = f"{count} rezerwacji zostało anulowanych i wysłano powiadomienia."
         if waitlist_promotions > 0:
             message += f" {waitlist_promotions} osób z listy rezerwowej zostało automatycznie potwierdzonych."
 
@@ -253,14 +316,13 @@ class EventImageAdmin(admin.ModelAdmin):
 class EventsAdmin(MetadataAdminModel):
     form = EventAdminForm
     list_display = ['title', 'type_of_events', 'start_datetime', 'end_datetime',
-                    'venue','price', 'max_participants', 'get_available_seats', 'is_active']
+                    'venue', 'price', 'max_participants', 'get_available_seats', 'is_active']
     list_filter = ['type_of_events', 'is_active', 'venue']
     search_fields = ['title', 'description']
     date_hierarchy = 'start_datetime'
     inlines = [EventImageInline]
     autocomplete_fields = ['venue', 'type_of_events']  # Dodane pole autocomplete
     actions = ['duplicate_event']
-
 
     # Opcjonalnie, jeśli chcesz dostosować edytor do konkretnego pola w panelu administracyjnym:
 
@@ -280,6 +342,7 @@ class EventsAdmin(MetadataAdminModel):
         'available_seats_display',
         'waitlist_participants_count',
     ]
+
     class Media:
         js = ('admin/js/admin_enhancements.js',)
 
