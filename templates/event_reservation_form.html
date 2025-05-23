@@ -68,9 +68,9 @@
         </div>
         <!-- Zmiana div formularza, dodanie atrybutów data -->
         <div id="reservation-form-container" data-event-detail-url="{% url 'event_detail' event.id %}">
-                <form method="post" novalidate id="reservation-form">
-                    {% csrf_token %}
-            {% if reservation_available %}
+            <form method="post" novalidate id="reservation-form">
+                {% csrf_token %}
+                {% if reservation_available %}
                     <div class="reservation-form__form">
                         <div class="reservation-form__form-group">
                             <label for="{{ form.first_name.id_for_label }}"
@@ -132,10 +132,11 @@
                                 {{ form.regulations_consent }}
                                 <label class="reservation-form__form-label"
                                        for="{{ form.regulations_consent.id_for_label }}">
-                                    Zapoznałem się z 
-            <a href="{% url 'website_regulations' %}" target="_blank" rel="noopener noreferrer">regulaminem</a> 
-            oraz 
-            <a href="{% url 'privacy_policy' %}" target="_blank" rel="noopener noreferrer">polityką prywatności</a>
+                                    Zapoznałem się z
+                                    <a href="{% url 'website_regulations' %}" target="_blank" rel="noopener noreferrer">regulaminem</a>
+                                    oraz
+                                    <a href="{% url 'privacy_policy' %}" target="_blank" rel="noopener noreferrer">polityką
+                                        prywatności</a>
                                 </label>
                             </div>
                             {% if form.regulations_consent.errors %}
@@ -163,18 +164,18 @@
                             <button type="submit" class="btn btn-primary">Zarezerwuj miejsce</button>
                         </div>
                     </div>
-                
-            {% else %}
-                <div class="reservation-form__information reservation-form__unavailable">
-                    <p class="reservation-form__text reservation-form__text--warning">
-                        Rezerwacja online jest już niedostępna, jeśli chcesz przyjść na koncert to zadzwoń.
-                    </p>
-                    <div class="reservation-form__form-buttons">
-                        <a href="{% url 'event_detail' event.id %}" class="btn btn-secondary">Powrót</a>
+
+                {% else %}
+                    <div class="reservation-form__information reservation-form__unavailable">
+                        <p class="reservation-form__text reservation-form__text--warning">
+                            Rezerwacja online jest już niedostępna, jeśli chcesz przyjść na koncert to zadzwoń.
+                        </p>
+                        <div class="reservation-form__form-buttons">
+                            <a href="{% url 'event_detail' event.id %}" class="btn btn-secondary">Powrót</a>
+                        </div>
                     </div>
-                </div>
-            {% endif %}
-                </form>
+                {% endif %}
+            </form>
         </div>
     </div>
 </section>
