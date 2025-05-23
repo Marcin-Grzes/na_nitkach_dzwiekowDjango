@@ -1,56 +1,14 @@
-<!DOCTYPE html>
+{% extends 'base/base.html' %}
 {% load static %}
-<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <meta name="description" content="Na nitkach dźwięków - relaksacyjne koncerty na misach dźwiękowych w Grodzisku
-    Mazowieckim, Milanówku i okolicach">
-    <meta name="keywords" content="relaks, misa tybetańska, gong, medytacja, rozwój duchowy">
-    <meta name="author" content="Marcin Grześ">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Faculty+Glyphic&display=swap" rel="stylesheet">
-    <title>Kalendarz koncertów</title>
+     {% block head_suplement %}
     <link rel="stylesheet" href={% static '/style/calendar.css' %}>
-    <link rel="stylesheet" href="{% static '/style/hamburgers.css' %}">
-    <link rel="stylesheet" href="{% static '/style/style.css' %}">
+         <title>Kalendarz wydarzeń</title>
+    {% endblock %}
 </head>
 <body>
 
-<!--===================NAWIGACJA=========================-->
-
-<nav class="nav" >
-    <div class="nav__items--destkop">
-        <a href="{% url 'index' %}#about_me" class="nav__item">O mnie</a>
-        <a href="{% url 'event_calendar' %}" class="nav__item">Kalendarz koncertów</a>
-        <a href="{% url 'index' %}#about_therapy" class="nav__item">O terapii dźwiękiem</a>
-        <a href="{% url 'index' %}#concerts" class="nav__item">Koncerty</a>
-        <a href="{% url 'index' %}#firm" class="nav__item">Dla firm</a>
-        <a href="{% url 'index' %}#practical" class="nav__item">Praktyczne informacje</a>
-        <a href="{% url 'index' %}#contact" class="nav__item">Kontakt</a>
-    </div>
-
-    <div class="nav__items-mobile nav__items-mobile--active" id="nav-mobile">
-        <a href="{% url 'index' %}#about_me" class="nav__item nav__item--mobile">O mnie</a>
-        <a href="{% url 'event_calendar' %}" class="nav__item nav__item--mobile">Kalendarz koncertów</a>
-        <a href="{% url 'index' %}#about_therapy" class="nav__item nav__item--mobile">O terapii dźwiękiem</a>
-        <a href="{% url 'index' %}#concerts" class="nav__item nav__item--mobile">Koncerty</a>
-        <a href="{% url 'index' %}#firm" class="nav__item nav__item--mobile">Dla firm</a>
-        <a href="{% url 'index' %}#practical" class="nav__item nav__item--mobile">Praktyczne informacje</a>
-        <a href="{% url 'index' %}#contact" class="nav__item nav__item--mobile">Kontakt</a>
-    </div>
-
-    <button class="hamburger hamburger--emphatic" type="button" aria-label="Otwórz menu" aria-expanded="false"
-            aria-controls="nav-mobile">
-  <span class="hamburger-box">
-    <span class="hamburger-inner"></span>
-  </span>
-    </button>
-</nav>
-
+{% block content %}
 <!--===================KALENDARZ=========================-->
 
 <section class="calendar">
@@ -61,22 +19,13 @@
         </div>
     </div>
 </section>
-
-<!--===================STOPKA=========================-->
-
-<footer class="footer">
-    <div class="wrapper">
-        <div class="footer__content">
-            <p class="footer__copyright">
-                &copy; <span class="footer__year"></span>
-                <span class="footer__owner">Beata Witkowska</span>
-                <span class="footer__rights">Wszelkie prawa zastrzeżone</span>
-            </p>
-        </div>
-    </div>
-</footer>
+    
+<!--===================KALENDARZ=========================-->
+    
+{% endblock %}
+{% block script %}
 <script defer src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.17/index.global.min.js"></script>
 <script defer src={% static "/../static/script/calendar.js" %}></script>
 <script defer src={% static "/../static/script/script.js" %}></script>
+{% endblock %}
 </body>
-</html>
