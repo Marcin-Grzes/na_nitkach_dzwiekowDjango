@@ -32,7 +32,21 @@ class HomeView(View):
 
 class Base(View):
     def get(self, request):
-        return render(request, '404.html')
+        return render(request, 'base/base.html')
+
+
+class Policy2(View):
+    def get(self, request):
+        return render(request, 'privacy_policy2.html')
+
+
+class Website_regulations(TemplateView):
+    template_name = 'website_regulations.html'
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['page_title'] = 'Regulamin strony internetowej'
+        return context
+
 
 
 class TestCalendar(View):
@@ -196,16 +210,16 @@ class EventReservationView(ReservationEmailMixin, View):
                 customer.save()
             except Customer.DoesNotExist:
                 """Utwórz nowego klienta"""
-                customer_data['created_ip'] = request.client_ip # Dodaj IP utworzenia
-                customer_data['created_by_admin'] = False # Utworzone przez klienta
+                customer_data['created_ip'] = request.client_ip  # Dodaj IP utworzenia
+                customer_data['created_by_admin'] = False  # Utworzone przez klienta
                 customer = Customer.objects.create(**customer_data)
 
             # Utwórz nowy obiekt rezerwacji bez zapisywania w bazie
             reservation = form.save(commit=False)
             reservation.customer = customer
             reservation.event = event
-            reservation.created_ip = request.client_ip # Dodaj IP utworzenia
-            reservation.created_by_admin = False # Utworzone przez klienta
+            reservation.created_ip = request.client_ip  # Dodaj IP utworzenia
+            reservation.created_by_admin = False  # Utworzone przez klienta
 
             # Sprawdzenie czy liczba uczestników nie przekracza dostępnych miejsc
             participants_count = form.cleaned_data['participants_count']
@@ -342,7 +356,6 @@ class UniversalReservationView(ReservationEmailMixin, View):
             # email = customer_data['email'].strip().lower()
             # phone_number = str(customer_data['phone_number'])
 
-
             """Rozwiązanie trzecie"""
             # Spróbuj znaleźć klienta z elastycznym zapytaniem
             # try:
@@ -425,10 +438,12 @@ class UniversalReservationView(ReservationEmailMixin, View):
 
         return render(request, 'universal_reservation_form.html', context)
 
+
 class EventsDataApiView(View):
     """
     API dostarczające dane o aktywnych wydarzeniach w formacie JSON
     """
+
     def get(self, request):
         """  Pobierz wszystkie aktywne, przyszłe wydarzenia """
         events = Events.objects.filter(
@@ -699,3 +714,12 @@ class ReservationAvailabilityView(View):
             'message': "Rezerwacja online jest już niedostępna, jeśli chcesz przyjść na koncert to zadzwoń pod numer: "
                        "509 55 33 66." if not is_available else ""
         })
+
+
+class PrivacyPolicyView(TemplateView):
+    template_name = 'privacy_policy.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['page_title'] = 'Polityka Prywatności'
+        return context

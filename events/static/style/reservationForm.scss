@@ -71,6 +71,17 @@
       font-size: 2rem;
       color: sienna;
       margin-bottom: 0.8rem;
+
+      a {
+        color: darkgoldenrod;
+        text-decoration: underline;
+        font-weight: normal;
+
+        &:hover {
+          color: gold;
+          text-decoration: none;
+        }
+      }
     }
 
     input,

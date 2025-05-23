@@ -44,6 +44,10 @@ urlpatterns = [
     path('api/events/<int:event_id>/check-reservation/', ReservationAvailabilityView.as_view(), name='check_reservation_availability'),
     path('reservation/', views.UniversalReservationView.as_view(), name='reservation'),
     path('api/events-data/', views.EventsDataApiView.as_view(), name='events_data_api'),
+    path('polityka-prywatnosci/', views.PrivacyPolicyView.as_view(), name='privacy_policy'),
+    path('policy2/', views.Policy2.as_view(), name='policy'),
+    path('regulamin/', views.Website_regulations.as_view(), name='website_regulations'),
+
 ]
 # Tylko w wersji developerskiej
 if settings.DEBUG:

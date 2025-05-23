@@ -132,7 +132,10 @@
                                 {{ form.regulations_consent }}
                                 <label class="reservation-form__form-label"
                                        for="{{ form.regulations_consent.id_for_label }}">
-                                    {{ form.regulations_consent.label }}
+                                    Zapoznałem się z 
+            <a href="{% url 'website_regulations' %}" target="_blank" rel="noopener noreferrer">regulaminem</a> 
+            oraz 
+            <a href="{% url 'privacy_policy' %}" target="_blank" rel="noopener noreferrer">polityką prywatności</a>
                                 </label>
                             </div>
                             {% if form.regulations_consent.errors %}

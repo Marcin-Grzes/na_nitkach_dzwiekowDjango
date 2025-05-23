@@ -1,0 +1,44 @@
+<!doctype html>
+{% load static %}
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="description" content="Na nitkach dźwięków - relaksacyjne koncerty na misach dźwiękowych w Grodzisku
+    Mazowieckim, Milanówku i okolicach">
+    <meta name="keywords" content="relaks, misa tybetańska, gong, medytacja, rozwój duchowy">
+    <meta name="author" content="Marcin Grześ">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Faculty+Glyphic&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href={% static "/../static/style/style.css" %}>
+    <link rel="stylesheet" href={% static "/../static/style/base.css" %}>
+    <link rel="stylesheet" href={% static "/../static/style/hamburgers.css" %}>
+    {% block head_suplement %}
+        
+    {% endblock %}
+</head>
+<body>
+
+<!--===================NAWIGACJA=========================-->
+{% include 'base/navigation.html' %}
+<!--===================NAWIGACJA=========================-->
+
+{% block content %}
+    
+{% endblock %}
+
+<!--===================STOPKA=========================-->
+{% include 'base/footer.html' %}
+<!--===================STOPKA=========================-->
+
+<script defer src={% static "../static/script/script.js" %}></script>
+<script defer src="{% static '../script/cookie-consent.js' %}"></script>
+{% block script %}
+    
+{% endblock %}
+</body>
+</html>

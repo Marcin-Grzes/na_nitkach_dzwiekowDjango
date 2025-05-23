@@ -1209,6 +1209,23 @@ Kontakt
     color: sienna; // Złoty kolor zgodny z paletą strony
   }
 
+  &__links {
+    margin-top: 5px;
+    text-align: center;
+
+    a {
+      color: #666;
+      text-decoration: none;
+      font-size: 1.8rem;
+      transition: color 0.3s ease;
+
+      &:hover {
+        color: goldenrod;
+        text-decoration: underline;
+      }
+    }
+  }
+
   &__rights {
     margin-left: 0.5rem;
   }
@@ -1219,6 +1236,11 @@ Kontakt
 
     &__copyright {
       font-size: 1.6rem;
+    }
+    &__links {
+      a {
+        font-size: 1.6rem;
+      }
     }
 
     // Na małych ekranach tekst może się zawijać

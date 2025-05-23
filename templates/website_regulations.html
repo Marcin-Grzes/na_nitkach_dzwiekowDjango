@@ -1,0 +1,108 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+<head>
+    {% block head_suplement %}
+        <link rel="stylesheet" href="{% static '/style/documents.css' %}">
+        <title>Regulamin rezerwacji online</title>
+    {% endblock %}
+</head>
+<body>
+{% block content %}
+    <!--===================TREŚĆ POLITYKI PRYWATNOŚCI=========================-->
+    <section class="document">
+        <div class="wrapper">
+            <h1 class="document__title">Regulamin</h1>
+            <div class="document__content">
+                <h2 class="document__subtitleH2">§1. Definicje</h2>
+                <ul class="document__list">
+                    <li class="document__list--point"><span class="strong">Regulamin</span> - niniejszy dokument
+                        określający zasady rezerwacji online miejsc na wydarzenie.
+                    </li>
+                    <li class="document__list--point"><span class="strong">System</span> - internetowy system rezerwacji
+                        dostępny na stronie Organizatora.
+                    </li>
+                    <li class="document__list--point"><span class="strong">Organizator</span> - podmiot organizujący
+                        wydarzenie i prowadzący System.
+                    </li>
+                    <li class="document__list--point"><span class="strong">Klient</span> - osoba dokonująca rezerwacji
+                        poprzez System.
+                    </li>
+                    <li class="document__list--point"><span class="strong">Wydarzenie</span> - impreza, koncert,
+                        spektakl lub inne wydarzenie, na które prowadzona jest rezerwacja.
+                    </li>
+                    <li class="document__list--point"><span class="strong">Rezerwacja</span> - zgłoszenie zarejestrowane
+                        w systemie na dowolną ilość miejsc na wybrane wydarzenie
+                    </li>
+                </ul>
+                <h2 class="document__subtitleH2">§2. Postanowienia ogólne</h2>
+                <ul class="document__list">
+                    <li class="document__list--point">Regulamin określa zasady korzystania z systemu rezerwacji
+                        internetowej, prawa i obowiązki Organizatora oraz Klienta.
+                    </li>
+                    <li class="document__list--point">Dokonanie rezerwacji oznacza akceptację Regulaminu przez
+                        Klienta.
+                    </li>
+                    <li class="document__list--point">Organizator zastrzega sobie prawo do zmiany Regulaminu, o czym
+                        poinformuje Klientów z odpowiednim wyprzedzeniem.
+                    </li>
+                </ul>
+                <h2 class="document__subtitleH2">§3. Warunki techniczne</h2>
+                <p class="document__paragraph">Do dokonania rezerwacji online wymagane jest posiadanie urządzenia z
+                    dostępem do Internetu, aktualnej przeglądarki oraz aktywnego adresu e-mail.</p>
+                
+                <h2 class="document__subtitleH2">§4. Proces rezerwacji</h2>
+                <ul class="document__list">
+                    <li class="document__list--point">Klient wybiera wydarzenie, datę i wypełnia formularz rezerwacyjny, podając wymagane dane osobowe (imię, nazwisko, e-mail, telefon), liczbę rezerwowanych miejsc oraz formę płatności.
+                    </li>
+                    <li class="document__list--point">Jeśli na wybrane wydarzenie są wolne miejsca w ilości rezerwowanych miejsc przez Klienta to rezerwacja trafia na listę podstawową. Jeśli nie będzie miejsca na rezerwowane wydarzenie wówczas rezerwacja trafia na listę rezerwową.
+                    </li>
+                    <li class="document__list--point">W przypadku anulowania rezerwacji przez Klienta na wydarzenie i zwolnienia się miejsc, System powiadamia o tym osobę z pierwszej pasującej Rezerwacji na liście rezerwowej o przeniesieniu na listę podstawową.
+                    </li>
+                    <li class="document__list--point">Klient potwierdza zapoznanie się z Regulaminem oraz wyraża zgodę na przetwarzanie danych osobowych.</li>
+                    <li class="document__list--point">Umowa zostaje zawarta w momencie skutecznego opłacenia rezerwacji lub potwierdzenia zamówienia przez Organizatora.</li>
+                    <li class="document__list--point">Klient otrzymuje potwierdzenie rezerwacji na podany adres e-mail.</li>
+                </ul>
+                
+                <h2 class="document__subtitleH2">§5. Ceny</h2>
+                <p class="document__paragraph">Wszystkie ceny podane w Systemie są cenami brutto PLN.</p>
+                
+                <h2 class="document__subtitleH2">§6. Płatności</h2>
+                <p class="document__paragraph">Płatność za rezerwację odbywa się zgodnie z informacjami zawartymi w systemie rezerwacji.</p>
+                
+                 <h2 class="document__subtitleH2">§7. Zmiany i anulacje</h2>
+                <ul class="document__list">
+                    <li class="document__list--point">Klient ma prawo do anulowania lub zmiany rezerwacji na zasadach określonych w Regulaminie (np. do określonego terminu przed wydarzeniem).
+                    </li>
+                    <li class="document__list--point">Anulowanie odbywa się poprzez samodzielne anulowanie przez Klienta poprzez kliknięcie przycisku anuluj zawartym w wiadomości z potwierdzeniem rezerwacji bądź też telefonicznie kontaktując się z zespołem NaNitkachDźwieków.
+                    </li>
+                    <li class="document__list--point">W przypadku odwołania wydarzenia przez Organizatora, jeśli Klient dokonał przedpłaty to wówczas otrzymuje zwrot środków.
+                    </li>
+                </ul>
+                
+                <h2 class="document__subtitleH2">§8. Reklamacje</h2>
+                <p class="document__paragraph">Reklamacje dotyczące procesu rezerwacji można składać w formie elektronicznej na adres e-mail Organizatora.</p>
+                
+                <h2 class="document__subtitleH2">§9. Ochrona danych osobowych</h2>
+                <ul class="document__list">
+                    <li class="document__list--point">Dane osobowe Klienta są przetwarzane wyłącznie w celu realizacji rezerwacji, zgodnie z obowiązującymi przepisami prawa.
+                    </li>
+                    <li class="document__list--point">Klient ma prawo dostępu do swoich danych osobowych oraz do ich poprawiania i usunięcia.
+                    </li>
+                </ul>
+                <h2 class="document__subtitleH2">§10. Postanowienia końcowe</h2>
+                <ul class="document__list">
+                    <li class="document__list--point">W sprawach nieuregulowanych Regulaminem zastosowanie mają przepisy Kodeksu cywilnego oraz ustawy o prawach konsumenta.
+                    </li>
+                    <li class="document__list--point">Regulamin dostępny jest na stronie internetowej Organizatora.
+                    </li>
+                </ul>
+                <p class="document__updated">
+                <span class="strong">Obowiązuje od:</span> 22 maja 2025 r.<br>
+                <span class="strong">Wersja:</span> 1.0
+            </p>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+</body>

@@ -15,9 +15,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Faculty+Glyphic&display=swap" rel="stylesheet">
     <link rel="stylesheet" href={% static "/../static/style/style.css" %}>
     <link rel="stylesheet" href={% static "/../static/style/hamburgers.css" %}>
+    <link rel="stylesheet" href={% static '/../static/style/cookie-consent.css' %}>
     <script defer src={% static "../static/script/script.js" %}></script>
     <script defer src={% static "../static/script/lazy-loading.js" %}></script>
     <script defer src={% static "../static/script/animations.js" %}></script>
+    <script defer src="{% static '../script/cookie-consent.js' %}"></script>
     <title>Na nitkach dźwięków - koncerty na misach dźwiękowych, gongu | Milanówek</title>
 </head>
 <body>
@@ -741,7 +743,11 @@
                 <span class="footer__rights">Wszelkie prawa zastrzeżone</span>
             </p>
         </div>
+        <p class="footer__links">
+                <a href="{% url 'privacy_policy' %}">Polityka Prywatności</a>
+            </p>
     </div>
 </footer>
+
 </body>
 </html>

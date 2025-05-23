@@ -71,6 +71,15 @@
   color: sienna;
   margin-bottom: 0.8rem;
 }
+.reservation-form__form-label a {
+  color: darkgoldenrod;
+  text-decoration: underline;
+  font-weight: normal;
+}
+.reservation-form__form-label a:hover {
+  color: gold;
+  text-decoration: none;
+}
 .reservation-form__form input,
 .reservation-form__form select,
 .reservation-form__form textarea {
