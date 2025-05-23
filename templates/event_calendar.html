@@ -2,7 +2,7 @@
 {% load static %}
 <head>
      {% block head_suplement %}
-    <link rel="stylesheet" href={% static '/style/calendar.css' %}>
+    <link rel="stylesheet" href="{% static '/style/calendar.css' %}">
          <title>Kalendarz wydarzeń</title>
     {% endblock %}
 </head>
@@ -25,6 +25,6 @@
 {% endblock %}
 {% block script %}
 <script defer src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.17/index.global.min.js"></script>
-<script defer src={% static "/../static/script/calendar.js" %}></script>
+<script defer src="{% static '/../static/script/calendar.js' %}"></script>
 {% endblock %}
 </body>
