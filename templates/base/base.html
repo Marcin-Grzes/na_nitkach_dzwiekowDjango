@@ -14,14 +14,14 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Faculty+Glyphic&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href={% static "/../static/style/style.css" %}>
+    <link rel="stylesheet" href={% static "/style/style.css" %}>
     {% block base_styles %}
-    <link rel="stylesheet" href={% static "/../static/style/base.css" %}>
-{% endblock base_styles %}
-    <link rel="stylesheet" href={% static "/../static/style/hamburgers.css" %}>
-    <link rel="stylesheet" href={% static '/../static/style/cookie-consent.css' %}>
+        <link rel="stylesheet" href={% static "/style/base.css" %}>
+    {% endblock base_styles %}
+    <link rel="stylesheet" href={% static "/style/hamburgers.css" %}>
+    <link rel="stylesheet" href={% static "/style/cookie-consent.css" %}>
     {% block head_suplement %}
-        
+
     {% endblock head_suplement %}
 </head>
 <body>
@@ -31,19 +31,19 @@
 <!--===================NAWIGACJA=========================-->
 
 {% block content %}
-    
+
 {% endblock %}
 
 <!--===================STOPKA=========================-->
 {% include 'base/footer.html' %}
 <!--===================STOPKA=========================-->
 
-<script defer src={% static "../static/script/script.js" %}></script>
-<script defer src={% static "../static/script/lazy-loading.js" %}></script>
+<script defer src="{% static '/script/script.js' %}"></script>
+<script defer src="{% static '/script/lazy-loading.js' %}"></script>
 <script defer src="{% static '/script/animations.js' %}"></script>
-<script defer src="{% static '../script/cookie-consent.js' %}"></script>
+<script defer src="{% static '/script/cookie-consent.js' %}"></script>
 {% block script %}
-    
+
 {% endblock %}
 </body>
 </html>

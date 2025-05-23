@@ -40,7 +40,7 @@ class Policy2(View):
         return render(request, 'privacy_policy2.html')
 
 
-class Website_regulations(TemplateView):
+class WebsiteRegulations(TemplateView):
     template_name = 'website_regulations.html'
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

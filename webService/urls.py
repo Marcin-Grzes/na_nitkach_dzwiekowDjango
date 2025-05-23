@@ -46,7 +46,7 @@ urlpatterns = [
     path('api/events-data/', views.EventsDataApiView.as_view(), name='events_data_api'),
     path('polityka-prywatnosci/', views.PrivacyPolicyView.as_view(), name='privacy_policy'),
     path('policy2/', views.Policy2.as_view(), name='policy'),
-    path('regulamin/', views.Website_regulations.as_view(), name='website_regulations'),
+    path('regulamin/', views.WebsiteRegulations.as_view(), name='website_regulations'),
 
 ]
 # Tylko w wersji developerskiej
