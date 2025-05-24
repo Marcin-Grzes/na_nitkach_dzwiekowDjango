@@ -165,7 +165,7 @@ class EventReservationView(ReservationEmailMixin, View):
 
         return render(request, 'event_reservation_form.html', context)
 
-    @check_honeypot
+    # @check_honeypot
     def post(self, request, event_id):
         # Pobierz wydarzenie lub zwróć 404
         event = get_object_or_404(Events, id=event_id, is_active=True)
@@ -298,7 +298,7 @@ class UniversalReservationView(ReservationEmailMixin, View):
 
         return render(request, 'universal_reservation_form.html', context)
 
-    @check_honeypot
+    # @check_honeypot
     def post(self, request):
         form = UniversalReservationForm(request.POST)
 
