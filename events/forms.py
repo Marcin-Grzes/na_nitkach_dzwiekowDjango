@@ -1,6 +1,9 @@
 from django.utils import timezone
 
 from django import forms
+from django_recaptcha.fields import ReCaptchaField
+from django_recaptcha.widgets import ReCaptchaV2Checkbox
+
 from .models import Reservations, Events
 
 
@@ -58,6 +61,11 @@ class EventReservationForm(forms.ModelForm):
         required=False,
         help_text="Chcę zapisać się newsletter, by otrzymywać informacje o przyszłych wydarzeniach wydarzeniach"
                   " i ofertach specjalnych."
+    )
+
+    captcha = ReCaptchaField(
+        widget=ReCaptchaV2Checkbox,
+        label='Weryfikacja'
     )
 
     class Meta:
@@ -125,6 +133,11 @@ class UniversalReservationForm(forms.ModelForm):
         required=False,
         help_text="Chcę zapisać się newsletter, by otrzymywać informacje o przyszłych wydarzeniach wydarzeniach"
                   " i ofertach specjalnych."
+    )
+
+    captcha = ReCaptchaField(
+        widget=ReCaptchaV2Checkbox,
+        label='Weryfikacja'
     )
 
     class Meta:

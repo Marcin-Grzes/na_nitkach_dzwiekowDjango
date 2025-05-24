@@ -192,6 +192,15 @@
       }
     }
   }
+
+  &__captcha {
+    text-align: left;
+
+    .g-recaptcha {
+      display: block;
+      margin-top: 2rem;
+    }
+  }
 }
 
 

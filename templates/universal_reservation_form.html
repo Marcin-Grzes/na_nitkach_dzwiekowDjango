@@ -125,6 +125,17 @@
                             {% endif %}
                             <small class="reservation-form__form-text">{{ form.newsletter_consent.help_text }}</small>
                         </div>
+                    
+                        {#CAPTCHA#}
+                        <div class="reservation-form__form-group" style="grid-column: 1 / -1;">
+                            <div class="reservation-form__captcha">
+                                <label class="reservation-form__form-label">{{ form.captcha.label }}</label>
+                                {{ form.captcha }}
+                                {% if form.captcha.errors %}
+                                    <div class="reservation-form__form-block">{{ form.captcha.errors }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
 
                         <div class="reservation-form__form-buttons">
                             <a href="{% url 'index' %}" class="btn btn-secondary">Przejdź na stronę główną</a>

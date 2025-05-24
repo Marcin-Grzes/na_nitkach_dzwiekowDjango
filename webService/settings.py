@@ -17,7 +17,6 @@ from django.template.context_processors import media
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
@@ -29,7 +28,6 @@ DEBUG = True
 
 # ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]']
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -44,7 +42,8 @@ INSTALLED_APPS = [
     "accounts.apps.AccountsConfig",
     'phonenumber_field',
     'honeypot',
-# zabezpieczenie honeypot
+    'django_recaptcha',
+    # zabezpieczenie honeypot
 ]
 
 # Konfiguracja TinyMCE
@@ -75,9 +74,11 @@ TINYMCE_DEFAULT_CONFIG = {
 TINYMCE_SPELLCHECKER = True
 TINYMCE_COMPRESSOR = False
 
+
 def honeypot_verifier(value):
     """Własny weryfikator honeypot - zwraca True jeśli pole jest puste"""
     return value == ''
+
 
 # Konfiguracja ustawień honeypot
 HONEYPOT_FIELD_NAME = 'website_url'  # Nazwa ukrytego pola
@@ -117,7 +118,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'webService.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
@@ -127,7 +127,6 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -147,7 +146,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
@@ -158,7 +156,6 @@ TIME_ZONE = 'Europe/Warsaw'
 USE_I18N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
@@ -198,3 +195,15 @@ except ImportError:
 
 # URL bazowy strony (używany do generowania pełnych linków)
 SITE_URL = 'http://localhost:8000'  # Zmień na rzeczywisty URL w produkcji
+
+
+
+# Opcjonalne ustawienia dla developmentu
+# W środowisku testowym możesz używać kluczy testowych Google:
+
+# Na końcu pliku settings.py dodaj:
+SILENCED_SYSTEM_CHECKS = ['django_recaptcha.recaptcha_test_key_error']
+
+if DEBUG:
+    RECAPTCHA_PUBLIC_KEY = '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI'
+    RECAPTCHA_PRIVATE_KEY = '6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe'

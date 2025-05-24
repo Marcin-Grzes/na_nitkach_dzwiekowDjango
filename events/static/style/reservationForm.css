@@ -175,6 +175,13 @@
   transform: translateY(-3px);
   background: rgba(218, 165, 32, 0.1);
 }
+.reservation-form__captcha {
+  text-align: left;
+}
+.reservation-form__captcha .g-recaptcha {
+  display: block;
+  margin-top: 2rem;
+}
 
 form {
   width: 100%;
