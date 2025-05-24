@@ -1364,5 +1364,29 @@ FORMULARZ REZERWACJI
     @include section-title
   }
 }*/
+/*================================
+HONEYPOT
+================================*/
+/* Honeypot field - ukrywamy przed użytkownikami */
+input[name=website_url] {
+  position: absolute !important;
+  left: -9999px !important;
+  top: -9999px !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  height: 0 !important;
+  width: 0 !important;
+}
+
+/* Alternatywna metoda - klasa dla kontenera honeypot */
+.honeypot-field {
+  position: absolute;
+  left: -9999px;
+  top: -9999px;
+  visibility: hidden;
+  opacity: 0;
+  height: 0;
+  width: 0;
+}
 
 /*# sourceMappingURL=style.css.map */

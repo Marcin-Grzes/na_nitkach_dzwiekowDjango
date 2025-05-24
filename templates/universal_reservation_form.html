@@ -17,6 +17,10 @@
             <div class="reservation-form-container">
                 <form method="post" novalidate id="reservation-form">
                     {% csrf_token %}
+                    <!-- Pole honeypot - niewidoczne dla użytkowników -->
+                    <div class="honeypot-field" style="display: none;">
+                        {{ form.website_url }}
+                    </div>
                     <div class="reservation-form__form">
                         <div class="reservation-form__form-group" style="grid-column: 1 / -1;">
                             <label for="event-selector" class="reservation-form__form-label">

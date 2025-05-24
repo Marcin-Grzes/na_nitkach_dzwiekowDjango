@@ -38,6 +38,12 @@ class EventReservationForm(forms.ModelForm):
     Łączy dane klienta i rezerwacji
     """
 
+    website_url = forms.CharField(
+        required=False,
+        widget=forms.HiddenInput(),
+        label='Leave empty'
+    )
+
     """Pola dla modelu Customer"""
     first_name = forms.CharField(label="Imię", max_length=50)
     last_name = forms.CharField(label="Nazwisko", max_length=50)
@@ -79,10 +85,24 @@ class EventReservationForm(forms.ModelForm):
 
         return cleaned_data
 
+    def clean_website_url(self):
+        """Walidacja pola honeypot"""
+        value = self.cleaned_data.get('website_url', '')
+        if value:
+            raise forms.ValidationError('Wykryto automatyczne wypełnianie formularza.')
+        return value
+
 
 class UniversalReservationForm(forms.ModelForm):
 
     """ Uniwersalny formularz z możliwością wyboru wydarzenia z listy """
+
+    # Dodaj pole honeypot
+    website_url = forms.CharField(
+        required=False,
+        widget=forms.HiddenInput(),
+        label='Leave empty'
+    )
 
     event = forms.ModelChoiceField(
         queryset=Events.objects.none(), # # Pusty queryset, będzie aktualizowany w __init__
@@ -135,3 +155,9 @@ class UniversalReservationForm(forms.ModelForm):
 
         return cleaned_data
 
+    def clean_website_url(self):
+        """Walidacja pola honeypot"""
+        value = self.cleaned_data.get('website_url', '')
+        if value:
+            raise forms.ValidationError('Wykryto automatyczne wypełnianie formularza.')
+        return value

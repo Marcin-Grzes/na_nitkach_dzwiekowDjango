@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     "events.apps.EventsConfig",
     "accounts.apps.AccountsConfig",
     'phonenumber_field',
-    # 'honeypot',
+    'honeypot',
 # zabezpieczenie honeypot
 ]
 
@@ -75,11 +75,14 @@ TINYMCE_DEFAULT_CONFIG = {
 TINYMCE_SPELLCHECKER = True
 TINYMCE_COMPRESSOR = False
 
+# def honeypot_verifier(value):
+#     """Własny weryfikator honeypot - zwraca True jeśli pole jest puste"""
+#     return value == ''
 
 # Konfiguracja ustawień honeypot
-# HONEYPOT_FIELD_NAME = 'email_verification'  # Nazwa ukrytego pola
-# HONEYPOT_VALUE = ''  # Oczekiwana wartość (puste pole)
-# HONEYPOT_VERIFIER = 'honeypot.validators.HoneypotValidator'  # Walidator
+HONEYPOT_FIELD_NAME = 'website_url'  # Nazwa ukrytego pola
+HONEYPOT_VALUE = ''  # Oczekiwana wartość (puste pole)
+# HONEYPOT_VERIFIER = 'honeypot.verifiers.honeypot_equals'  # Walidator
 # HONEYPOT_RESPONSE = 'Formularz zawiera podejrzane dane. Jeśli nie jesteś botem, spróbuj ponownie.'  # Komunikat błędu
 
 MIDDLEWARE = [
@@ -91,6 +94,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'accounts.middleware.IPAddressMiddleware',
+    'honeypot.middleware.HoneypotMiddleware',
 ]
 
 ROOT_URLCONF = 'webService.urls'
