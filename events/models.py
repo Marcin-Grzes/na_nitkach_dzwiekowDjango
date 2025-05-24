@@ -2,18 +2,14 @@ import uuid
 
 from django.db.models import Sum
 from django.conf import settings
-from django.core.mail import send_mail
 from django.db.models import Max
-from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils import timezone
-from .services import cancel_reservation, send_waitlist_promotion_email
+from .services import cancel_reservation
 from django.core.exceptions import ValidationError
 from django.db import models
-from django.utils.html import strip_tags
 from django.utils.text import slugify
 from djmoney.models.validators import MinMoneyValidator
-from phonenumber_field.modelfields import PhoneNumberField
 from django.utils.translation import gettext_lazy as _
 from django.core.validators import MinValueValidator, MaxValueValidator
 from tinymce.models import HTMLField

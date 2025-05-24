@@ -8,8 +8,6 @@ from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 from tinymce.widgets import TinyMCE
 from accounts.admin_base import MetadataAdminModel
-
-from accounts import models
 from .models import Reservations, EventType, EventImage, Events, Venue
 from .views import ReservationEmailMixin
 
@@ -84,7 +82,7 @@ class ReservationsAdmin(ReservationEmailMixin, MetadataAdminModel):
             elif obj.status == Reservations.ReservationStatus.WAITLIST:
                 self.send_email(obj, 'confirmation')  # Używamy tego samego szablonu
                 self.message_user(request,
-                                  f"Utworzono nową rezerwację na liście rezerwowej. Wysłano powiadomienie do {obj.customer.email}.")
+            f"Utworzono nową rezerwację na liście rezerwowej. Wysłano powiadomienie do {obj.customer.email}.")
 
         # Przypadek 2: Zmiana statusu istniejącej rezerwacji
         elif old_status != obj.status:

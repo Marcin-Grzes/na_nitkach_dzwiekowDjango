@@ -20,20 +20,14 @@ from django.conf.urls.static import static
 from django.urls import path, include
 
 from events import views
-from events.views import (HomeView, Base, TestCalendar, ReservationSuccessView, ReservationAvailabilityView,
-                          UniversalReservationView, EventsDataApiView)
-
-# from events.views import ReservationsView
-# from events.views import HomeView
+from events.views import (HomeView, Base, ReservationSuccessView, ReservationAvailabilityView)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', HomeView.as_view(), name='index'),
     path('base/', Base.as_view(), name='base'),
-    path('test/', TestCalendar.as_view(), name='test'),
     path('events/<int:event_id>/reservation/<int:reservation_id>/success/', ReservationSuccessView.as_view(),
          name='reservation_success'),
-    # path('rezerwation', ReservationsView.as_view(), name='rezerwation'),
     path('calendar/', views.CalendarView.as_view(), name='event_calendar'),
     path('<int:event_id>/', views.EventDetailView.as_view(), name='event_detail'),
     path('type/<slug:type_slug>/', views.EventsByTypeView.as_view(), name='events_by_type'),
@@ -45,7 +39,6 @@ urlpatterns = [
     path('reservation/', views.UniversalReservationView.as_view(), name='reservation'),
     path('api/events-data/', views.EventsDataApiView.as_view(), name='events_data_api'),
     path('polityka-prywatnosci/', views.PrivacyPolicyView.as_view(), name='privacy_policy'),
-    path('policy2/', views.Policy2.as_view(), name='policy'),
     path('regulamin/', views.WebsiteRegulations.as_view(), name='website_regulations'),
 
 ]

@@ -1,8 +1,7 @@
 from django.utils import timezone
 
 from django import forms
-from .models import Reservations, Events, EventType, Venue
-from accounts.models import Customer
+from .models import Reservations, Events
 
 
 class EventForm(forms.ModelForm):
@@ -105,7 +104,7 @@ class UniversalReservationForm(forms.ModelForm):
     )
 
     event = forms.ModelChoiceField(
-        queryset=Events.objects.none(), # # Pusty queryset, będzie aktualizowany w __init__
+        queryset=Events.objects.none(),  # Pusty queryset, będzie aktualizowany w __init__
         label="Wybierz wydarzenie",
         widget=forms.Select(attrs={'class': 'form-control', 'id': 'event-selector'}),
     )

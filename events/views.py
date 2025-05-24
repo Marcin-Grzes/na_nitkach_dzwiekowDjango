@@ -1,21 +1,15 @@
 import json
 
-from django.contrib.admin.views.decorators import staff_member_required
-from django.db import IntegrityError
-
 from django.http import JsonResponse
 from django.utils import timezone
 from django.core.mail import send_mail
 from django.shortcuts import render, redirect, get_object_or_404
 from django.template.loader import render_to_string
-from django.utils.decorators import method_decorator
 from django.utils.html import strip_tags
 from django.views import View
 from django.urls import reverse
 from django.views.generic import ListView, DetailView
 from django.views.generic.base import ContextMixin, TemplateView
-from honeypot.decorators import check_honeypot
-
 from accounts.models import Customer
 from events.forms import EventReservationForm, UniversalReservationForm
 from django.contrib import messages
@@ -33,11 +27,6 @@ class HomeView(View):
 class Base(View):
     def get(self, request):
         return render(request, 'base/base.html')
-
-
-class Policy2(View):
-    def get(self, request):
-        return render(request, 'privacy_policy2.html')
 
 
 class WebsiteRegulations(TemplateView):
@@ -135,7 +124,7 @@ class EventReservationView(ReservationEmailMixin, View):
     Przyjmuje ID wydarzenia z URL i tworzy odpowiednią rezerwację.
     """
 
-    # @check_honeypot
+
     def get(self, request, event_id):
         # Pobierz wydarzenie lub zwróć 404
         event = get_object_or_404(Events, id=event_id, is_active=True)
@@ -165,7 +154,7 @@ class EventReservationView(ReservationEmailMixin, View):
 
         return render(request, 'event_reservation_form.html', context)
 
-    # @check_honeypot
+
     def post(self, request, event_id):
         # Pobierz wydarzenie lub zwróć 404
         event = get_object_or_404(Events, id=event_id, is_active=True)
@@ -337,48 +326,6 @@ class UniversalReservationView(ReservationEmailMixin, View):
                 customer_data['created_by_admin'] = False  # Utworzone przez klienta
                 customer = Customer.objects.create(**customer_data)
 
-            """Drugie rozwiązanie - występuje błąd"""
-            # defaults = customer_data.copy()
-            # email = defaults.pop('email')
-            # phone_number = defaults.pop('phone_number')
-            #
-            # customer, created = Customer.objects.get_or_create(
-            #     email=email,
-            #     phone_number=phone_number,
-            #     defaults=defaults
-            # )
-            # if not created:
-            #     """Jeśli klient istniał, aktualizujemy jego dane"""
-            #     customer.first_name = customer_data['first_name']
-            #     customer.last_name = customer_data['last_name']
-            #     customer.save()
-
-            # Normalizacja danych - usunięcie białych znaków
-            # email = customer_data['email'].strip().lower()
-            # phone_number = str(customer_data['phone_number'])
-
-            """Rozwiązanie trzecie"""
-            # Spróbuj znaleźć klienta z elastycznym zapytaniem
-            # try:
-            #     # Najpierw sprawdź z dokładnym dopasowaniem
-            #     customer = Customer.objects.get(
-            #         email=email,
-            #         phone_number=phone_number
-            # )
-            #     # Aktualizuj dane, jeśli klient istnieje
-            #     customer.first_name = customer_data['first_name']
-            #     customer.last_name = customer_data['last_name']
-            #     customer.save(update_fields=['first_name', 'last_name'])
-            #
-            # except Customer.DoesNotExist:
-            #     try:
-            #         customer = Customer.objects.create(**customer_data)
-            #     except IntegrityError:
-            #         """Jeśli nadal występuje problem, szukamy jeszcze raz. Może ktoś inny właśnie utworzył tego klienta"""
-            #         customer = Customer.objects.get(
-            #             email=email,
-            #             phone_number=phone_number
-            #         )
 
             # Utwórz nowy obiekt rezerwacji bez zapisywania w bazie
             reservation = form.save(commit=False)
