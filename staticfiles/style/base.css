@@ -1,0 +1,13 @@
+@font-face {
+  font-family: "Original Surfer";
+  src: url("../fonts/Original_Surfer/OriginalSurfer-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+@media (min-width: 992px) {
+  .nav {
+    position: relative;
+  }
+}
+
+/*# sourceMappingURL=base.css.map */

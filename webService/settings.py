@@ -24,10 +24,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 # ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]']
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['seiryuu.atthost24.pl', 'www.seiryuu.atthost24.pl']
 
 # Application definition
 
@@ -121,12 +121,12 @@ WSGI_APPLICATION = 'webService.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -194,16 +194,19 @@ except ImportError:
     pass
 
 # URL bazowy strony (używany do generowania pełnych linków)
-SITE_URL = 'http://localhost:8000'  # Zmień na rzeczywisty URL w produkcji
+SITE_URL = 'http://seiryuu.atthost24.pl'  # Zmień na rzeczywisty URL w produkcji
 
-
+# Bezpieczeństwo
+SECURE_BROWSER_XSS_FILTER = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
+X_FRAME_OPTIONS = 'DENY'
 
 # Opcjonalne ustawienia dla developmentu
 # W środowisku testowym możesz używać kluczy testowych Google:
 
 # Na końcu pliku settings.py dodaj:
-SILENCED_SYSTEM_CHECKS = ['django_recaptcha.recaptcha_test_key_error']
+# SILENCED_SYSTEM_CHECKS = ['django_recaptcha.recaptcha_test_key_error']
 
-if DEBUG:
-    RECAPTCHA_PUBLIC_KEY = '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI'
-    RECAPTCHA_PRIVATE_KEY = '6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe'
+# if DEBUG:
+#     RECAPTCHA_PUBLIC_KEY = '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI'
+#     RECAPTCHA_PRIVATE_KEY = '6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe'

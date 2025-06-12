@@ -1,0 +1,173 @@
+@import "mixiny";
+
+// min-width: 992px
+@media (min-width: 992px) {
+  .nav {
+    position: relative !important;
+  }
+}
+
+.success-confirmation {
+  background: $background;
+  position: relative;
+  overflow: hidden;
+  padding: 6rem 0;
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+
+  &__container {
+    background: $backgroud-subsection;
+    border-radius: 15px;
+    padding: 4rem 2rem;
+    text-align: center;
+    box-shadow: 0 8px 20px rgba(184, 134, 11, 0.15);
+    transition: $transformHover;
+    max-width: 800px;
+    margin: 0 auto;
+
+    &:hover {
+      @include card-hover-effect;
+    }
+  }
+
+  &__icon {
+    width: 8rem;
+    height: 8rem;
+    margin: 0 auto 2rem;
+    background: linear-gradient(135deg, goldenrod, #e6b422);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    svg {
+      width: 5rem;
+      height: 5rem;
+      color: white;
+    }
+  }
+
+  &__title {
+    font-size: 4rem;
+    margin-bottom: 2rem;
+    color: $main-color;
+    text-shadow: $text-shadow;
+    font-family: $head-font;
+  }
+
+  &__text {
+    font-size: 2.4rem;
+    line-height: 1.8;
+    font-family: $main-font;
+    margin-bottom: 2rem;
+  }
+
+  &__event-title {
+    color: sienna;
+    font-weight: bold;
+  }
+
+  &__details {
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 10px;
+    padding: 3rem;
+    margin: 4rem 0;
+    text-align: left;
+
+    p {
+      font-family: $main-font;
+      font-size: 2.2rem;
+      margin-bottom: 1rem;
+
+      span {
+        font-weight: bold;
+        color: sienna;
+      }
+    }
+  }
+
+  &__info {
+    font-size: 2rem;
+    line-height: 1.6;
+    font-family: $main-font;
+    margin-bottom: 3rem;
+    color: #28a745;
+  }
+
+  &__waitlist-info {
+    font-size: 2.2rem;
+    line-height: 1.6;
+    font-family: $main-font;
+    margin-bottom: 2rem;
+    color: #cc9900;
+
+    strong {
+      color: sienna;
+      font-size: 2.4rem;
+    }
+  }
+
+  &__actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    margin-top: 3rem;
+
+    @media (min-width: 576px) {
+      flex-direction: row;
+      justify-content: center;
+    }
+  }
+
+  &__button {
+    display: inline-block;
+    background: linear-gradient(135deg, goldenrod, #e6b422);
+    color: white;
+    font-family: $head-font;
+    font-size: 2rem;
+    padding: 1.5rem 3rem;
+    border-radius: 50px;
+    text-transform: uppercase;
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+    text-decoration: none;
+    min-width: 240px;
+    text-align: center;
+
+    &:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    &--secondary {
+      background: transparent;
+      color: goldenrod;
+      border: 2px solid goldenrod;
+      box-shadow: none;
+
+      &:hover {
+        background: rgba(218, 165, 32, 0.1);
+      }
+    }
+  }
+}
+
+// Animacje
+@include fade-animation;
+
+@media (min-width: 768px) {
+  .success-confirmation {
+    padding: 8rem 0;
+
+    &__container {
+      padding: 5rem;
+    }
+
+    &__title {
+      font-size: 4.5rem;
+    }
+  }
+}

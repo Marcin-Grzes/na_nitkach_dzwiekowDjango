@@ -1,0 +1,178 @@
+@import 'mixiny';
+
+//  Basic reset
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+}
+
+html {
+  font-size: 62.5%;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 1.6rem;
+}
+
+a {
+  text-decoration: none;
+}
+
+img {
+  height: auto;
+}
+
+input,
+button,
+textarea,
+select {
+  font-family: inherit;
+}
+
+button {
+  border: none;
+  cursor: pointer;
+}
+
+
+textarea {
+  resize: vertical;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+.wrapper {
+  margin: 0 auto;
+  padding: 0 15px;
+  width: 100%;
+  max-width: 1200px;
+}
+
+// MENU
+
+// min-width: 992px
+@media (min-width: 992px) {
+  .nav {
+    position: relative !important;
+  }
+}
+
+// Base Calendar Container
+
+.title {
+  @include section-title;
+  @include section-title-suplement;
+}
+
+.calendar {
+  background: $backgroud-subsection;
+}
+.calendar-container {
+  //font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-family: $main-font;
+  color: $text-color;
+
+  .page-title {
+    //margin-bottom: 25px;
+    //font-size: 1.8rem;
+    //font-weight: bold;
+    //color: goldenrod;
+    font-size: 6rem;
+    //margin: 3rem 0 5rem;
+    padding: 3rem 0 5rem;
+    text-align: center;
+    color: $main-color;
+    text-shadow: $text-shadow;
+    font-family: $head-font;
+  }
+}
+
+// Calendar
+#calendar {
+  @include card;
+  //margin-bottom: 25px;
+  min-height: 600px;
+
+  .fc-toolbar-title {
+    font-size: 1.5rem;
+
+    @media (min-width: $breakpoint-tablet) {
+      font-size: 1.8rem;
+    }
+  }
+
+  .fc-button {
+    background-color: sienna;
+    border-color: sienna;
+
+    &:hover {
+      background-color: darken(sienna, 10%);
+      border-color: darken(sienna, 10%);
+    }
+
+    &:focus {
+      box-shadow: 0 0 0 0.2rem rgba(#4a90e2, 0.3);
+    }
+  }
+
+  .fc-event {
+    cursor: pointer;
+    border-radius: 3px;
+
+    &.fully-booked {
+      opacity: 0.7;
+      text-decoration: line-through;
+    }
+  }
+
+  // ustawienia wyświetlania tytułu wydarzenia
+  .fc-event-title {
+    color: $text-color; /* kolor czcionki linku wydarzenia */
+    font-size: 1.2rem;
+  white-space: normal; /* Pozwala na zawijanie tekstu */
+  overflow: visible;   /* Zapobiega ucięciu tekstu */
+  word-break: break-word;         /* Zapewnia łamanie długich słów */
+  line-height: 1.5;               /* Optymalizuje wysokość linii */
+  padding: 1px 2px;               /* Dodaje trochę przestrzeni wokół tekstu */
+}
+
+  // ustawienia wyświetlania godziny w kalendarzu
+  .fc-event-time {
+    color: sienna;
+  font-size: 1.2rem; /* Dostosuj według potrzeb */
+}
+  // ustawienia kropki przy wydarzeniu w kalendarzu
+  .fc-daygrid-event-dot {
+  display: none;
+}
+
+/* Dla wydarzeń o stałej wysokości (np. widoku tygodniowego) */
+.fc-daygrid-event {
+  height: auto;        /* Pozwala wydarzeniu rozszerzać się w pionie */
+  max-height: none;    /* Usuwa maksymalną wysokość */
+}
+
+  // Mobilne widoki
+  @media (max-width: $breakpoint-tablet) {
+    .fc-toolbar {
+      flex-direction: column;
+
+      .fc-toolbar-chunk {
+        margin-bottom: 10px;
+      }
+    }
+  }
+}

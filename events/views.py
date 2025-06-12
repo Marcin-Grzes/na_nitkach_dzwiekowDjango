@@ -437,9 +437,9 @@ class EventListView(EventTypeMixin, ListView):
     Widok wyświetlający listę wszystkich aktywnych, nadchodzących wydarzeń.
     Umożliwia filtrowanie po typie wydarzenia.
     """
-    model = Events
-    template_name = 'events/event_list.html'
-    context_object_name = 'events'
+    # model = Events
+    # template_name = 'events/event_list.html'
+    # context_object_name = 'events'
 
     def get_queryset(self):
         # Pobieramy tylko aktywne wydarzenia z datą rozpoczęcia w przyszłości

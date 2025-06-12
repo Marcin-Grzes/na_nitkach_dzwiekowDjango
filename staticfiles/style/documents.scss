@@ -1,0 +1,128 @@
+@import "mixiny";
+
+.document {
+  padding: 80px 0 40px;
+  background: linear-gradient(135deg, rgba(255, 253, 240, 1) 0%, rgba(255, 236, 179, 1) 100%);
+  min-height: 100vh;
+
+  &__title {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 40px;
+    color: sienna;
+    font-family: "Original Surfer", sans-serif;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+  }
+
+  &__content {
+    max-width: 900px;
+    margin: 0 auto;
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+  }
+
+  &__subtitleH2 {
+    color: sienna;
+    margin-top: 35px;
+    margin-bottom: 20px;
+    font-size: 1.8rem;
+    border-bottom: 2px solid goldenrod;
+    padding-bottom: 10px;
+    font-family: "Faculty Glyphic", sans-serif;
+  }
+
+  &__subtitleH3 {
+    color: #8B4513;
+    margin-top: 25px;
+    margin-bottom: 15px;
+    font-size: 1.3rem;
+    font-family: "Faculty Glyphic", sans-serif;
+  }
+
+  &__paragraph {
+    margin-bottom: 20px;
+    line-height: 1.7;
+    text-align: justify;
+    font-size: 16px;
+  }
+
+  &__list {
+    padding-left: 25px;
+    margin-bottom: 20px;
+
+    &--point {
+      margin-bottom: 12px;
+      line-height: 1.6;
+      position: relative;
+
+      &::marker {
+        color: goldenrod;
+        font-weight: bold;
+      }
+    }
+  }
+
+  .strong {
+    color: sienna;
+    font-weight: 600;
+  }
+
+  &__updated {
+    font-style: italic;
+    color: #666;
+    text-align: right;
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid #ddd;
+    font-size: 14px;
+  }
+
+  &__contact-box {
+    background: linear-gradient(135deg, rgba(218, 165, 32, 0.1), rgba(255, 215, 0, 0.1));
+    border: 1px solid goldenrod;
+    border-radius: 10px;
+    padding: 20px;
+    margin: 25px 0;
+  }
+
+  &__back-button {
+    display: inline-block;
+    background: linear-gradient(135deg, goldenrod, #d4af37);
+    color: #333;
+    padding: 12px 25px;
+    text-decoration: none;
+    border-radius: 25px;
+    font-weight: bold;
+    margin-bottom: 30px;
+    transition: all 0.3s ease;
+    font-family: "Faculty Glyphic", sans-serif;
+
+    &:hover {
+      background: linear-gradient(135deg, #d4af37, #b8941f);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(218, 165, 32, 0.3);
+      color: #333;
+    }
+  }
+
+}
+
+@media (max-width: 768px) {
+  .document {
+    &__title {
+      font-size: 2rem;
+    }
+
+    &__content {
+      padding: 25px;
+      margin: 0 15px;
+    }
+
+    &__document__subtitleH2 {
+      font-size: 1.5rem;
+    }
+  }
+}

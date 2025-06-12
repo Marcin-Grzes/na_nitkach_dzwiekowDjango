@@ -188,30 +188,38 @@ class EventImage(BaseMetadataModel):
 # Definicja niestandardowego menedżera
 class EventManager(models.Manager):
     """
-    Niestandardowy menedżer modelu Events, który automatycznie aktualizuje
-    statusy wydarzeń podczas pobierania danych z bazy.
+    Niestandardowy menedżer modelu Events z bezpiecznymi metodami
+    aktualizacji statusów wydarzeń.
     """
 
     def get_queryset(self):
         """
-        Nadpisana metoda get_queryset, która przed zwróceniem wyników
-        aktualizuje statusy minionych wydarzeń.
-        """
-        # Najpierw pobierz standardowy queryset
-        queryset = super().get_queryset()
+        Podstawowa metoda get_queryset, która tylko zwraca dane
+        bez wykonywania żadnych modyfikacji.
 
-        # Znajdź i zaktualizuj wydarzenia, które już się rozpoczęły a są nadal aktywne
-        past_events = queryset.filter(
+        Ta metoda jest jak bibliotekarz, który tylko wskazuje półkę z książkami,
+        ale nie reorganizuje całej biblioteki za każdym razem.
+        """
+        return super().get_queryset()
+
+    def update_past_events(self):
+        """
+               Dedykowana metoda do aktualizowania statusów minionych wydarzeń.
+               Ta metoda powinna być wywoływana świadomie, gdy chcemy
+               zsynchronizować statusy z rzeczywistością.
+
+               Zwraca liczbę zaktualizowanych wydarzeń dla celów diagnostycznych.
+               """
+        # Znajdź wydarzenia, które już się rozpoczęły a są nadal aktywne
+        past_events = self.get_queryset().filter(
             is_active=True,
             start_datetime__lt=timezone.now()
         )
 
-        # Aktualizuj statusy, jeśli znaleziono takie wydarzenia
-        if past_events.exists():
-            past_events.update(is_active=False)
+        # Wykonaj aktualizację i zwróć liczbę zmodyfikowanych rekordów
+        updated_count = past_events.update(is_active=False)
 
-        # Zwróć całość querysetu (już zaktualizowaną)
-        return queryset
+        return updated_count
 
     def active(self):
         """
@@ -224,6 +232,19 @@ class EventManager(models.Manager):
         Pomocnicza metoda zwracająca tylko przyszłe aktywne wydarzenia.
         """
         return self.active().filter(start_datetime__gte=timezone.now())
+
+    def active_and_current(self):
+        """
+        Nowa metoda, która zwraca aktywne wydarzenia z automatyczną
+        aktualizacją statusów. To jest bezpieczne miejsce na wywołanie
+        aktualizacji, ponieważ nazwa metody jasno wskazuje, że wykona
+        ona operację modyfikującą.
+        """
+        # Najpierw aktualizuj statusy
+        updated_count = self.update_past_events()
+
+        # Następnie zwróć aktywne wydarzenia
+        return self.active()
 
 
 class Events(BaseMetadataModel):

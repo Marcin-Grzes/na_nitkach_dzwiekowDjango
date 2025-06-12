@@ -1,0 +1,374 @@
+// Zmienne globalne
+$primary-color: goldenrod;
+$primary-dark: #d4af37;
+$primary-darker: #b8941f;
+$primary-hover: #f4d03f;
+
+$text-dark: #333;
+$text-medium: #666;
+$text-light: #fff;
+
+$background-dark: #333;
+$background-medium: #444;
+$background-overlay: rgba(0, 0, 0, 0.7);
+
+$font-family: "Faculty Glyphic", sans-serif;
+
+$border-radius: 6px;
+$border-radius-large: 12px;
+$transition-smooth: 0.3s ease;
+$transition-bounce: 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+$shadow-light: 0 3px 10px rgba(218, 165, 32, 0.3);
+$shadow-medium: 0 5px 15px rgba(218, 165, 32, 0.4);
+$shadow-heavy: 0 20px 40px rgba(0, 0, 0, 0.3);
+$shadow-banner: 0 -4px 20px rgba(0, 0, 0, 0.3);
+
+// Mixiny
+@mixin gradient-primary {
+  background: linear-gradient(135deg, $primary-color, $primary-dark);
+}
+
+@mixin gradient-dark {
+  background: linear-gradient(135deg, rgba(51, 51, 51, 0.98), rgba(34, 34, 34, 0.98));
+}
+
+@mixin button-base {
+  padding: 10px 18px;
+  border: none;
+  border-radius: $border-radius;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  font-family: $font-family;
+  transition: all $transition-smooth;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+@mixin button-hover-lift {
+  transform: translateY(-2px);
+}
+
+// Banner cookies
+.cookie-banner {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  @include gradient-dark;
+  color: $text-light;
+  padding: 0;
+  z-index: 1000;
+  transform: translateY(100%);
+  transition: transform $transition-bounce;
+  box-shadow: $shadow-banner;
+  backdrop-filter: blur(10px);
+
+  &--visible {
+    transform: translateY(0);
+  }
+
+  &__container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+  }
+
+  &__content {
+    flex: 1 1 60%;
+    min-width: 300px;
+
+    p {
+      margin: 0;
+      font-size: 15px;
+      line-height: 1.6;
+      font-family: $font-family;
+    }
+
+    a {
+      color: $primary-color;
+      text-decoration: underline;
+      transition: color 0.2s;
+
+      &:hover {
+        color: $primary-hover;
+      }
+    }
+  }
+
+  &__buttons {
+    flex: 0 0 auto;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  &__button {
+    @include button-base;
+
+    &--accept {
+      @include gradient-primary;
+      color: $text-dark;
+      box-shadow: $shadow-light;
+
+      &:hover {
+        background: linear-gradient(135deg, $primary-dark, $primary-darker);
+        @include button-hover-lift;
+        box-shadow: $shadow-medium;
+      }
+    }
+
+    &--necessary {
+      background: rgba(255, 255, 255, 0.1);
+      color: $text-light;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.2);
+        border-color: rgba(255, 255, 255, 0.5);
+      }
+    }
+
+    &--settings {
+      background: transparent;
+      color: $text-light;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.1);
+        border-color: rgba(255, 255, 255, 0.5);
+      }
+    }
+  }
+}
+
+// Modal ustawień cookies
+.cookie-settings {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1001;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: all $transition-smooth;
+
+  &--visible {
+    opacity: 1;
+    visibility: visible;
+
+    .cookie-settings__container {
+      transform: scale(1);
+    }
+  }
+
+  &__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: $background-overlay;
+    backdrop-filter: blur(5px);
+  }
+
+  &__container {
+    position: relative;
+    background: $text-light;
+    max-width: 600px;
+    width: 90%;
+    max-height: 80vh;
+    border-radius: $border-radius-large;
+    overflow: hidden;
+    box-shadow: $shadow-heavy;
+    transform: scale(0.9);
+    transition: transform $transition-smooth;
+  }
+
+  &__header {
+    background: linear-gradient(135deg, $background-dark, $background-medium);
+    color: $text-light;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    h3 {
+      margin: 0;
+      font-size: 20px;
+      font-family: $font-family;
+    }
+  }
+
+  &__close {
+    background: none;
+    border: none;
+    color: $text-light;
+    font-size: 28px;
+    cursor: pointer;
+    padding: 0;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background-color 0.2s;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+  }
+
+  &__content {
+    padding: 25px;
+    max-height: 50vh;
+    overflow-y: auto;
+  }
+
+  &__option {
+    margin-bottom: 25px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #eee;
+
+    &:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+    }
+
+    label {
+      display: flex;
+      align-items: flex-start;
+      cursor: pointer;
+      margin-bottom: 8px;
+    }
+
+    input[type="checkbox"] {
+      margin-right: 12px;
+      margin-top: 2px;
+      flex-shrink: 0;
+    }
+
+    p {
+      margin: 0;
+      font-size: 14px;
+      color: $text-medium;
+      line-height: 1.5;
+      padding-left: 24px;
+    }
+  }
+
+  &__option-title {
+    font-weight: 600;
+    font-size: 16px;
+    color: $text-dark;
+    font-family: $font-family;
+  }
+
+  &__footer {
+    padding: 20px 25px;
+    border-top: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+
+  &__button {
+    padding: 12px 24px;
+    border: none;
+    border-radius: $border-radius;
+    cursor: pointer;
+    font-weight: 600;
+    font-family: $font-family;
+    transition: all $transition-smooth;
+
+    &--save {
+      @include gradient-primary;
+      color: $text-dark;
+      box-shadow: $shadow-light;
+
+      &:hover {
+        background: linear-gradient(135deg, $primary-dark, $primary-darker);
+        transform: translateY(-1px);
+        box-shadow: $shadow-medium;
+      }
+    }
+  }
+
+  &__link {
+    color: $text-medium;
+    text-decoration: underline;
+    font-size: 14px;
+    transition: color 0.2s;
+
+    &:hover {
+      color: $primary-color;
+    }
+  }
+}
+
+// Media queries - responsywność
+@media (max-width: 768px) {
+  .cookie-banner {
+    &__container {
+      flex-direction: column;
+      text-align: center;
+    }
+
+    &__content {
+      flex: 1 1 100%;
+      margin-bottom: 15px;
+    }
+
+    &__buttons {
+      width: 100%;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    &__button {
+      flex: 1;
+      min-width: 120px;
+    }
+  }
+
+  .cookie-settings {
+    &__container {
+      width: 95%;
+      max-height: 90vh;
+    }
+
+    &__footer {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    &__button--save {
+      width: 100%;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .cookie-banner {
+    &__buttons {
+      flex-direction: column;
+    }
+
+    &__button {
+      width: 100%;
+    }
+  }
+}
